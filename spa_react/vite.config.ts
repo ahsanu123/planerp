@@ -7,7 +7,7 @@ const reactOptions: Options = {
       plugins: [
         'decorators',
         'decoratorAutoAccessors',
-        'classProperties'
+        'classProperties',
       ]
     }
   }

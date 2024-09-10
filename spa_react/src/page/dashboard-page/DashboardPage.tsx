@@ -1,18 +1,17 @@
-import { Box, Heading, StateLabel } from '@primer/react'
-import './Dashboard.scss'
-import { useMainStore } from '../../store/useMainStore'
+import { Box, Heading, StateLabel } from '@primer/react';
+import './Dashboard.scss';
+import { useMainStore } from '../../store/useMainStore';
 import { observer } from 'mobx-react-lite';
 
-const DashboardPageImpl: React.FC = () => {
+const DashboardPageComponent: React.FC = () => {
 
   const {
     dashboardPageStore
   } = useMainStore();
 
   const handleOnclick = () => {
-    dashboardPageStore.setTitle()
-    console.log("does this work")
-  }
+    dashboardPageStore.setTitle();
+  };
 
   return (
     <>
@@ -31,7 +30,7 @@ const DashboardPageImpl: React.FC = () => {
         </button>
       </Box>
     </>
-  )
-}
+  );
+};
 
-export const DashboardPage = observer(DashboardPageImpl);
+export const DashboardPage = observer(DashboardPageComponent);

@@ -2,14 +2,14 @@ import { action, makeAutoObservable, observable } from "mobx";
 
 export class DashboardPageStore {
   constructor() {
-    makeAutoObservable(this)
+    makeAutoObservable(this);
   }
 
   @observable
-  title: string = "hello world"
+  title: string = "hello world";
 
   @action
   setTitle() {
-    this.title = "huh"
+    this.title = "huh";
   }
 }

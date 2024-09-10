@@ -1,5 +1,6 @@
 import js from '@eslint/js'
 import globals from 'globals'
+import stylisticTs from '@stylistic/eslint-plugin-ts'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
@@ -16,13 +17,14 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      '@stylistic/ts': stylisticTs,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      '@typescript-eslint/no-explicit-any': ['off'],
+      '@typescript-eslint/no-unused-vars': ['off'],
+      '@stylistic/ts/semi': ['error']
     },
   },
 )
