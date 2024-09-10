@@ -1,0 +1,78 @@
+<div class="card">
+  <p-dataView #dw
+              [value]="lists"
+              [rows]="3"
+              [paginator]="true">
+
+    <ng-template pTemplate="list"
+                 let-lists>
+      <div class="flex flex-column">
+
+        <div *ngFor="let item of lists; let first = first;"
+             class="my-2">
+          <p-card [header]="item.name"
+                  [subheader]="getDate(item.createdDate)"
+                  [style]="{ width: '100%'}">
+            <ng-template pTemplate="header">
+              hohoho
+            </ng-template>
+            <p class="item-description">
+              {{item.description}}
+            </p>
+            <ng-template pTemplate="footer">
+              <div class="tag-expander flex align-items-center">
+                <p-checkbox #chipExpanded
+                            [binary]="true"
+                            inputId="binary" />
+                <label [style]="{marginLeft: '20px'}"> Show Tags</label>
+              </div>
+
+              <ng-container *ngIf="chipExpanded.checked()">
+                <p-floatLabel>
+                  <p-chips id="chips" />
+                  <label for="chips">Tags</label>
+                </p-floatLabel>
+              </ng-container>
+
+            </ng-template>
+
+          </p-card>
+        </div>
+
+      </div>
+    </ng-template>
+  </p-dataView>
+</div>
+<div class="color-bg-accent p-2 rounded mb-2">.color-bg-accent</div>
+<div class="color-bg-accent-emphasis color-fg-on-emphasis p-2 rounded mb-4">.color-bg-accent-emphasis</div>
+
+<div class="color-bg-success p-2 rounded mb-2">.color-bg-success</div>
+<div class="color-bg-success-emphasis color-fg-on-emphasis p-2 rounded mb-4">.color-bg-success-emphasis</div>
+
+<div class="color-bg-attention p-2 rounded mb-2">.color-bg-attention</div>
+<div class="color-bg-attention-emphasis color-fg-on-emphasis p-2 rounded mb-4">.color-bg-attention-emphasis</div>
+
+<div class="color-bg-severe p-2 rounded mb-2">.color-bg-severe</div>
+<div class="color-bg-severe-emphasis color-fg-on-emphasis p-2 rounded mb-4">.color-bg-severe-emphasis</div>
+
+<div class="color-bg-success p-2 rounded mb-2">.color-bg-success</div>
+<div class="color-bg-success-emphasis color-fg-on-emphasis p-2 rounded mb-4">.color-bg-success-emphasis</div>
+
+<div class="Box color-shadow-small">
+  <div class="Box-row">
+    <h3 class="m-0">Organization</h3>
+  </div>
+  <div class="Box-row">
+    <p class="mb-0 color-fg-muted">
+      Taxidermy live-edge mixtape, keytar tumeric locavore meh selvage deep v letterpress vexillologist lo-fi tousled
+      church-key thundercats. Brooklyn bicycle rights tousled, marfa actually.
+    </p>
+  </div>
+  <div class="Box-row">
+    <button type="button"
+            name="Create an organization"
+            class="btn btn-primary btn-block">
+      Create an organization
+    </button>
+  </div>
+</div>
