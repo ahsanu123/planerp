@@ -10,6 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@blocksuite/blocks": "^0.17.6",
+    "@blocksuite/presets": "^0.17.6",
+    "@blocksuite/store": "^0.17.6",
+    "@primer/octicons-react": "^19.11.0",
     "@primer/react": "^36.27.0",
     "@reduxjs/toolkit": "^2.2.7",
     "mobx": "^6.13.2",

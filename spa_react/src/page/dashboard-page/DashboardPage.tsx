@@ -1,7 +1,8 @@
-import { Box, Heading, StateLabel } from '@primer/react';
+import { Box, Heading, PageLayout, StateLabel } from '@primer/react';
 import './Dashboard.scss';
 import { useMainStore } from '../../store/useMainStore';
 import { observer } from 'mobx-react-lite';
+import { ChevronLeftIcon } from '@primer/octicons-react';
 
 const DashboardPageComponent: React.FC = () => {
 
@@ -15,20 +16,29 @@ const DashboardPageComponent: React.FC = () => {
 
   return (
     <>
-      <Box m={4}>
-        <Heading as="h2" sx={{ mb: 2 }}>
-          Hello, world!
-        </Heading>
-        <StateLabel status="pullOpened">Open</StateLabel>
-        <h2>{dashboardPageStore.title}</h2>
+      <PageLayout>
+        <PageLayout.Header>
+          <h2>Header</h2>
+        </PageLayout.Header>
 
-        <p>This will get Primer text styles.</p>
-        <button
-          onClick={handleOnclick}
-        >
-          click Me
-        </button>
-      </Box>
+        <PageLayout.Content>
+          <Box m={4}>
+            <Heading as="h2" sx={{ mb: 2 }}>
+              Hello, world!
+              <ChevronLeftIcon size={12} />
+            </Heading>
+            <StateLabel status="pullOpened">Open</StateLabel>
+            <h2>{dashboardPageStore.title}</h2>
+
+            <p>This will get Primer text styles.</p>
+            <button
+              onClick={handleOnclick}
+            >
+              click Me
+            </button>
+          </Box>
+        </PageLayout.Content>
+      </PageLayout>
     </>
   );
 };
