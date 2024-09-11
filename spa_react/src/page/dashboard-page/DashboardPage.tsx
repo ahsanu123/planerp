@@ -23,7 +23,7 @@ const DashboardPageComponent: React.FC = () => {
 
         <PageLayout.Content>
           <Box m={4}>
-            <Heading as="h2" sx={{ mb: 2 }}>
+            <Heading as="h2" sx={{ mb: 20 }}>
               Hello, world!
               <ChevronLeftIcon size={12} />
             </Heading>
