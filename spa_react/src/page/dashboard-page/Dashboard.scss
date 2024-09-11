@@ -1,1 +1,11 @@
+.dashboard-container {
 
+  .dashboard-header-title {
+    font-size: 4rem;
+  }
+
+  .main-content {
+    height: 65vh;
+    overflow-y: auto;
+  }
+}

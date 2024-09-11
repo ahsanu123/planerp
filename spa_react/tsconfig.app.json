@@ -1,17 +1,11 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx",
-  },
-  "compilerOption": {
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": [
       "ES2020",
-      "es2015",
       "DOM",
-      "DOM.Iterable",
-      "es5",
-      "es6"
+      "DOM.Iterable"
     ],
     "module": "ESNext",
     "skipLibCheck": true,
@@ -21,10 +15,12 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
+    "jsx": "react-jsx",
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
+    "allowUnusedLabels": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": [
