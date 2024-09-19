@@ -1,54 +1,37 @@
-import { Button, Details, PageLayout } from "@primer/react";
+import { Details, PageLayout } from "@primer/react";
 import { observer } from "mobx-react-lite";
 import svgPanZoom from "svg-pan-zoom";
 import { useMermaidDiagramService } from "../../shared/hooks/use-mermaid-diagram";
-import { createElement, Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import React from 'react';
+import './mermaid-diagram.scss';
+import { mermaidMockData } from "./mermaid-diagram-mock";
 
 interface MermaidDiagramProps {
   data: string,
   title?: string,
+  description?: string,
 }
 
-type PromiseStatusType = 'pending' | 'fullfilled' | 'error';
+const MermaidDiagramComponent: React.FC<MermaidDiagramProps> = (props) => {
+  const {
+    data,
+    title,
+    description,
+  } = props;
+  const {
+    mermaidService,
+  } = useMermaidDiagramService();
 
-const wrapPromise = <T,>(promise: Promise<T>) => {
-  let status: PromiseStatusType = 'pending';
-  let response: T;
-
-  const suspender = promise.then(
-    (res) => {
-      status = 'fullfilled';
-      response = res;
-    },
-    (err) => {
-      status = 'error';
-      response = err;
-    }
-  );
-
-  const read = () => {
-    if (!suspender) {
-      throw suspender;
-    }
-    return response;
-    // switch (status) {
-    //   case 'pending':
-    //     throw suspender;
-    //   case 'error':
-    //     throw response;
-    //   case 'fullfilled':
-    //     return response;
-  };
-  return { read };
-};
-
-const MermaidCom = ({ diagram }: { diagram: HTMLElement }) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const compRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    compRef.current?.appendChild(diagram);
-    if (compRef.current) {
+  const renderMermaidDiagram = async () => {
+    setLoading(true);
+    const diagram = await mermaidService.renderMermaidDiagram(data);
+
+    if (compRef.current && diagram) {
+      compRef.current.appendChild(diagram);
       svgPanZoom(diagram, {
         zoomEnabled: true,
         controlIconsEnabled: true,
@@ -56,49 +39,35 @@ const MermaidCom = ({ diagram }: { diagram: HTMLElement }) => {
         center: true,
       });
     }
-  }, []);
+    setLoading(false);
+  };
 
-  return (
-    <div
-      ref={compRef}
-    />
-  );
-};
-
-const DummyComponent = React.lazy(async () => {
-  const {
-    mermaidService,
-  } = useMermaidDiagramService();
-
-  const diagram = await mermaidService.renderMermaidDiagram();
-
-  return Promise.resolve().then(() => {
-    return {
-      default: () => <MermaidCom diagram={diagram} />
-    };
+  useEffect(() => {
+    renderMermaidDiagram();
   });
-});
-
-
-const MermaidDiagramComponent: React.FC<MermaidDiagramProps> = (props) => {
-  const {
-    data,
-    title,
-  } = props;
 
   return (
     <PageLayout>
       <PageLayout.Header>
         <h2>{title ?? 'Mermaid Diagram'}</h2>
+        <p>
+          {description}
+        </p>
       </PageLayout.Header>
 
       <PageLayout.Content>
 
-        <Suspense
-          fallback={<p>loading</p>}
-        >
-          <DummyComponent />
-        </Suspense>
+        {
+          loading
+            ? <p>loading</p>
+            : (
+              <div
+                className='mermaid-pan-able'
+                ref={compRef}
+              />
+            )
+        }
+
       </PageLayout.Content>
 
     </PageLayout>

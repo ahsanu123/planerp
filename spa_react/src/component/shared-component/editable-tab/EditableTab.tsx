@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { FormControl, Stack, TextInput, Tooltip } from "@primer/react";
+import { Button, FormControl, Stack, TextInput, Tooltip } from "@primer/react";
 import { TabPanels } from '@primer/react/experimental';
 import { EditableTabModel } from "../../../model";
 import { PencilIcon } from "@primer/octicons-react";
@@ -69,6 +69,10 @@ const EditableTabComponent: React.FC<EditableTabProps> = (props) => {
           defaultTabIndex={0}
         >
           {tabs.map((tab) => renderTabs(tab))}
+
+          <TabPanels.Tab>
+            <Button>Add +</Button>
+          </TabPanels.Tab>
         </TabPanels>
       </div>
 

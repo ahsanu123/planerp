@@ -35,7 +35,7 @@ const DashboardPageComponent: React.FC = () => {
         <PageLayout.Header>
           <Stack
             direction='horizontal'
-            justify='center'
+            justify='start'
           >
             <h2
               className='dashboard-header-title'
@@ -43,10 +43,7 @@ const DashboardPageComponent: React.FC = () => {
               🥑 planerp
             </h2>
           </Stack>
-
-          <Stack
-            align='center'
-          >
+          <Stack>
             Your Personal Project Planner and Management
           </Stack>
         </PageLayout.Header>
