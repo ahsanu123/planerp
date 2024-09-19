@@ -4,8 +4,13 @@ import { observer } from 'mobx-react-lite';
 import { EditableTab } from '../../component/shared-component/editable-tab/EditableTab';
 import { EditableTabModel } from '../../model';
 import './Dashboard.scss';
+import { MermaidDiagramMock } from '../../component/mermaid-diagram/mermaid-diagram-mock';
 
 const MOCK_TAB: EditableTabModel[] = [
+  {
+    title: 'Mermaid Digram Component',
+    content: <MermaidDiagramMock />
+  },
   {
     title: 'Active Project',
     content: <p>Active Project Content</p>
