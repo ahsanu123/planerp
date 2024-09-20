@@ -16,6 +16,6 @@
  
 <h1 align="center">🥑 planerp </h1>
 <p align="center">Your Personal Project Planner and Management 
-
- 
+  
+![image](https://github.com/user-attachments/assets/c1f9dc80-fe5c-4c16-bbd0-f2e6ff2e0a0e)
  
