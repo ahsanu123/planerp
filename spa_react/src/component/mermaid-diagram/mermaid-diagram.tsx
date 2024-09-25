@@ -1,4 +1,4 @@
-import { Button, Details, FormControl, PageLayout, Popover, Stack, Text, Textarea } from "@primer/react";
+import { Button, Details, FormControl, PageLayout, Popover, Stack, Text, Textarea, ToggleSwitch } from "@primer/react";
 import { observer } from "mobx-react-lite";
 import svgPanZoom from "svg-pan-zoom";
 import { useMermaidDiagramService } from "../../shared/hooks/use-mermaid-diagram";
@@ -7,6 +7,7 @@ import React from 'react';
 import { CodeIcon, InfoIcon } from "@primer/octicons-react";
 import './mermaid-diagram.scss';
 import { isNullOrEmpty } from "../../shared/function";
+import { useLoaderData } from "react-router-dom";
 
 interface MermaidDiagramProps {
   dataText: string,
@@ -28,6 +29,10 @@ const MermaidDiagramComponent: React.FC<MermaidDiagramProps> = (props) => {
   const {
     mermaidService,
   } = useMermaidDiagramService();
+
+  const {
+    data
+  } = useLoaderData() as { data: number };
 
   const [loading, setLoading] = useState<boolean>(false);
   const [errorText, setErrorText] = useState<string>('');
@@ -134,14 +139,19 @@ const MermaidDiagramComponent: React.FC<MermaidDiagramProps> = (props) => {
           <p>
             {description}
           </p>
-          <Button
-            onClick={() => setIsShowCode(!isShowCode)}
+          <span
+            className='mermaid-diagram-show-code-text'
           >
             <CodeIcon
               size={16}
             />
             &nbsp; Show Code
-          </Button>
+          </span>
+          <ToggleSwitch
+            onClick={() => setIsShowCode(!isShowCode)}
+            checked={isShowCode}
+            statusLabelPosition='end'
+          />
         </PageLayout.Header>
 
         <PageLayout.Content>
