@@ -54,14 +54,10 @@ public class FileUtilService
                     Path.Combine(_sftpConfig.BasePath, _sftpConfig.ResourceDocsPath)
                 );
             }
-            using (var fileStream = new MemoryStream())
-            {
-                await file.CopyToAsync(fileStream);
-                client.UploadFile(
-                    fileStream,
-                    Path.Combine(_sftpConfig.BasePath, _sftpConfig.ResourceDocsPath, filename)
-                );
-            }
+            client.UploadFile(
+                file.OpenReadStream(),
+                Path.Combine(_sftpConfig.BasePath, _sftpConfig.ResourceDocsPath, filename)
+            );
         }
         return filename;
     }

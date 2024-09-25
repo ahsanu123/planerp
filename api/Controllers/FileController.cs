@@ -1,3 +1,5 @@
+using System.IO;
+using System.Net.Mime;
 using erpPlanner.Model;
 using erpPlanner.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -38,26 +40,43 @@ public class FileController : Controller
     [Route("image")]
     public async Task<ActionResult> UploadImage(IFormFile image)
     {
-        var filename = $"{Guid.NewGuid()}-{image.FileName}".Replace(" ", "_");
+        var filename = $"{Guid.NewGuid()}_{image.FileName}".Replace(" ", "_");
         using (var client = new SftpClient(_sftpConfig.Host, _sftpConfig.User, _sftpConfig.Pass))
         {
             client.Connect();
             var directoryExists = client.Exists(
                 Path.Combine(_sftpConfig.BasePath, _sftpConfig.ImagePath)
             );
+
             if (!directoryExists)
             {
                 client.CreateDirectory(Path.Combine(_sftpConfig.BasePath, _sftpConfig.ImagePath));
             }
-            using (var imageStream = new MemoryStream())
-            {
-                await image.CopyToAsync(imageStream);
-                client.UploadFile(
-                    imageStream,
-                    Path.Combine(_sftpConfig.BasePath, _sftpConfig.ImagePath, filename)
-                );
-            }
+
+            client.UploadFile(
+                image.OpenReadStream(),
+                Path.Combine(_sftpConfig.BasePath, _sftpConfig.ImagePath, filename)
+            );
         }
         return Ok(filename);
+    }
+
+    [HttpGet]
+    [Route("image")]
+    public async Task<ActionResult> GetImage()
+    {
+        String fileName = "2caee324-fec0-4ad5-bdd4-19a9940606e2_bremco2.jpg";
+        String newFileName = Path.Combine(Path.GetTempPath(), "downloadedImage.png");
+
+        using (var client = new SftpClient(_sftpConfig.Host, _sftpConfig.User, _sftpConfig.Pass))
+        {
+            var file = new FileStream(newFileName, FileMode.Create, FileAccess.ReadWrite);
+            client.Connect();
+            client.DownloadFile(
+                Path.Combine(_sftpConfig.BasePath, _sftpConfig.ImagePath, fileName),
+                file
+            );
+            return Ok(Url.Content(newFileName));
+        }
     }
 }
