@@ -84,7 +84,7 @@ Component |o--o{ ResourceDocument : have
 const MermaidDiagramMockComponent: React.FC = () => (
   <MermaidDiagram
     title='Flowchart With Mermaid Diagram'
-    data={mermaidMockData}
+    dataText={mermaidMockData}
     description={description}
   />
 );

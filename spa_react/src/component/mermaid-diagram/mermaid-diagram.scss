@@ -1,6 +1,21 @@
-.mermaid-pan-able {
-  width: 100%;
-  min-height: 700px;
-  height: 800px;
-  border: solid 1px #deebff;
+$mermaid-code-and-preview-height: 470px;
+
+.mermaid-diagram-container {
+  .mermaid-diagram-textarea {
+    width: 300px;
+    min-height: 400px;
+    height: $mermaid-code-and-preview-height;
+  }
+
+  .mermaid-pan-able {
+    margin-top: 25px;
+    width: 100%;
+    min-height: 400px;
+    height: $mermaid-code-and-preview-height;
+    border: solid 1px #deebff;
+  }
+
+  .error-overlay-text {
+    font-size: 12px;
+  }
 }

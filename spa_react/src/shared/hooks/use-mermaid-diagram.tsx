@@ -30,6 +30,7 @@ export class MermaidDiagramService {
   constructor() {
     mermaid.initialize({
       startOnLoad: false,
+      suppressErrorRendering: true,
       ...defaultMermaidDiagramConfig,
     });
 
