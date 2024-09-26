@@ -1,12 +1,12 @@
 import { Button, Dialog, Stack } from "@primer/react";
-import { Divider } from "@primer/react/lib-esm/deprecated/ActionList/Divider";
 import { observer } from "mobx-react-lite";
+import { Divider } from "@primer/react/lib-esm/ActionList/Divider";
 import './CustomDialog.scss';
 
 interface CustomDialogProps {
   isOpen: boolean;
   title: string;
-  sortDescription: string;
+  sortDescription?: string;
   content?: JSX.Element;
   onDismiss: () => void;
   onConfirm: () => void;
@@ -24,52 +24,51 @@ const CustomDialogComponent: React.FC<CustomDialogProps> = (props) => {
   } = props;
 
   return (
+    <Dialog
+      onDissmis={onDismiss}
+      isOpen={isOpen}
+      className='custom-dialog-container'
+    >
+      <Dialog.Header>
+        <h3>{title}</h3>
+      </Dialog.Header>
 
-    <>
-      <Dialog
-        onDissmis={onDismiss}
-        isOpen={isOpen}
-        className="custom-dialog_container"
+      <Stack
+        className='custom-dialog-content'
       >
-        <Dialog.Header>
-          <h3>{title}</h3>
-        </Dialog.Header>
+        <span>
+          {sortDescription}
+        </span>
 
-        <Stack
-          className='custom-dialog_content'
+        <Divider />
+      </Stack>
+
+      {
+        content && content
+      }
+
+      <Stack
+        direction='horizontal'
+        justify='end'
+        className='custom-dialog-footer'
+        style={{
+          padding: '20px',
+        }}
+      >
+        <Button
+          onClick={onDismiss}
         >
-          <span>
-            {sortDescription}
-          </span>
+          Cancel
+        </Button>
 
-          <Divider />
-        </Stack>
-
-        {
-          content && content
-        }
-
-        <Stack
-          direction='horizontal'
-          justify='end'
-          className='custom-dialog_footer'
+        <Button
+          onClick={onConfirm}
         >
-          <Button
-            onClick={onDismiss}
-          >
-            Cancel
-          </Button>
+          Confirm
+        </Button>
+      </Stack>
 
-          <Button
-            onClick={onConfirm}
-          >
-            Confirm
-          </Button>
-        </Stack>
-
-      </Dialog>
-    </>
-
+    </Dialog>
   );
 };
 

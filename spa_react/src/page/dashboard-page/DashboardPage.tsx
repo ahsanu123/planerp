@@ -5,7 +5,7 @@ import { EditableTab } from '../../component/shared-component/editable-tab/Edita
 import { EditableTabModel } from '../../model';
 import './Dashboard.scss';
 import { MermaidDiagramMock } from '../../component/mermaid-diagram/mermaid-diagram-mock';
-import { useLoaderData } from 'react-router-dom';
+import { ProjectPage } from '../project-page/ProjectPage';
 
 const MOCK_TAB: EditableTabModel[] = [
   {
@@ -13,8 +13,8 @@ const MOCK_TAB: EditableTabModel[] = [
     content: <MermaidDiagramMock />
   },
   {
-    title: 'Active Project',
-    content: <p>Active Project Content</p>
+    title: 'Project',
+    content: <ProjectPage />,
   },
   {
     title: 'Notes',
@@ -27,10 +27,6 @@ const MOCK_TAB: EditableTabModel[] = [
 ];
 
 const DashboardPageComponent: React.FC = () => {
-
-  const {
-    some
-  } = useLoaderData() as { some: string };
 
   return (
     <div
@@ -45,7 +41,7 @@ const DashboardPageComponent: React.FC = () => {
             <h2
               className='dashboard-header-title'
             >
-              🥑 planerp {some}
+              🥑 planerp
             </h2>
           </Stack>
           <Stack>

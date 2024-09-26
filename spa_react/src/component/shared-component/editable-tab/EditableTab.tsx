@@ -6,6 +6,7 @@ import { PencilIcon } from "@primer/octicons-react";
 import './EditableTab.scss';
 import { useState } from "react";
 import { CustomDialog } from "../CustomDialog";
+import { FormGenerator } from "../form-generator";
 
 interface EditableTabProps {
   tabs: EditableTabModel[];
@@ -82,7 +83,7 @@ const EditableTabComponent: React.FC<EditableTabProps> = (props) => {
         onDismiss={() => setIsRenameDialogOpen(false)}
         onConfirm={() => setIsRenameDialogOpen(false)}
         isOpen={isRenameDialogOpen}
-        content={renameTabTitleComponent()}
+        content={<FormGenerator data={{ name: 'heello' }} />}
       />
     </>
   );

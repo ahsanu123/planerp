@@ -1,8 +1,5 @@
-.custom-dialog_container {
-
-  &_content,
-  &_footer {
-    padding: 0 10px;
+.custom-dialog-container {
+  .custom-dialog-footer {
+    padding-bottom: 200px;
   }
-
 }
