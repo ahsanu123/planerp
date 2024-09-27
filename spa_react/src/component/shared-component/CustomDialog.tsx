@@ -1,6 +1,5 @@
 import { Button, Dialog, Stack } from "@primer/react";
 import { observer } from "mobx-react-lite";
-import { Divider } from "@primer/react/lib-esm/ActionList/Divider";
 import './CustomDialog.scss';
 
 interface CustomDialogProps {
@@ -25,9 +24,9 @@ const CustomDialogComponent: React.FC<CustomDialogProps> = (props) => {
 
   return (
     <Dialog
-      onDissmis={onDismiss}
       isOpen={isOpen}
       className='custom-dialog-container'
+      onDissmis={() => onDismiss()}
     >
       <Dialog.Header>
         <h3>{title}</h3>
@@ -39,35 +38,13 @@ const CustomDialogComponent: React.FC<CustomDialogProps> = (props) => {
         <span>
           {sortDescription}
         </span>
+        <Stack>
+          {
+            content && content
+          }
+        </Stack>
 
-        <Divider />
       </Stack>
-
-      {
-        content && content
-      }
-
-      <Stack
-        direction='horizontal'
-        justify='end'
-        className='custom-dialog-footer'
-        style={{
-          padding: '20px',
-        }}
-      >
-        <Button
-          onClick={onDismiss}
-        >
-          Cancel
-        </Button>
-
-        <Button
-          onClick={onConfirm}
-        >
-          Confirm
-        </Button>
-      </Stack>
-
     </Dialog>
   );
 };

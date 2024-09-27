@@ -2,9 +2,9 @@ import { BaseModel } from "./base-model";
 
 export interface Project extends BaseModel {
   bomId: number,
+  logId: number,
   resourceDocumentId: number,
   procedureId: number,
-  logId: number,
   name: string,
   deadLineDate: Date,
   lastUpdateDate: Date,
@@ -15,3 +15,10 @@ export interface Project extends BaseModel {
   profitInPercent: number,
   description: string,
 }
+
+export type ProjectRequest = Omit<Project,
+  'id'
+  | 'bomId'
+  | 'logId'
+>;
+

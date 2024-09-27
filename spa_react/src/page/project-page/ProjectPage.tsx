@@ -6,9 +6,27 @@ import { format, formatDistanceToNow } from "date-fns";
 import { DoubleClickEditor } from "../../component/shared-component/DoubleClickEditor";
 import { useState } from "react";
 import { CustomDialog } from "../../component/shared-component/CustomDialog";
-import { FormGenerator } from "../../component/shared-component/form-generator";
+import { FormGenerator } from "../../component/shared-component/FormGenerator";
+import { FormAddNewProject } from "./component/FormAddNewProject";
+import { blankProject } from "../../model/blank-model";
 
 const MOCK_PROJECTS: Project[] = [
+  {
+    bomId: 0,
+    resourceDocumentId: 0,
+    procedureId: 0,
+    logId: 0,
+    name: "Tofu Control Panel Automation",
+    deadLineDate: new Date(2024, 11),
+    lastUpdateDate: new Date(),
+    finishDate: new Date(),
+    planedSellPrice: 10000,
+    capital: 1000,
+    isArchived: false,
+    profitInPercent: 10,
+    description: "upgrade factory machinery with new technology",
+    id: 0
+  },
   {
     bomId: 0,
     resourceDocumentId: 0,
@@ -23,7 +41,7 @@ const MOCK_PROJECTS: Project[] = [
     isArchived: false,
     profitInPercent: 10,
     description: "Coagulant Machine For Automatic Tofu Maker",
-    id: 0
+    id: 1
   },
   {
     bomId: 0,
@@ -31,15 +49,15 @@ const MOCK_PROJECTS: Project[] = [
     procedureId: 0,
     logId: 0,
     name: "Sudi Keyboard V2 - Split Keyboard",
-    deadLineDate: new Date(2025, 1),
-    lastUpdateDate: new Date(2025, 2),
+    deadLineDate: new Date(2024, 11),
+    lastUpdateDate: new Date(),
     finishDate: new Date(),
-    planedSellPrice: 500000,
-    capital: 250000,
+    planedSellPrice: 10000,
+    capital: 1000,
     isArchived: false,
     profitInPercent: 10,
     description: "36 Wireless Split Keyboard based on Nrf52832",
-    id: 0
+    id: 2
   },
 ];
 
@@ -52,7 +70,7 @@ const ProjectPageComponent: React.FC = () => {
       renderCell: (data) => (
         <DoubleClickEditor
           value={data.name}
-          onDoubleClicked={handleOnDoubleClicked}
+          onDoubleClicked={(status) => handleOnDoubleClicked(data, status)}
         />
       ),
     },
@@ -78,14 +96,23 @@ const ProjectPageComponent: React.FC = () => {
     }
   ];
 
+  const [selectedProject, setSelectedProject] = useState<Project | undefined>(undefined);
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
-  const handleOnDoubleClicked = (status: boolean) => {
+  const [isShowAddDialog, setIsShowAddDialog] = useState<boolean>(false);
+
+  const handleOnDoubleClicked = (data: Project, status: boolean) => {
     setIsShowDialog(status);
+    setSelectedProject(data);
   };
+
 
   return (
     <>
-      <Button>Add Project</Button>
+      <Button
+        onClick={() => setIsShowAddDialog(true)}
+      >
+        Add Project
+      </Button>
       <Table.Container>
         <Table.Title
           id='project'
@@ -109,18 +136,40 @@ const ProjectPageComponent: React.FC = () => {
         />
 
       </Table.Container>
-      <CustomDialog
-        title='Table Content Editor'
-        isOpen={isShowDialog}
-        onDismiss={() => setIsShowDialog(false)}
-        onConfirm={() => setIsShowDialog(false)}
-        content={
-          <FormGenerator
-            data={MOCK_PROJECTS[0]}
-            onDataChanged={(data) => console.log(data)}
+      {
+        isShowAddDialog && (
+          <CustomDialog
+            title='New Project'
+            isOpen={isShowAddDialog}
+            onDismiss={() => setIsShowAddDialog(false)}
+            onConfirm={() => setIsShowAddDialog(false)}
+            content={
+              <FormAddNewProject
+                data={MOCK_PROJECTS[0]}
+                onCancel={() => setIsShowAddDialog(false)}
+                onSubmit={(data) => console.log(data)}
+              />
+            }
           />
-        }
-      />
+        )
+      }
+      {
+        isShowDialog && (
+          <CustomDialog
+            title='Table Content Editor'
+            isOpen={isShowDialog}
+            onDismiss={() => setIsShowDialog(false)}
+            onConfirm={() => setIsShowDialog(false)}
+            content={
+              <FormGenerator
+                data={selectedProject}
+                onSubmit={(data) => console.log(data)}
+                onCancel={() => setIsShowDialog(false)}
+              />
+            }
+          />
+        )
+      }
     </>
   );
 };

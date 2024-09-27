@@ -1,4 +1,4 @@
-import { Box, Heading, PageLayout, Stack, StateLabel } from '@primer/react';
+import { PageLayout, Stack } from '@primer/react';
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { EditableTab } from '../../component/shared-component/editable-tab/EditableTab';
