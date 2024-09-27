@@ -1,7 +1,9 @@
+import { FillColorsSchema } from "@blocksuite/blocks/dist/index.js";
 import { FileDirectoryIcon } from "@primer/octicons-react";
-import { Button } from "@primer/react";
+import { Button, Heading, Popover, Tooltip } from "@primer/react";
 import { observer } from "mobx-react-lite";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { elipsisText } from "../../shared/function";
 
 interface ButtonInputFileProps {
   label?: string;
@@ -17,6 +19,14 @@ const ButtonInputFileComponent: React.FC<ButtonInputFileProps> = (props) => {
   } = props;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [file, setFile] = useState<File>();
+  const handleSelectedFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const file = event.target.files[0];
+      setFile(file);
+      console.log(file);
+    }
+  };
 
   return (
     <>
@@ -26,7 +36,14 @@ const ButtonInputFileComponent: React.FC<ButtonInputFileProps> = (props) => {
         <FileDirectoryIcon size={16} />
         &nbsp;{!hideLabel && (label)}
       </Button>
+      <Tooltip
+        text={file?.name}
+        direction='s'
+      >
+        {elipsisText(file?.name ?? '')}
+      </Tooltip>
       <input
+        onChange={(event) => handleSelectedFile(event)}
         ref={fileInputRef}
         type='file'
         accept={allowedFileTypes?.join(',') ?? '*'}
