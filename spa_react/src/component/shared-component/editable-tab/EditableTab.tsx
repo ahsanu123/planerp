@@ -83,7 +83,12 @@ const EditableTabComponent: React.FC<EditableTabProps> = (props) => {
         onDismiss={() => setIsRenameDialogOpen(false)}
         onConfirm={() => setIsRenameDialogOpen(false)}
         isOpen={isRenameDialogOpen}
-        content={<FormGenerator data={{ name: 'heello' }} />}
+        content={
+          <FormGenerator
+            data={{ name: 'heello' }}
+            onDataChanged={(data) => console.log(data)}
+          />
+        }
       />
     </>
   );

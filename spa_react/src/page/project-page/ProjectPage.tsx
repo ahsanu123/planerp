@@ -114,7 +114,12 @@ const ProjectPageComponent: React.FC = () => {
         isOpen={isShowDialog}
         onDismiss={() => setIsShowDialog(false)}
         onConfirm={() => setIsShowDialog(false)}
-        content={<FormGenerator data={MOCK_PROJECTS[0]} />}
+        content={
+          <FormGenerator
+            data={MOCK_PROJECTS[0]}
+            onDataChanged={(data) => console.log(data)}
+          />
+        }
       />
     </>
   );
