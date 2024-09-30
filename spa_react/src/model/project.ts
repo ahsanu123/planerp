@@ -6,6 +6,7 @@ export interface Project extends BaseModel {
   resourceDocumentId: number,
   procedureId: number,
   name: string,
+  thumbnailUrl: string,
   deadLineDate: Date,
   lastUpdateDate: Date,
   finishDate: Date,

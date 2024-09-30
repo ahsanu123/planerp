@@ -6,12 +6,18 @@ export interface FetchApiWrapperOption {
 }
 export type ApiValidationFunction = (object: any) => boolean;
 
-export const fetchApiwrapper = async <T>(url: string, option: FetchApiWrapperOption, validator?: ApiValidationFunction): Promise<T> => {
+export const fetchApiwrapper = async <T>(
+  url: string,
+  body: BodyInit | null | undefined,
+  option: FetchApiWrapperOption,
+  validator?: ApiValidationFunction
+): Promise<T> => {
   let parsedData: T | undefined;
 
   const response = await fetch(url, {
     method: option.method,
     headers: option.header,
+    body: body,
   });
 
   const responseData = await response.text();

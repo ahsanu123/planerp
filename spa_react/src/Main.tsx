@@ -5,11 +5,11 @@ import { RouterProvider } from 'react-router-dom';
 import { BaseStyles, ThemeProvider } from '@primer/react';
 import { StoreProvider } from './store/StoreProvider';
 import { router } from './Routes';
-import { ApiStoreProvider } from './api/api-provider';
+import { ApiProvider } from './api/api-store/ApiStoreProvider';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
 
-    <ApiStoreProvider>
+    <ApiProvider>
       <StoreProvider>
         <ThemeProvider
           colorMode='day'
@@ -19,7 +19,7 @@ createRoot(document.getElementById('root')!).render(
           </BaseStyles>
         </ThemeProvider>
       </StoreProvider>
-    </ApiStoreProvider>
+    </ApiProvider>
 
   </StrictMode>,
 );

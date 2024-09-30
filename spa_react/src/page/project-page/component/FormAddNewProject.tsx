@@ -5,6 +5,7 @@ import { Project, ProjectRequest } from "../../../model";
 import { ButtonInputFile } from "../../../component/shared-component/ButtonInputFile";
 import { Field, Form, useFormik } from 'formik';
 import { blankProject, blankProjectRequest } from "../../../model/blank-model";
+import { useApiStore } from "../../../api/api-store/useApiStore";
 
 interface FormAddNewProjectProps {
   data: Project
@@ -12,19 +13,20 @@ interface FormAddNewProjectProps {
   onCancel: () => void;
 }
 
-// bomId: number,
-// resourceDocumentId: number,
-// procedureId: number,
-// logId: number,
-// name: string,
-// deadLineDate: Date,
-// lastUpdateDate: Date,
-// finishDate: Date,
-// planedSellPrice: number,
-// capital: number,
-// isArchived: boolean,
-// profitInPercent: number,
-// description: string,
+const mockProjectRequest: ProjectRequest = {
+  resourceDocumentId: 0,
+  procedureId: 0,
+  name: "Automatic Coagulant Machine",
+  thumbnailUrl: '',
+  deadLineDate: new Date(),
+  lastUpdateDate: new Date(),
+  finishDate: new Date(),
+  planedSellPrice: 1000000,
+  capital: 500000,
+  isArchived: false,
+  profitInPercent: 50,
+  description: "Automatic Coagulant Machine With PID control System",
+};
 
 const FormAddNewProjectComponent: React.FC<FormAddNewProjectProps> = (props) => {
   const {
@@ -33,9 +35,18 @@ const FormAddNewProjectComponent: React.FC<FormAddNewProjectProps> = (props) => 
     onCancel,
   } = props;
 
+  const {
+    fileUtils,
+  } = useApiStore();
+
+  const handleUploadFile = async (file: File) => {
+    const fileName = await fileUtils.uploadFile(file);
+    console.log('from add Panel', fileName);
+  };
+
   const formik = useFormik<ProjectRequest>({
-    initialValues: blankProjectRequest,
-    onSubmit: (values) => onSubmit(values)
+    initialValues: mockProjectRequest,
+    onSubmit: (values) => console.log(values),
   });
 
   return (
@@ -62,7 +73,9 @@ const FormAddNewProjectComponent: React.FC<FormAddNewProjectProps> = (props) => 
           <FormControl.Label>
             Thumbnail
           </FormControl.Label>
-          <ButtonInputFile />
+          <ButtonInputFile
+            onFileSelected={(file) => handleUploadFile(file)}
+          />
         </Stack.Item>
 
       </Stack>
