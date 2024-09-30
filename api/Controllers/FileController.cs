@@ -3,6 +3,7 @@ using System.Net.Mime;
 using erpPlanner.Model;
 using erpPlanner.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Renci.SshNet;
 
 namespace erpPlanner.Controllers;
@@ -61,22 +62,47 @@ public class FileController : Controller
         return Ok(filename);
     }
 
+    /// <summary>
+    /// Download Image By File Name
+    /// </summary>
     [HttpGet]
     [Route("image")]
-    public async Task<ActionResult> GetImage()
+    public async Task<ActionResult> GetImage([FromQuery] string fileName)
     {
-        String fileName = "2caee324-fec0-4ad5-bdd4-19a9940606e2_bremco2.jpg";
-        String newFileName = Path.Combine(Path.GetTempPath(), "downloadedImage.png");
+        String fileExtension = Path.GetExtension(fileName);
+        String temporaryFileName = Path.Combine(
+            Path.GetTempPath(),
+            $"tempImageFile{fileExtension}"
+        );
 
         using (var client = new SftpClient(_sftpConfig.Host, _sftpConfig.User, _sftpConfig.Pass))
         {
-            var file = new FileStream(newFileName, FileMode.Create, FileAccess.ReadWrite);
+            var file = new FileStream(temporaryFileName, FileMode.Create, FileAccess.ReadWrite);
             client.Connect();
-            client.DownloadFile(
-                Path.Combine(_sftpConfig.BasePath, _sftpConfig.ImagePath, fileName),
-                file
-            );
-            return Ok(Url.Content(newFileName));
+            try
+            {
+                client.DownloadFile(
+                    Path.Combine(_sftpConfig.BasePath, _sftpConfig.ImagePath, fileName),
+                    file
+                );
+            }
+            catch (System.Exception)
+            {
+                return NotFound(
+                    new ErrorModel() { error = $"{fileName} NotFound", reason = "file NotFound" }
+                );
+            }
         }
+        string contentType;
+        var mime = new FileExtensionContentTypeProvider().TryGetContentType(
+            fileName,
+            out contentType
+        );
+
+        var fileByte = await System.IO.File.ReadAllBytesAsync(temporaryFileName);
+        if (String.IsNullOrEmpty(contentType))
+            return StatusCode(500);
+
+        return File(fileByte, contentType);
     }
 }
