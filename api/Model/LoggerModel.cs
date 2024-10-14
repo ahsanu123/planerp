@@ -1,5 +1,8 @@
+using TypeGen.Core.TypeAnnotations;
+
 namespace erpPlanner.Model;
 
+[ExportTsInterface(OutputDir = Constant.TypeGenBaseDirectory)]
 public class LoggerModel : BaseModel
 {
     public DateTime Date { get; set; }

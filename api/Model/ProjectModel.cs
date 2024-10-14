@@ -1,5 +1,8 @@
+using TypeGen.Core.TypeAnnotations;
+
 namespace erpPlanner.Model;
 
+[ExportTsInterface(OutputDir = Constant.TypeGenBaseDirectory)]
 public class Project : BaseModel
 {
     public string Name { get; set; }

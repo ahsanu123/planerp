@@ -19,3 +19,9 @@
   
 ![image](https://github.com/user-attachments/assets/c1f9dc80-fe5c-4c16-bbd0-f2e6ff2e0a0e)
  
+# Setup Automatic Model Generation with TypeGen
+
+- follow installation instruction from [github repository](https://github.com/jburzynski/TypeGen)
+- build project 
+- run `dotnet-typegen generate --output-folder <output-directory>`
+
