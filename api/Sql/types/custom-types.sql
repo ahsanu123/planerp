@@ -1,0 +1,5 @@
+DROP TYPE IF EXISTS complex_type;
+CREATE TYPE complex_type AS (
+  r DOUBLE PRECISION,
+  i DOUBLE PRECISION
+);
