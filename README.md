@@ -28,3 +28,4 @@
 # References 
 
 - [Postgresql Synopsis Convention](https://www.postgresql.org/docs/current/notation.html#NOTATION)
+- [JSON in Postgresql](https://www.cybertec-postgresql.com/en/json-postgresql-how-to-use-it-right/)
