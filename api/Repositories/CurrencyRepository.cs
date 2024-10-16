@@ -1,9 +1,5 @@
-using System.Data;
 using System.Xml;
-using Dapper;
-using Dapper.Postgres;
 using Newtonsoft.Json;
-using Planerp.Model;
 
 namespace Planerp.Repository;
 

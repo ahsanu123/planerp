@@ -10,10 +10,10 @@ public class Project : BaseModel
     public DateTime? DeadLineDate { get; set; }
     public DateTime LastUpdatedDate { get; set; }
     public DateTime? FinishedDate { get; set; }
-    public double? SellPrice { get; set; }
-    public double Capital { get; set; }
+    public float? SellPrice { get; set; }
+    public float Capital { get; set; }
     public bool Fail { get; set; }
     public bool Finish { get; set; }
-    public double? ProfitInPersen { get; set; }
+    public float? ProfitInPersen { get; set; }
     public string? Description { get; set; }
 }

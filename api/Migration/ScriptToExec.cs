@@ -2,14 +2,14 @@ using FluentMigrator;
 
 namespace Planerp.PlanerpMigration;
 
-public class ScriptToExec : MigrationChild
+public class ScriptToExec : MigrationBase
 {
     // this base path belong to /api
     private readonly string DatabaseBasePath = Directory.GetCurrentDirectory() + "/Database";
 
-    void MigrationChild.ChildDown(Migration migration) { }
+    void MigrationBase.MigrationDown(Migration migration) { }
 
-    void MigrationChild.ChildUp(Migration migration)
+    void MigrationBase.MigrationUp(Migration migration)
     {
         // var listSQLFile = Directory.EnumerateFiles(this.DatabaseBasePath, "*.sql");
         // foreach (var sqlFile in listSQLFile)
@@ -18,6 +18,4 @@ public class ScriptToExec : MigrationChild
         //     Console.WriteLine($"-- {sqlFile}");
         // }
     }
-
-    public void SetupForeignKey(Migration migration) { }
 }

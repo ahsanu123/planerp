@@ -13,20 +13,20 @@ public class MainMigrator : Migration
     ///
     /// </summary>
     IEnumerable<Type> listMigration = Assembly
-        .GetAssembly(typeof(MigrationChild))
+        .GetAssembly(typeof(MigrationBase))
         .GetTypes()
         .Where(type =>
-            type.IsClass && !type.IsAbstract && typeof(MigrationChild).IsAssignableFrom(type)
+            type.IsClass && !type.IsAbstract && typeof(MigrationBase).IsAssignableFrom(type)
         );
 
-    List<MigrationChild> GetMigrationInheritedClass()
+    List<MigrationBase> GetMigrationInheritedClass()
     {
-        List<MigrationChild> list = new List<MigrationChild>();
+        List<MigrationBase> list = new List<MigrationBase>();
         foreach (var item in listMigration)
         {
             if (System.Attribute.GetCustomAttributes(item).Length == 0)
             {
-                list.Add((MigrationChild)Activator.CreateInstance(item));
+                list.Add((MigrationBase)Activator.CreateInstance(item));
             }
         }
         return list;
@@ -36,7 +36,7 @@ public class MainMigrator : Migration
     {
         foreach (var item in GetMigrationInheritedClass())
         {
-            item.ChildDown(this);
+            item.MigrationDown(this);
         }
     }
 
@@ -44,11 +44,7 @@ public class MainMigrator : Migration
     {
         foreach (var item in GetMigrationInheritedClass())
         {
-            item.ChildUp(this);
-        }
-        foreach (var item in GetMigrationInheritedClass())
-        {
-            item.SetupForeignKey(this);
+            item.MigrationUp(this);
         }
     }
 }

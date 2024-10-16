@@ -1,12 +1,14 @@
 using Dapper;
+using Planerp.Extensions;
 using Planerp.Model;
 using Planerp.Services;
+using SqlKata;
 
 namespace Planerp.Repository;
 
 public interface IProjectRepository
 {
-    public Task<IEnumerable<Project>> GetProjects();
+    public Task<IEnumerable<Project>> GetProjects(Query query);
     public Task<Project> GetProjectById(int projectId);
     public Task<int> CreateProject(Project newProject);
     public Task<Project> UpdateProject(Project updatedProject);
@@ -104,12 +106,11 @@ public class ProjectRepository : IProjectRepository
         }
     }
 
-    public async Task<IEnumerable<Project>> GetProjects()
+    public async Task<IEnumerable<Project>> GetProjects(Query query)
     {
         using (var conn = _connection.CreateConnection())
         {
-            string sql = $"SELECT *	FROM public.planerp_project;";
-            var project = await conn.QueryAsync<Project>(sql);
+            var project = await conn.QuerySqlKataAsync<Project>(query);
             return project;
         }
     }
