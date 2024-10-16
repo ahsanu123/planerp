@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace erpPlanner.BuilderService;
+namespace Planerp.BuilderService;
 
 public static class BuilderSwaggerUiProvider
 {

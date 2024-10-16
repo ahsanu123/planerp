@@ -1,9 +1,9 @@
 using Dapper;
-using erpPlanner.Services;
-using erpPlanner.Model;
 using Npgsql;
+using Planerp.Model;
+using Planerp.Services;
 
-namespace erpPlanner.Repository;
+namespace Planerp.Repository;
 
 public interface IProducingStepRepository
 {
@@ -22,11 +22,13 @@ public class ProducingStepRepository : IProducingStepRepository
     {
         _connection = connection;
     }
+
     public async Task<ProducingStep> CreateProducingStep(ProducingStep newProducingStep)
     {
         using (var conn = _connection.CreateConnection())
         {
-            string sql = @"
+            string sql =
+                @"
               INSERT INTO public.plannerp_producing_step(
                 producingstepid, projectid, liststep)
                 VALUES ($1, $2, $3)  ;
@@ -35,16 +37,18 @@ public class ProducingStepRepository : IProducingStepRepository
             await conn.OpenAsync();
             await using var cmd = new NpgsqlCommand(sql, conn)
             {
-                Parameters ={
-                  new(){Value = newProducingStep.Id},
-                  new(){Value = newProducingStep.ProjectId},
-                  new(){Value = newProducingStep.ListStep},
-                }
+                Parameters =
+                {
+                    new() { Value = newProducingStep.Id },
+                    new() { Value = newProducingStep.ProjectId },
+                    new() { Value = newProducingStep.ListStep },
+                },
             };
 
             await cmd.ExecuteNonQueryAsync();
 
-            string resultQuery = $"select * from plannerp_producing_step where producingstepid = {newProducingStep.Id}";
+            string resultQuery =
+                $"select * from plannerp_producing_step where producingstepid = {newProducingStep.Id}";
             var result = await conn.QueryFirstOrDefaultAsync<ProducingStep>(resultQuery);
 
             return result;
@@ -65,7 +69,8 @@ public class ProducingStepRepository : IProducingStepRepository
     {
         using (var conn = _connection.CreateConnection())
         {
-            string sql = $"SELECT * FROM plannerp_producing_step where producingstepid = {ProducingStepId};";
+            string sql =
+                $"SELECT * FROM plannerp_producing_step where producingstepid = {ProducingStepId};";
             var producingStep = await conn.QueryFirstOrDefaultAsync<ProducingStep>(sql);
 
             return producingStep;
@@ -77,5 +82,3 @@ public class ProducingStepRepository : IProducingStepRepository
         throw new NotImplementedException();
     }
 }
-
-

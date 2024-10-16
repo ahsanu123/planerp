@@ -2,7 +2,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using Npgsql;
 
-namespace erpPlanner.Services;
+namespace Planerp.Services;
 
 public interface IConnectionProvider
 {

@@ -2,7 +2,7 @@ using System.Reflection;
 using FluentMigrator;
 using FluentMigrator.Runner;
 
-namespace erpPlanner.pMigration;
+namespace Planerp.PlanerpMigration;
 
 public interface MigrationChild
 {

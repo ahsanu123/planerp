@@ -1,6 +1,6 @@
-using erpPlanner.pMigration;
+using Planerp.PlanerpMigration;
 
-namespace erpPlanner.BuilderService;
+namespace Planerp.BuilderService;
 
 public static class OpenIdDictProvider
 {

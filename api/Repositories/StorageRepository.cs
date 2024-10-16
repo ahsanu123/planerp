@@ -1,10 +1,10 @@
-using Npgsql;
-using Dapper;
-using erpPlanner.Services;
-using erpPlanner.Model;
 using System.Data.Common;
+using Dapper;
+using Npgsql;
+using Planerp.Model;
+using Planerp.Services;
 
-namespace erpPlanner.Repository;
+namespace Planerp.Repository;
 
 public interface IStorageRepository
 {
@@ -18,24 +18,25 @@ public interface IStorageRepository
 public class StorageRepository : IStorageRepository
 {
     private readonly PostgresqlConnectionProvider _connection;
+
     public StorageRepository(PostgresqlConnectionProvider connection)
     {
         _connection = connection;
     }
+
     public async Task<int> CreateStorage(Storage newStorage)
     {
-        string sql = @"
+        string sql =
+            @"
         INSERT INTO planerp_storage(name, location)
           VALUES (@name, @location) RETURNING storageid;";
 
         using (var conn = _connection.CreateConnection())
         {
-
-            var id = await conn.ExecuteScalarAsync<int>(sql, new
-            {
-                name = newStorage.Name,
-                location = newStorage.Location
-            });
+            var id = await conn.ExecuteScalarAsync<int>(
+                sql,
+                new { name = newStorage.Name, location = newStorage.Location }
+            );
             return id;
         }
     }
@@ -45,10 +46,7 @@ public class StorageRepository : IStorageRepository
         string sql = "DELETE FROM planerp_storage	WHERE storageid=@storageid;";
         using (var conn = _connection.CreateConnection())
         {
-            var affectedRow = await conn.ExecuteAsync(sql, new
-            {
-                storageid = storageId
-            });
+            var affectedRow = await conn.ExecuteAsync(sql, new { storageid = storageId });
             return affectedRow;
         }
     }
@@ -68,10 +66,10 @@ public class StorageRepository : IStorageRepository
         using (var conn = _connection.CreateConnection())
         {
             string sql = $@"SELECT * FROM planerp_storage where storageid=@storageid;";
-            var storage = await conn.QueryFirstOrDefaultAsync<Storage>(sql, new
-            {
-                storageid = storageId
-            });
+            var storage = await conn.QueryFirstOrDefaultAsync<Storage>(
+                sql,
+                new { storageid = storageId }
+            );
             return storage;
         }
     }
@@ -80,20 +78,26 @@ public class StorageRepository : IStorageRepository
     {
         using (var conn = _connection.CreateConnection())
         {
-            string sql = @"
+            string sql =
+                @"
             UPDATE planerp_storage
               SET  name=@name, location=@location
               WHERE storageid = @storageid;
           ";
 
-            await conn.ExecuteAsync(sql, new
-            {
-                name = updatedStorage.Name,
-                location = updatedStorage.Location,
-                storageid = updatedStorage.Id
-            });
+            await conn.ExecuteAsync(
+                sql,
+                new
+                {
+                    name = updatedStorage.Name,
+                    location = updatedStorage.Location,
+                    storageid = updatedStorage.Id,
+                }
+            );
 
-            var result = await conn.QuerySingleOrDefaultAsync<Storage>($"select * from planerp_storage where storageid = {updatedStorage.Id}");
+            var result = await conn.QuerySingleOrDefaultAsync<Storage>(
+                $"select * from planerp_storage where storageid = {updatedStorage.Id}"
+            );
 
             return result;
         }

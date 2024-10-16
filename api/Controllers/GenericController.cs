@@ -1,8 +1,8 @@
-using erpPlanner.Model;
-using erpPlanner.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Planerp.Model;
+using Planerp.Repository;
 
-namespace erpPlanner.Controllers;
+namespace Planerp.Controllers;
 
 [ApiController]
 public class GenericController<T> : Controller

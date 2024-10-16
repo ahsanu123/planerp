@@ -1,8 +1,8 @@
 using Dapper;
-using erpPlanner.Model;
-using erpPlanner.Services;
+using Planerp.Model;
+using Planerp.Services;
 
-namespace erpPlanner.Repository;
+namespace Planerp.Repository;
 
 // most diference think about postgresql and sqlserver is, stored procedure in postgresql doesnt return a value or table
 // but in sqlserver does.

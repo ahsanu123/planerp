@@ -1,8 +1,8 @@
-using erpPlanner.BuilderService;
-using erpPlanner.Model;
-using erpPlanner.pMigration;
 using GraphQL.AspNet.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Planerp.BuilderService;
+using Planerp.Model;
+using Planerp.PlanerpMigration;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;

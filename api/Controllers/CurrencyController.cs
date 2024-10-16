@@ -1,10 +1,10 @@
 using System.Xml;
-using erpPlanner.Model;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Planerp.Model;
 
-namespace erpPlanner.Controllers;
+namespace Planerp.Controllers;
 
 [ApiController]
 [Route("Currency/")]

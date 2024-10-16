@@ -1,7 +1,7 @@
-using erpPlanner.Model;
-using erpPlanner.pMigration;
+using Planerp.Model;
+using Planerp.PlanerpMigration;
 
-namespace erpPlanner.BuilderService;
+namespace Planerp.BuilderService;
 
 public static class BuilderAspnetDefaultIdentityProvider
 {

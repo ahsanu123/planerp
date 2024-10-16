@@ -6,7 +6,7 @@ using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace erpPlanner.Controllers;
+namespace Planerp.Controllers;
 
 [ApiController]
 [Route("openiddict")]
@@ -49,9 +49,12 @@ public class OpenIddictController : Controller
             identity.SetDestinations(static claim =>
                 claim.Type switch
                 {
-                    Claims.Name when claim.Subject.HasScope(Scopes.Profile)
-                        => [Destinations.AccessToken, Destinations.IdentityToken],
-                    _ => [Destinations.AccessToken]
+                    Claims.Name when claim.Subject.HasScope(Scopes.Profile) =>
+                    [
+                        Destinations.AccessToken,
+                        Destinations.IdentityToken,
+                    ],
+                    _ => [Destinations.AccessToken],
                 }
             );
             return SignIn(

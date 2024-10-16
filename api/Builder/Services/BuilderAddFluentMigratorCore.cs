@@ -1,7 +1,7 @@
 using System.Reflection;
 using FluentMigrator.Runner;
 
-namespace erpPlanner.BuilderService;
+namespace Planerp.BuilderService;
 
 public static class BuilderFluentMigratorProvider
 {

@@ -1,8 +1,8 @@
-using erpPlanner.Model;
-using erpPlanner.pMigration;
 using Microsoft.EntityFrameworkCore;
+using Planerp.Model;
+using Planerp.PlanerpMigration;
 
-namespace erpPlanner.Repository;
+namespace Planerp.Repository;
 
 public interface IGenericRepository<T>
     where T : BaseModel

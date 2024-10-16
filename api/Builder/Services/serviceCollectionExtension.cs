@@ -1,8 +1,8 @@
-using erpPlanner.Model;
-using erpPlanner.Repository;
-using erpPlanner.Services;
+using Planerp.Model;
+using Planerp.Repository;
+using Planerp.Services;
 
-namespace erpPlanner.BuilderService;
+namespace Planerp.BuilderService;
 
 public static class ServiceCollectionCustom
 {

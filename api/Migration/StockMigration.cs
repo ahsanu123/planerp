@@ -1,6 +1,6 @@
 using FluentMigrator;
 
-namespace erpPlanner.pMigration;
+namespace Planerp.PlanerpMigration;
 
 public class StockMigration : MigrationChild
 {

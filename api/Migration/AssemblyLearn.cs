@@ -1,8 +1,9 @@
+namespace Planerp.assem;
 
-namespace erpPlanner.assem;
-[System.AttributeUsage(System.AttributeTargets.Class |
-                       System.AttributeTargets.Struct,
-                       AllowMultiple = true)  // Multiuse attribute.
+[System.AttributeUsage(
+    System.AttributeTargets.Class | System.AttributeTargets.Struct,
+    AllowMultiple = true
+) // Multiuse attribute.
 ]
 public class AuthorAttribute : System.Attribute
 {
@@ -32,7 +33,6 @@ public class InheritBase : BaseAssem
     {
         return "Inherit Hello";
     }
-
 }
 
 public class Hoho : BaseAssem
@@ -41,8 +41,8 @@ public class Hoho : BaseAssem
     {
         return "Hoho Hello";
     }
-
 }
+
 public class hihi : BaseAssem
 {
     public override string hello()

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace erpPlanner.Model;
+namespace Planerp.Model;
 
 public class CustomIdentityModel : IdentityUser
 {

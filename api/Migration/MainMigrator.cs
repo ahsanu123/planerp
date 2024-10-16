@@ -1,7 +1,7 @@
 using System.Reflection;
 using FluentMigrator;
 
-namespace erpPlanner.pMigration;
+namespace Planerp.PlanerpMigration;
 
 [Migration(MigrationExtension.MIGRATION_VERSION, MigrationExtension.MIGRATION_DESCRIPTION)]
 public class MainMigrator : Migration

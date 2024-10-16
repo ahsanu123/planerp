@@ -1,6 +1,6 @@
 using TypeGen.Core.TypeAnnotations;
 
-namespace erpPlanner.Model;
+namespace Planerp.Model;
 
 [ExportTsInterface(OutputDir = Constant.TypeGenBaseDirectory)]
 public class Currency

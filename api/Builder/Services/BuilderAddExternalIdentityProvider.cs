@@ -1,4 +1,4 @@
-namespace erpPlanner.BuilderService;
+namespace Planerp.BuilderService;
 
 public static class BuilderExternalIdentityProvider
 {

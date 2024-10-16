@@ -1,5 +1,5 @@
-using erpPlanner.pMigration;
 using OpenIddict.Abstractions;
+using Planerp.PlanerpMigration;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 public class OpendIddictWorker : IHostedService
@@ -28,8 +28,8 @@ public class OpendIddictWorker : IHostedService
                     Permissions =
                     {
                         Permissions.Endpoints.Token,
-                        Permissions.GrantTypes.ClientCredentials
-                    }
+                        Permissions.GrantTypes.ClientCredentials,
+                    },
                 }
             );
         }

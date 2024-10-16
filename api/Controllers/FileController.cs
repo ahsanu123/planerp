@@ -1,8 +1,8 @@
-using erpPlanner.Model;
-using erpPlanner.Services;
 using Microsoft.AspNetCore.Mvc;
+using Planerp.Model;
+using Planerp.Services;
 
-namespace erpPlanner.Controllers;
+namespace Planerp.Controllers;
 
 [ApiController]
 [Route("File/")]

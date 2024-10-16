@@ -1,9 +1,9 @@
-using erpPlanner.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using Planerp.Model;
 using Renci.SshNet;
 
-namespace erpPlanner.Services;
+namespace Planerp.Services;
 
 public class FileUtilService
 {

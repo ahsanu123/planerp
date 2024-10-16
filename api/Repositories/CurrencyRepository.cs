@@ -1,12 +1,11 @@
-using System.Xml;
 using System.Data;
+using System.Xml;
 using Dapper;
 using Dapper.Postgres;
-
-using erpPlanner.Model;
 using Newtonsoft.Json;
+using Planerp.Model;
 
-namespace erpPlanner.Repository;
+namespace Planerp.Repository;
 
 public interface ICurrencyRepository
 {
@@ -23,6 +22,5 @@ public class CurrencyRepostory : ICurrencyRepository
 
         var convertedJson = JsonConvert.SerializeXmlNode(xmlDoc);
         return convertedJson;
-
     }
 }

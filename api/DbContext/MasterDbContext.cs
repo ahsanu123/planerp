@@ -1,8 +1,8 @@
-using erpPlanner.Model;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Planerp.Model;
 
-namespace erpPlanner.pMigration;
+namespace Planerp.PlanerpMigration;
 
 public class MasterContext : IdentityDbContext<CustomIdentityModel>
 {

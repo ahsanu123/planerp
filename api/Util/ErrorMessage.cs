@@ -1,6 +1,4 @@
-
-
-namespace erpPlanner.Util;
+namespace Planerp.Util;
 
 public class ErrorMessage
 {

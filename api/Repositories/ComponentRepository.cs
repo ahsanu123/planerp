@@ -1,8 +1,8 @@
 using Dapper;
-using erpPlanner.Model;
-using erpPlanner.Services;
+using Planerp.Model;
+using Planerp.Services;
 
-namespace erpPlanner.Repository;
+namespace Planerp.Repository;
 
 public interface IComponentRepository
 {

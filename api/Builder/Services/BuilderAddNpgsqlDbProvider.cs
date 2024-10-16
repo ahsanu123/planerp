@@ -1,7 +1,7 @@
-using erpPlanner.pMigration;
 using Microsoft.EntityFrameworkCore;
+using Planerp.PlanerpMigration;
 
-namespace erpPlanner.BuilderService;
+namespace Planerp.BuilderService;
 
 public static class NpgSqlDbProvider
 {

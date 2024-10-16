@@ -1,6 +1,6 @@
 using GraphQL.AspNet.Configuration;
 
-namespace erpPlanner.BuilderService;
+namespace Planerp.BuilderService;
 
 public static class BuilderAddGraphQLProvider
 {

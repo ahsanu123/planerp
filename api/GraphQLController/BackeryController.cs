@@ -1,7 +1,7 @@
 using GraphQL.AspNet.Attributes;
 using GraphQL.AspNet.Controllers;
 
-namespace erpPlanner.Controllers;
+namespace Planerp.Controllers;
 
 public class BakeryController : GraphController
 {
@@ -12,7 +12,7 @@ public class BakeryController : GraphController
         {
             Id = 3,
             Name = "Snowy Dream",
-            Flavor = "Vanilla"
+            Flavor = "Vanilla",
         };
     }
 }

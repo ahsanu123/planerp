@@ -1,9 +1,9 @@
-using erpPlanner.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Planerp.Model;
 
-namespace erpPlanner.Controllers;
+namespace Planerp.Controllers;
 
 [ApiController]
 public class IdentityController : Controller

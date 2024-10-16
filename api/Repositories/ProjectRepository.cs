@@ -1,8 +1,8 @@
 using Dapper;
-using erpPlanner.Services;
-using erpPlanner.Model;
+using Planerp.Model;
+using Planerp.Services;
 
-namespace erpPlanner.Repository;
+namespace Planerp.Repository;
 
 public interface IProjectRepository
 {
@@ -27,7 +27,8 @@ public class ProjectRepository : IProjectRepository
     {
         using (var conn = _connection.CreateConnection())
         {
-            string sql = @"
+            string sql =
+                @"
             INSERT INTO planerp_project(
                 name, 
                 createddate, 
@@ -54,20 +55,23 @@ public class ProjectRepository : IProjectRepository
                 @description)
             RETURNING projectid;";
 
-            var createdProjectId = await conn.ExecuteScalarAsync<int>(sql, new
-            {
-                name = newProject.Name,
-                createddate = newProject.CreatedDate,
-                deadlinedate = newProject.DeadLineDate,
-                lastupdateddate = newProject.LastUpdatedDate,
-                finisheddate = newProject.FinishedDate,
-                sellprice = newProject.SellPrice,
-                capital = newProject.Capital,
-                fail = newProject.Fail,
-                finish = newProject.Finish,
-                profitinpersen = newProject.ProfitInPersen,
-                description = newProject.Description
-            });
+            var createdProjectId = await conn.ExecuteScalarAsync<int>(
+                sql,
+                new
+                {
+                    name = newProject.Name,
+                    createddate = newProject.CreatedDate,
+                    deadlinedate = newProject.DeadLineDate,
+                    lastupdateddate = newProject.LastUpdatedDate,
+                    finisheddate = newProject.FinishedDate,
+                    sellprice = newProject.SellPrice,
+                    capital = newProject.Capital,
+                    fail = newProject.Fail,
+                    finish = newProject.Finish,
+                    profitinpersen = newProject.ProfitInPersen,
+                    description = newProject.Description,
+                }
+            );
 
             return createdProjectId;
         }
@@ -79,10 +83,10 @@ public class ProjectRepository : IProjectRepository
         {
             string sql = $"DELETE FROM planerp_project WHERE projectId = @projectId";
 
-            var affectedRow = await conn.ExecuteScalarAsync<int>(sql, new
-            {
-                projectId = projectId
-            });
+            var affectedRow = await conn.ExecuteScalarAsync<int>(
+                sql,
+                new { projectId = projectId }
+            );
             return affectedRow;
         }
     }
@@ -92,10 +96,10 @@ public class ProjectRepository : IProjectRepository
         using (var conn = _connection.CreateConnection())
         {
             string sql = $"SELECT *	FROM planerp_project WHERE projectId = @projectId;";
-            var project = await conn.QuerySingleOrDefaultAsync<Project>(sql, new
-            {
-                projectId = projectId
-            });
+            var project = await conn.QuerySingleOrDefaultAsync<Project>(
+                sql,
+                new { projectId = projectId }
+            );
             return project;
         }
     }
@@ -114,8 +118,8 @@ public class ProjectRepository : IProjectRepository
     {
         using (var conn = _connection.CreateConnection())
         {
-
-            string sql = @"
+            string sql =
+                @"
           UPDATE planerp_project
           SET 
             name=@name, 
@@ -131,27 +135,29 @@ public class ProjectRepository : IProjectRepository
             description=@description
           WHERE projectid = @projectId;";
 
-            await conn.ExecuteAsync(sql, new
-            {
-                name = updatedProject.Name,
-                createddate = updatedProject.CreatedDate,
-                deadlinedate = updatedProject.DeadLineDate,
-                lastupdateddate = updatedProject.LastUpdatedDate,
-                finisheddate = updatedProject.FinishedDate,
-                sellprice = updatedProject.SellPrice,
-                capital = updatedProject.Capital,
-                fail = updatedProject.Fail,
-                finish = updatedProject.Finish,
-                profitinpersen = updatedProject.ProfitInPersen,
-                description = updatedProject.Description
-            });
-
+            await conn.ExecuteAsync(
+                sql,
+                new
+                {
+                    name = updatedProject.Name,
+                    createddate = updatedProject.CreatedDate,
+                    deadlinedate = updatedProject.DeadLineDate,
+                    lastupdateddate = updatedProject.LastUpdatedDate,
+                    finisheddate = updatedProject.FinishedDate,
+                    sellprice = updatedProject.SellPrice,
+                    capital = updatedProject.Capital,
+                    fail = updatedProject.Fail,
+                    finish = updatedProject.Finish,
+                    profitinpersen = updatedProject.ProfitInPersen,
+                    description = updatedProject.Description,
+                }
+            );
 
             sql = $"SELECT *	FROM planerp_project WHERE projectId = @projectId;";
-            var updatedResult = await conn.QuerySingleOrDefaultAsync<Project>(sql, new
-            {
-                projectId = updatedProject.Id
-            });
+            var updatedResult = await conn.QuerySingleOrDefaultAsync<Project>(
+                sql,
+                new { projectId = updatedProject.Id }
+            );
 
             return updatedResult;
         }

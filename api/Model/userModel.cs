@@ -1,4 +1,4 @@
-namespace erpPlanner.Model;
+namespace Planerp.Model;
 
 public class User
 {
