@@ -2,7 +2,6 @@ namespace Planerp.PlanerpMigration;
 
 using System.Data;
 using System.Text.RegularExpressions;
-using Dapper;
 using FluentMigrator;
 using FluentMigrator.Builders.Create.Table;
 

@@ -22,43 +22,49 @@ public class ProjectPageRepository : IProjectPageRepository
 
     public async Task<ProjectPageDetailInformation> GetProjectPageDetail(int id)
     {
-        var projectDetailsQuery = new Query(nameof(Project));
+        var SelectProject_QUERY = new Query(nameof(Project));
+
+        var SelectProjectWhereProjectIdEqual_QUERY = SelectProject_QUERY
+            .Clone()
+            .Where(FullNameof(nameof(Project.Id)), id)
+            .SelectAllClassProperties(typeof(Project));
+
+        var SelectModelLoggerWhereProjectIdEqual_QUERY = SelectProject_QUERY
+            .Clone()
+            .Join(
+                nameof(LoggerModel),
+                FullNameof(nameof(Project.Id)),
+                FullNameof(nameof(LoggerModel.ProjectId))
+            )
+            .SelectAllClassProperties(typeof(LoggerModel));
+
+        var WithProjectComponentList_CTE = new Query(nameof(ProjectComponentList))
+            .Select(nameof(ProjectComponentList.ComponentId))
+            .Where(nameof(ProjectComponentList.ProjectId), id);
+
+        var SelectArrayComponentWhereProjectComponentIdEqual_QUERY = new Query(nameof(Component))
+            .WithAutoAlias(WithProjectComponentList_CTE)
+            .SelectAllClassProperties(typeof(Component))
+            .Join(
+                nameof(WithProjectComponentList_CTE),
+                nameof(ProjectComponentList.ComponentId),
+                FullNameof(nameof(Component.Id))
+            );
 
         using (var conn = _connection.CreateConnection())
         {
             var resultProject = await conn.QuerySingleSqlKataAsync<Project>(
-                projectDetailsQuery
-                    .Clone()
-                    .Where(GetClassColumn<Project>(nameof(Project.Id)), id)
-                    .SelectAllClassProperties(typeof(Project)),
+                SelectProjectWhereProjectIdEqual_QUERY,
                 true
             );
 
             var resultLogger = await conn.QuerySqlKataAsync<LoggerModel>(
-                projectDetailsQuery
-                    .Clone()
-                    .Join(
-                        nameof(LoggerModel),
-                        GetClassColumn<Project>(nameof(Project.Id)),
-                        GetClassColumn<LoggerModel>(nameof(LoggerModel.ProjectId))
-                    )
-                    .SelectAllClassProperties(typeof(LoggerModel)),
+                SelectModelLoggerWhereProjectIdEqual_QUERY,
                 true
             );
 
-            var projectComponentIdArray = new Query(nameof(ProjectComponentList))
-                .Select(nameof(ProjectComponentList.ComponentId))
-                .Where(nameof(ProjectComponentList.ProjectId), id);
-
             var resultComponent = await conn.QuerySqlKataAsync<Component>(
-                new Query(nameof(Component))
-                    .With("ProjectComponnentId", projectComponentIdArray)
-                    .SelectAllClassProperties(typeof(Component))
-                    .Join(
-                        "ProjectComponnentId",
-                        "ProjectComponnentId.ComponentId",
-                        GetClassColumn<Component>(nameof(Component.Id))
-                    ),
+                SelectArrayComponentWhereProjectComponentIdEqual_QUERY,
                 true
             );
 

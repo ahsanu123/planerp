@@ -2,9 +2,9 @@ namespace Planerp.Extensions;
 
 using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Dapper;
 using Newtonsoft.Json;
-using Planerp.Model;
 using SqlKata;
 using SqlKata.Compilers;
 
@@ -72,6 +72,16 @@ public static class DapperSqlKataExtension
         }
 
         query.Select(columnlists);
+        return query;
+    }
+
+    public static Query WithAutoAlias(
+        this Query query,
+        Query queryToRun,
+        [CallerArgumentExpression(nameof(queryToRun))] string callerParameter = ""
+    )
+    {
+        query.With(callerParameter, queryToRun);
         return query;
     }
 }

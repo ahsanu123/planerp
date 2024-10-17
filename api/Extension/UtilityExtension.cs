@@ -17,10 +17,18 @@ public static class UtilityExtension
         Console.WriteLine("-------------------------");
     }
 
-    public static string GetClassColumn<T>(string propertyName)
-        where T : class
+    // reference: https://stackoverflow.com/a/75958935/19270838
+    // official docs: https://learn.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.callerargumentexpressionattribute.-ctor?view=net-7.0#system-runtime-compilerservices-callerargumentexpressionattribute-ctor(system-string)
+    public static string FullNameof(
+        string propertyName,
+        [CallerArgumentExpression(nameof(propertyName))] string fullNameof = ""
+    )
     {
-        var className = typeof(T).Name;
-        return $"{className}.{propertyName}";
+        return fullNameof.Substring(7, fullNameof.Length - 8);
+    }
+
+    public static string GetLastWordAfterDot(string dotSeparatedString)
+    {
+        return dotSeparatedString.Split(".").Last();
     }
 }

@@ -1,5 +1,7 @@
 using System.ComponentModel;
 using System.Net.Mime;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 using Planerp.Model;
 using Planerp.Repository;
@@ -62,6 +64,21 @@ public class SqlKataController : ControllerBase
         }
     }
 
+    // reference: https://stackoverflow.com/a/75958935/19270838
+    // official docs: https://learn.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.callerargumentexpressionattribute.-ctor?view=net-7.0#system-runtime-compilerservices-callerargumentexpressionattribute-ctor(system-string)
+    private IEnumerable<string> PrintObjectName(
+        string className,
+        [CallerArgumentExpression(nameof(className))] string stringClassName = ""
+    )
+    {
+        var nspace = "Planerp.Model";
+        var asm = Assembly.GetExecutingAssembly();
+        return asm.GetTypes()
+            .Where(type => type.Namespace == nspace)
+            .Select(type => type.Name)
+            .Append(stringClassName.Substring(7, stringClassName.Length - 8));
+    }
+
     [HttpGet]
     [Route("ListClass")]
     public async Task<IActionResult> GetListClass()
@@ -80,6 +97,6 @@ public class SqlKataController : ControllerBase
             keyVal.Add(prop.Name, prop.ToString());
         }
 
-        return Ok(keyVal);
+        return Ok(this.PrintObjectName(nameof(Project.Name)));
     }
 }
