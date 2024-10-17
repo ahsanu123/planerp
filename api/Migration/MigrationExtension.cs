@@ -12,7 +12,7 @@ public interface MigrationBase
 
 public static class MigrationExtension
 {
-    public const int MIGRATION_VERSION = 45;
+    public const int MIGRATION_VERSION = 48;
     public const string MIGRATION_DESCRIPTION = $"Add Migration Message Here";
     public static bool UpdateForeignKey = false;
 
@@ -29,6 +29,9 @@ public static class MigrationExtension
             runner.Down(new MainMigrator());
 
             runner.MigrateUp(MigrationExtension.MIGRATION_VERSION);
+            // this is for update foreign key
+            // after table is established in database
+            // MigrationExtension.UpdateForeignKey = true;
             MigrationExtension.UpdateForeignKey = true;
             runner.Up(new MainMigrator());
         }
@@ -45,9 +48,10 @@ public static class MigrationExtension
 
     public static Migration DeleteTableIfExistsCascadePostgresql(
         this Migration migration,
-        string tableName
+        Type className
     )
     {
+        var tableName = className.Name;
         var postgresqlDeleteCascade = $"DROP TABLE IF EXISTS \"{tableName}\" CASCADE;";
         migration.Execute.Sql(postgresqlDeleteCascade);
         return migration;

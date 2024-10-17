@@ -2,6 +2,7 @@ namespace Planerp.PlanerpMigration;
 
 using System.Data;
 using System.Text.RegularExpressions;
+using Dapper;
 using FluentMigrator;
 using FluentMigrator.Builders.Create.Table;
 
@@ -17,9 +18,8 @@ public static class ModelToMigration
         return withColumnSyntax;
     }
 
-    public static Migration GenerateForeignKey(this Migration migration, object model)
+    public static Migration GenerateForeignKey(this Migration migration, Type modelType)
     {
-        var modelType = model.GetType();
         var tableName = modelType.FullName.Split('.').Last();
 
         foreach (var key in modelType.GetProperties())
@@ -44,9 +44,8 @@ public static class ModelToMigration
         return migration;
     }
 
-    public static Migration ConvertModelToMigration(this Migration migration, object model)
+    public static Migration ConvertModelToMigration(this Migration migration, Type modelType)
     {
-        var modelType = model.GetType();
         var tableName = modelType.FullName.Split('.').Last();
 
         var table = migration.Create.Table(tableName);

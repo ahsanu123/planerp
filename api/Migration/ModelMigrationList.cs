@@ -5,36 +5,29 @@ namespace Planerp.PlanerpMigration;
 
 public class ModelMigrationList : MigrationBase
 {
+    private List<Type> listModel = new List<Type>
+    {
+        typeof(LoggerModel),
+        typeof(ProducingStep),
+        typeof(Project),
+        typeof(ResourceDoc),
+        typeof(Storage),
+        typeof(Component),
+        typeof(ProjectComponentList),
+    };
+
     public void MigrationDown(Migration migration)
     {
-        migration
-            .DeleteTableIfExistsCascadePostgresql(nameof(LoggerModel))
-            .DeleteTableIfExistsCascadePostgresql(nameof(ProducingStep))
-            .DeleteTableIfExistsCascadePostgresql(nameof(Project))
-            .DeleteTableIfExistsCascadePostgresql(nameof(ResourceDoc))
-            .DeleteTableIfExistsCascadePostgresql(nameof(Storage))
-            .DeleteTableIfExistsCascadePostgresql(nameof(Component));
+        this.listModel.ForEach((type) => migration.DeleteTableIfExistsCascadePostgresql(type));
     }
 
     public void MigrationUp(Migration migration)
     {
-        migration
-            .ConvertModelToMigration(new LoggerModel())
-            .ConvertModelToMigration(new ProducingStep())
-            .ConvertModelToMigration(new Project())
-            .ConvertModelToMigration(new ResourceDoc())
-            .ConvertModelToMigration(new Storage())
-            .ConvertModelToMigration(new Component());
+        this.listModel.ForEach((type) => migration.ConvertModelToMigration(type));
     }
 
     public void GenerateForeignKey(Migration migration)
     {
-        migration
-            .GenerateForeignKey(new LoggerModel())
-            .GenerateForeignKey(new ProducingStep())
-            .GenerateForeignKey(new Project())
-            .GenerateForeignKey(new ResourceDoc())
-            .GenerateForeignKey(new Storage())
-            .GenerateForeignKey(new Component());
+        this.listModel.ForEach((type) => migration.GenerateForeignKey(type));
     }
 }

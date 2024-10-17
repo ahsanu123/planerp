@@ -24,7 +24,11 @@ public class ProjectPageController : ControllerBase
     [Route("details/{id}")]
     public async Task<IActionResult> GetProjectDetails([FromRoute] int id)
     {
-        var projectDetails = await this._projectDetailRepo.GetProjectPageDetail(1);
+        var projectDetails = await this._projectDetailRepo.GetProjectPageDetail(id);
+        if (projectDetails.Project == null)
+        {
+            return NotFound();
+        }
         return Ok(projectDetails);
     }
 }

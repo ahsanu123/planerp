@@ -29,3 +29,4 @@
 
 - [Postgresql Synopsis Convention](https://www.postgresql.org/docs/current/notation.html#NOTATION)
 - [JSON in Postgresql](https://www.cybertec-postgresql.com/en/json-postgresql-how-to-use-it-right/)
+- [Dapper Custom Type Mapper](https://medium.com/dapper-net/custom-type-handling-4b447b97c620)

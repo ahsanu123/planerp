@@ -40,6 +40,9 @@ public static class DapperSqlKataExtension
         if (LogRaw)
         {
             UtilityExtension.ShowCurrentPosition(sqlResult.Sql);
+            UtilityExtension.ShowCurrentPosition(
+                JsonConvert.SerializeObject(sqlResult.NamedBindings)
+            );
         }
 
         return await conn.QueryAsync<T>(sqlResult.Sql, sqlResult.NamedBindings);

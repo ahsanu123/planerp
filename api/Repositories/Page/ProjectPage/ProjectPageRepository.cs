@@ -27,7 +27,11 @@ public class ProjectPageRepository : IProjectPageRepository
         using (var conn = _connection.CreateConnection())
         {
             var resultProject = await conn.QuerySingleSqlKataAsync<Project>(
-                projectDetailsQuery.Clone().SelectAllClassProperties(typeof(Project))
+                projectDetailsQuery
+                    .Clone()
+                    .Where(GetClassColumn<Project>(nameof(Project.Id)), id)
+                    .SelectAllClassProperties(typeof(Project)),
+                true
             );
 
             var resultLogger = await conn.QuerySqlKataAsync<LoggerModel>(
@@ -38,18 +42,24 @@ public class ProjectPageRepository : IProjectPageRepository
                         GetClassColumn<Project>(nameof(Project.Id)),
                         GetClassColumn<LoggerModel>(nameof(LoggerModel.ProjectId))
                     )
-                    .SelectAllClassProperties(typeof(LoggerModel))
+                    .SelectAllClassProperties(typeof(LoggerModel)),
+                true
             );
 
+            var projectComponentIdArray = new Query(nameof(ProjectComponentList))
+                .Select(nameof(ProjectComponentList.ComponentId))
+                .Where(nameof(ProjectComponentList.ProjectId), id);
+
             var resultComponent = await conn.QuerySqlKataAsync<Component>(
-                projectDetailsQuery
-                    .Clone()
-                    .Join(
-                        nameof(Component),
-                        nameof(Project.ComponentId),
-                        GetClassColumn<Component>(nameof(Component.Id))
-                    )
+                new Query(nameof(Component))
+                    .With("ProjectComponnentId", projectComponentIdArray)
                     .SelectAllClassProperties(typeof(Component))
+                    .Join(
+                        "ProjectComponnentId",
+                        "ProjectComponnentId.ComponentId",
+                        GetClassColumn<Component>(nameof(Component.Id))
+                    ),
+                true
             );
 
             var projectDetails = new ProjectPageDetailInformation
