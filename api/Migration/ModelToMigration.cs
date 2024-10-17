@@ -17,6 +17,33 @@ public static class ModelToMigration
         return withColumnSyntax;
     }
 
+    public static Migration GenerateForeignKey(this Migration migration, object model)
+    {
+        var modelType = model.GetType();
+        var tableName = modelType.FullName.Split('.').Last();
+
+        foreach (var key in modelType.GetProperties())
+        {
+            var typeString = key.ToString();
+            var isPrimaryKey = Regex.IsMatch(key.Name.ToLower(), "^id$");
+            var isForeignKey = Regex.IsMatch(key.Name, "Id$");
+
+            if (isForeignKey && !isPrimaryKey)
+            {
+                migration
+                    .Create.ForeignKey()
+                    .FromTable(tableName)
+                    .ForeignColumn(key.Name)
+                    .ToTable(key.Name.Substring(0, key.Name.Length - 2))
+                    .PrimaryColumn("Id")
+                    .OnDelete(Rule.Cascade)
+                    .OnDeleteOrUpdate(Rule.Cascade);
+            }
+        }
+
+        return migration;
+    }
+
     public static Migration ConvertModelToMigration(this Migration migration, object model)
     {
         var modelType = model.GetType();
@@ -30,10 +57,6 @@ public static class ModelToMigration
             var column = table.WithColumn(key.Name);
             var isPrimaryKey = Regex.IsMatch(key.Name.ToLower(), "^id$");
             var isForeignKey = Regex.IsMatch(key.Name, "Id$");
-
-            Console.WriteLine("+++++++++++++++++++");
-            Console.WriteLine(key.Name);
-            Console.WriteLine("+++++++++++++++++++");
 
             if (isPrimaryKey)
             {
@@ -90,28 +113,11 @@ public static class ModelToMigration
 
             if (typeString.Contains(nameof(System.Single)))
             {
-                column.AsInt64().IsNullable(typeString);
+                column.AsFloat().IsNullable(typeString);
                 continue;
             }
         }
 
-        foreach (var key in modelType.GetProperties())
-        {
-            var typeString = key.ToString();
-            var isPrimaryKey = Regex.IsMatch(key.Name.ToLower(), "^id$");
-            var isForeignKey = Regex.IsMatch(key.Name, "Id$");
-
-            if (isForeignKey && !isPrimaryKey)
-            {
-                migration
-                    .Create.ForeignKey()
-                    .FromTable(tableName)
-                    .ForeignColumn(key.Name)
-                    .ToTable(key.Name.Substring(0, key.Name.Length - 2))
-                    .PrimaryColumn("Id")
-                    .OnDeleteOrUpdate(Rule.Cascade);
-            }
-        }
         return migration;
     }
 }

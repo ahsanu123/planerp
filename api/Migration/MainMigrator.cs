@@ -8,7 +8,7 @@ public class MainMigrator : Migration
 {
     /// <summary>
     ///
-    /// Scan All MigrationChild in assembly, and create instance of it
+    /// Scan All MigrationBase in assembly, and create instance of it
     /// then run childUp or childDown inside MainMigrator Up and Down Method
     ///
     /// </summary>
@@ -42,9 +42,20 @@ public class MainMigrator : Migration
 
     public override void Up()
     {
-        foreach (var item in GetMigrationInheritedClass())
+        if (!MigrationExtension.UpdateForeignKey)
         {
-            item.MigrationUp(this);
+            foreach (var item in GetMigrationInheritedClass())
+            {
+                item.MigrationUp(this);
+            }
+        }
+
+        if (MigrationExtension.UpdateForeignKey)
+        {
+            foreach (var item in GetMigrationInheritedClass())
+            {
+                item.GenerateForeignKey(this);
+            }
         }
     }
 }

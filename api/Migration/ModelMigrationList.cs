@@ -8,12 +8,12 @@ public class ModelMigrationList : MigrationBase
     public void MigrationDown(Migration migration)
     {
         migration
-            .DeleteTableIfExists(nameof(Component))
-            .DeleteTableIfExists(nameof(LoggerModel))
-            .DeleteTableIfExists(nameof(ProducingStep))
-            .DeleteTableIfExists(nameof(Project))
-            .DeleteTableIfExists(nameof(ResourceDoc))
-            .DeleteTableIfExists(nameof(Storage));
+            .DeleteTableIfExistsCascadePostgresql(nameof(LoggerModel))
+            .DeleteTableIfExistsCascadePostgresql(nameof(ProducingStep))
+            .DeleteTableIfExistsCascadePostgresql(nameof(Project))
+            .DeleteTableIfExistsCascadePostgresql(nameof(ResourceDoc))
+            .DeleteTableIfExistsCascadePostgresql(nameof(Storage))
+            .DeleteTableIfExistsCascadePostgresql(nameof(Component));
     }
 
     public void MigrationUp(Migration migration)
@@ -27,5 +27,14 @@ public class ModelMigrationList : MigrationBase
             .ConvertModelToMigration(new Component());
     }
 
-    public void SetupForeignKey(Migration migration) { }
+    public void GenerateForeignKey(Migration migration)
+    {
+        migration
+            .GenerateForeignKey(new LoggerModel())
+            .GenerateForeignKey(new ProducingStep())
+            .GenerateForeignKey(new Project())
+            .GenerateForeignKey(new ResourceDoc())
+            .GenerateForeignKey(new Storage())
+            .GenerateForeignKey(new Component());
+    }
 }

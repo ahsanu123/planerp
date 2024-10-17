@@ -7,16 +7,18 @@ public interface MigrationBase
 {
     public abstract void MigrationUp(Migration migration);
     public abstract void MigrationDown(Migration migration);
+    public abstract void GenerateForeignKey(Migration migration);
 }
 
 public static class MigrationExtension
 {
-    public const int MIGRATION_VERSION = 34;
+    public const int MIGRATION_VERSION = 44;
     public const string MIGRATION_DESCRIPTION = $"Add Migration Message Here";
+    public static bool UpdateForeignKey = false;
 
-    public static IApplicationBuilder Migrate(this IApplicationBuilder app)
+    public static IApplicationBuilder Migrate(this IApplicationBuilder builder)
     {
-        using var scope = app.ApplicationServices.CreateScope();
+        using var scope = builder.ApplicationServices.CreateScope();
         var runner = scope.ServiceProvider.GetService<IMigrationRunner>();
         var versionLoader = scope.ServiceProvider.GetService<IVersionLoader>();
 
@@ -25,17 +27,29 @@ public static class MigrationExtension
         if (MigrationExtension.MIGRATION_VERSION > versionLoader.VersionInfo.Latest())
         {
             runner.Down(new MainMigrator());
+
             runner.MigrateUp(MigrationExtension.MIGRATION_VERSION);
+            MigrationExtension.UpdateForeignKey = true;
+            runner.Up(new MainMigrator());
         }
 
-        return app;
+        return builder;
     }
 
     public static Migration DeleteTableIfExists(this Migration migration, string name)
     {
-        if (migration.Schema.Table(name).Exists())
-            migration.Delete.Table(name);
+        migration.Delete.Table(name).IfExists();
 
+        return migration;
+    }
+
+    public static Migration DeleteTableIfExistsCascadePostgresql(
+        this Migration migration,
+        string tableName
+    )
+    {
+        var postgresqlDeleteCascade = $"DROP TABLE IF EXISTS \"{tableName}\" CASCADE;";
+        migration.Execute.Sql(postgresqlDeleteCascade);
         return migration;
     }
 }

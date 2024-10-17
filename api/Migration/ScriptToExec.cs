@@ -7,6 +7,8 @@ public class ScriptToExec : MigrationBase
     // this base path belong to /api
     private readonly string DatabaseBasePath = Directory.GetCurrentDirectory() + "/Database";
 
+    public void GenerateForeignKey(Migration migration) { }
+
     void MigrationBase.MigrationDown(Migration migration) { }
 
     void MigrationBase.MigrationUp(Migration migration)
