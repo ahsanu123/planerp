@@ -19,6 +19,7 @@ public static class ServiceCollectionCustom
         services.AddScoped<GenericRepository<LoggerModel>>();
 
         services.AddScoped<IProjectRepository, ProjectRepository>();
+        services.AddScoped<IProjectPageRepository, ProjectPageRepository>();
 
         return services;
     }

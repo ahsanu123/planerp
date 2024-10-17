@@ -16,4 +16,7 @@ public class Project : BaseModel
     public bool Finish { get; set; }
     public float? ProfitInPersen { get; set; }
     public string? Description { get; set; }
+
+    public int? LoggerModelId { get; set; }
+    public int? ComponentId { get; set; }
 }
