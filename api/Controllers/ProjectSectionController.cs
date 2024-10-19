@@ -9,26 +9,76 @@ namespace Planerp.Controllers;
 public class ProjectPageController : ControllerBase
 {
     private GenericRepository<Project> _projectRepo;
+    private GenericRepository<Component> _componentRepo;
+    private GenericRepository<LoggerModel> _loggerRepo;
     private IProjectPageRepository _projectDetailRepo;
 
     public ProjectPageController(
         GenericRepository<Project> projectRepo,
+        GenericRepository<Component> componentRepo,
+        GenericRepository<LoggerModel> loggerRepo,
         IProjectPageRepository projectDetailRepo
     )
     {
         this._projectRepo = projectRepo;
         this._projectDetailRepo = projectDetailRepo;
+        this._componentRepo = componentRepo;
+        this._loggerRepo = loggerRepo;
     }
 
     [HttpGet]
-    [Route("details/{id}")]
-    public async Task<IActionResult> GetProjectDetails([FromRoute] int id)
+    [Route("details/{projectId}")]
+    public async Task<IActionResult> GetProjectDetails([FromRoute] int projectId)
     {
-        var projectDetails = await this._projectDetailRepo.GetProjectPageDetail(id);
+        var projectDetails = await this._projectDetailRepo.GetProjectPageDetail(projectId);
         if (projectDetails.Project == null)
         {
             return NotFound();
         }
         return Ok(projectDetails);
+    }
+
+    [HttpPost]
+    [Route("add-component")]
+    public async Task<IActionResult> AddComponentToProject(
+        [FromQuery] int projectId,
+        [FromQuery] int componentId
+    )
+    {
+        var isProjectExists = await this._projectRepo.Get(projectId);
+        if (isProjectExists == null)
+            return NotFound(new ErrorModel { error = "404", reason = "Project NotFound" });
+
+        var isComponentExists = await this._componentRepo.Get(componentId);
+        if (isComponentExists == null)
+            return NotFound(new ErrorModel { error = "404", reason = "Component NotFound" });
+
+        await this._projectDetailRepo.AddIdToDatabaseArray(
+            new ProjectComponentList { ProjectId = projectId, ComponentId = componentId }
+        );
+
+        return Ok();
+    }
+
+    [HttpPost]
+    [Route("add-Logger")]
+    public async Task<IActionResult> AddLoggerToProject(
+        [FromQuery] int projectId,
+        [FromQuery] int loggerId
+    )
+    {
+        var isProjectExists = await this._projectRepo.Get(projectId);
+        if (isProjectExists == null)
+            return NotFound(new ErrorModel { error = "404", reason = "Project NotFound" });
+
+        var isLoggerExist = await this._loggerRepo.Get(loggerId);
+        if (isLoggerExist == null)
+            return NotFound(new ErrorModel { error = "404", reason = "Logger NotFound" });
+
+        await this._projectDetailRepo.AddIdToDatabaseArray(
+            new ProjectLoggerList { ProjectId = projectId, LoggerModelId = loggerId }
+        );
+
+        return Ok();
     }
 }

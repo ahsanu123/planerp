@@ -13,7 +13,12 @@ public class ModelMigrationList : MigrationBase
         typeof(ResourceDoc),
         typeof(Storage),
         typeof(Component),
+        typeof(Unit),
+        typeof(Value),
         typeof(ProjectComponentList),
+        typeof(ComponentValueList),
+        typeof(ProjectLoggerList),
+        typeof(TaskModel),
     };
 
     public void MigrationDown(Migration migration)

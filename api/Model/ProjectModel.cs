@@ -6,6 +6,7 @@ namespace Planerp.Model;
 public class Project : BaseModel
 {
     public string Name { get; set; }
+    public string ImageUrl { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime? DeadLineDate { get; set; }
     public DateTime LastUpdatedDate { get; set; }
@@ -16,9 +17,4 @@ public class Project : BaseModel
     public bool Finish { get; set; }
     public float? ProfitInPersen { get; set; }
     public string? Description { get; set; }
-
-    // public List<string> ListComponent { get; set; }
-
-    public int? LoggerModelId { get; set; }
-    public int? ComponentId { get; set; }
 }

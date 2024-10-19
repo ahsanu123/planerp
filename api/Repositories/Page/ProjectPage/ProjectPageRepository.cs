@@ -8,7 +8,8 @@ namespace Planerp.Repository;
 
 public interface IProjectPageRepository
 {
-    public Task<ProjectPageDetailInformation> GetProjectPageDetail(int id);
+    public Task<ProjectPageDetailInformation> GetProjectPageDetail(int projectId);
+    public Task AddIdToDatabaseArray<T>(T value);
 }
 
 public class ProjectPageRepository : IProjectPageRepository
@@ -20,27 +21,39 @@ public class ProjectPageRepository : IProjectPageRepository
         this._connection = connection;
     }
 
-    public async Task<ProjectPageDetailInformation> GetProjectPageDetail(int id)
+    public async Task AddIdToDatabaseArray<T>(T value)
+    {
+        using (var conn = _connection.CreateConnection())
+        {
+            await DapperSqlKataExtension.AddIdToDatabaseArray(conn, value);
+        }
+    }
+
+    public async Task<ProjectPageDetailInformation> GetProjectPageDetail(int projectId)
     {
         var SelectProject_QUERY = new Query(nameof(Project));
 
         var SelectProjectWhereProjectIdEqual_QUERY = SelectProject_QUERY
             .Clone()
-            .Where(FullNameof(nameof(Project.Id)), id)
+            .Where(FullNameof(nameof(Project.Id)), projectId)
             .SelectAllClassProperties(typeof(Project));
 
-        var SelectModelLoggerWhereProjectIdEqual_QUERY = SelectProject_QUERY
-            .Clone()
+        var WithProjectLoggerList_CTE = new Query(nameof(ProjectLoggerList))
+            .Select(nameof(ProjectLoggerList.LoggerModelId))
+            .Where(nameof(ProjectLoggerList.ProjectId), projectId);
+
+        var SelectArrayLoggerWhereProjectLoggerIdEqual_QUERY = new Query(nameof(LoggerModel))
+            .WithAutoAlias(WithProjectLoggerList_CTE)
             .Join(
-                nameof(LoggerModel),
-                FullNameof(nameof(Project.Id)),
-                FullNameof(nameof(LoggerModel.ProjectId))
+                nameof(WithProjectLoggerList_CTE),
+                nameof(ProjectLoggerList.LoggerModelId),
+                FullNameof(nameof(LoggerModel.Id))
             )
             .SelectAllClassProperties(typeof(LoggerModel));
 
         var WithProjectComponentList_CTE = new Query(nameof(ProjectComponentList))
             .Select(nameof(ProjectComponentList.ComponentId))
-            .Where(nameof(ProjectComponentList.ProjectId), id);
+            .Where(nameof(ProjectComponentList.ProjectId), projectId);
 
         var SelectArrayComponentWhereProjectComponentIdEqual_QUERY = new Query(nameof(Component))
             .WithAutoAlias(WithProjectComponentList_CTE)
@@ -59,7 +72,7 @@ public class ProjectPageRepository : IProjectPageRepository
             );
 
             var resultLogger = await conn.QuerySqlKataAsync<LoggerModel>(
-                SelectModelLoggerWhereProjectIdEqual_QUERY,
+                SelectArrayLoggerWhereProjectLoggerIdEqual_QUERY,
                 true
             );
 
