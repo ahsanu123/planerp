@@ -22,13 +22,13 @@
 </p>
 
  
-### Setup Automatic Model Generation with TypeGen
+### 🗃️ Setup Automatic Model Generation with TypeGen
 
 - follow installation instruction from [github repository](https://github.com/jburzynski/TypeGen)
 - build project 
 - run `dotnet-typegen generate --output-folder <output-directory>`
 
-# References 
+### 🗒️ References 
 
 - [Postgresql Synopsis Convention](https://www.postgresql.org/docs/current/notation.html#NOTATION)
 - [JSON in Postgresql](https://www.cybertec-postgresql.com/en/json-postgresql-how-to-use-it-right/)
