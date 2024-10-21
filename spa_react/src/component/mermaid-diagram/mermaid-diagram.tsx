@@ -62,7 +62,7 @@ const MermaidDiagramComponent: React.FC<MermaidDiagramProps> = (props) => {
       setErrorText('');
       diagram = await mermaidService.renderMermaidDiagram(dataString);
     } catch (error) {
-      const errorMessage = (error as Error).message;
+      const errorMessage = (error as Error).description;
       setErrorText(errorMessage);
     }
 

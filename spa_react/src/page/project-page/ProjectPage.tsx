@@ -1,63 +1,112 @@
-import { Button } from "@primer/react";
+import { Button, NavList, PageLayout, Stack, Text } from "@primer/react";
 import { observer } from "mobx-react-lite";
-import { Project } from "../../model";
 import { Column, DataTable, Table } from "@primer/react/drafts";
-import { format, formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { DoubleClickEditor } from "../../component/shared-component/DoubleClickEditor";
 import { useState } from "react";
 import { CustomDialog } from "../../component/shared-component/CustomDialog";
 import { FormGenerator } from "../../component/shared-component/FormGenerator";
 import { FormAddNewProject } from "./component/FormAddNewProject";
-import { blankProject } from "../../model/blank-model";
+import { Project } from "../../model/generated/project";
+import { FormatNumberAsCurrency } from "../../shared/function";
+import { ProjectDetailSection } from "./component/ProjectDetailSection";
+import { Divider } from "@primer/react/lib-esm/deprecated/ActionList/Divider";
+import { GitCommitIcon } from "@primer/octicons-react";
+import { CondenseTimeline } from "../../component/shared-component";
+import { TimelineModel } from "../../model";
 
 const MOCK_PROJECTS: Project[] = [
   {
-    bomId: 0,
-    resourceDocumentId: 0,
-    procedureId: 0,
-    logId: 0,
     name: "Tofu Control Panel Automation",
     deadLineDate: new Date(2024, 11),
-    lastUpdateDate: new Date(),
-    finishDate: new Date(),
-    planedSellPrice: 10000,
+    lastUpdatedDate: new Date(),
+    finishedDate: new Date(),
     capital: 1000,
-    isArchived: false,
-    profitInPercent: 10,
     description: "upgrade factory machinery with new technology",
-    id: 0
+    id: 0,
+    imageUrl: "",
+    createdDate: new Date(),
+    sellPrice: 0,
+    fail: false,
+    finish: false,
+    profitInPersen: 0
   },
   {
-    bomId: 0,
-    resourceDocumentId: 0,
-    procedureId: 0,
-    logId: 0,
-    name: "Coagulant Machine",
-    deadLineDate: new Date(2024, 11),
-    lastUpdateDate: new Date(),
-    finishDate: new Date(),
-    planedSellPrice: 10000,
-    capital: 1000,
-    isArchived: false,
-    profitInPercent: 10,
-    description: "Coagulant Machine For Automatic Tofu Maker",
-    id: 1
-  },
-  {
-    bomId: 0,
-    resourceDocumentId: 0,
-    procedureId: 0,
-    logId: 0,
     name: "Sudi Keyboard V2 - Split Keyboard",
     deadLineDate: new Date(2024, 11),
-    lastUpdateDate: new Date(),
-    finishDate: new Date(),
-    planedSellPrice: 10000,
+    lastUpdatedDate: new Date(),
+    finishedDate: new Date(),
     capital: 1000,
-    isArchived: false,
-    profitInPercent: 10,
-    description: "36 Wireless Split Keyboard based on Nrf52832",
-    id: 2
+    description: "upgrade factory machinery with new technology",
+    id: 0,
+    imageUrl: "",
+    createdDate: new Date(),
+    sellPrice: 0,
+    fail: false,
+    finish: false,
+    profitInPersen: 0
+  },
+  {
+    name: "Coagulant Machine",
+    deadLineDate: new Date(2024, 11),
+    lastUpdatedDate: new Date(),
+    finishedDate: new Date(),
+    capital: 1000,
+    description: "upgrade factory machinery with new technology",
+    id: 0,
+    imageUrl: "",
+    createdDate: new Date(),
+    sellPrice: 0,
+    fail: false,
+    finish: false,
+    profitInPersen: 0
+  },
+];
+
+const MOCK_TIMELINE: TimelineModel[] = [
+  {
+    icon: GitCommitIcon,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam, ut sint illa vendibiliora, haec uberiora certe sunt. Ne discipulum abducam, times. Ita credo. Expectoque quid ad id, quod quaerebam, respondeas. Ita relinquet duas, de"
+  },
+  {
+    icon: GitCommitIcon,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam, ut sint illa vendibiliora, haec uberiora certe sunt. Ne discipulum abducam, times. Ita credo. Expectoque quid ad id, quod quaerebam, respondeas. Ita relinquet duas, de"
+  },
+  {
+    icon: GitCommitIcon,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam, ut sint illa vendibiliora, haec uberiora certe sunt. Ne discipulum abducam, times. Ita credo. Expectoque quid ad id, quod quaerebam, respondeas. Ita relinquet duas, de"
+  },
+  {
+    icon: GitCommitIcon,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam, ut sint illa vendibiliora, haec uberiora certe sunt. Ne discipulum abducam, times. Ita credo. Expectoque quid ad id, quod quaerebam, respondeas. Ita relinquet duas, de"
+  },
+  {
+    icon: GitCommitIcon,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam, ut sint illa vendibiliora, haec uberiora certe sunt. Ne discipulum abducam, times. Ita credo. Expectoque quid ad id, quod quaerebam, respondeas. Ita relinquet duas, de"
+  },
+  {
+    icon: GitCommitIcon,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam, ut sint illa vendibiliora, haec uberiora certe sunt. Ne discipulum abducam, times. Ita credo. Expectoque quid ad id, quod quaerebam, respondeas. Ita relinquet duas, de"
+  },
+  {
+    icon: GitCommitIcon,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam, ut sint illa vendibiliora, haec uberiora certe sunt. Ne discipulum abducam, times. Ita credo. Expectoque quid ad id, quod quaerebam, respondeas. Ita relinquet duas, de"
+  },
+  {
+    icon: GitCommitIcon,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam, ut sint illa vendibiliora, haec uberiora certe sunt. Ne discipulum abducam, times. Ita credo. Expectoque quid ad id, quod quaerebam, respondeas. Ita relinquet duas, de"
+  },
+  {
+    icon: GitCommitIcon,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam, ut sint illa vendibiliora, haec uberiora certe sunt. Ne discipulum abducam, times. Ita credo. Expectoque quid ad id, quod quaerebam, respondeas. Ita relinquet duas, de"
+  },
+  {
+    icon: GitCommitIcon,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam, ut sint illa vendibiliora, haec uberiora certe sunt. Ne discipulum abducam, times. Ita credo. Expectoque quid ad id, quod quaerebam, respondeas. Ita relinquet duas, de"
+  },
+  {
+    icon: GitCommitIcon,
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam, ut sint illa vendibiliora, haec uberiora certe sunt. Ne discipulum abducam, times. Ita credo. Expectoque quid ad id, quod quaerebam, respondeas. Ita relinquet duas, de"
   },
 ];
 
@@ -75,14 +124,9 @@ const ProjectPageComponent: React.FC = () => {
       ),
     },
     {
-      header: 'Planed Sell Price',
-      field: 'planedSellPrice',
-      renderCell: (data) => (<span>{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(data.planedSellPrice)}</span>),
-    },
-    {
       header: 'Capital',
       field: 'capital',
-      renderCell: (data) => (<span>{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(data.capital)}</span>),
+      renderCell: (data) => (<span>{FormatNumberAsCurrency(data.capital)}</span>),
     },
     {
       header: 'Dead Line',
@@ -90,10 +134,20 @@ const ProjectPageComponent: React.FC = () => {
       renderCell: (data) => (<span>{formatDistanceToNow(data.deadLineDate)}</span>)
     },
     {
-      header: 'Last updated',
-      field: 'lastUpdateDate',
-      renderCell: (data) => (<span>{format(data.lastUpdateDate, 'PPPPpp')}</span>)
-    }
+      header: 'Dead Line',
+      field: 'deadLineDate',
+      renderCell: (data) => (<span>{formatDistanceToNow(data.deadLineDate)}</span>)
+    },
+    {
+      header: 'Dead Line',
+      field: 'deadLineDate',
+      renderCell: (data) => (<span>{formatDistanceToNow(data.deadLineDate)}</span>)
+    },
+    {
+      header: 'Dead Line',
+      field: 'deadLineDate',
+      renderCell: (data) => (<span>{formatDistanceToNow(data.deadLineDate)}</span>)
+    },
   ];
 
   const [selectedProject, setSelectedProject] = useState<Project | undefined>(undefined);
@@ -105,37 +159,59 @@ const ProjectPageComponent: React.FC = () => {
     setSelectedProject(data);
   };
 
-
   return (
-    <>
-      <Button
-        onClick={() => setIsShowAddDialog(true)}
-      >
-        Add Project
-      </Button>
-      <Table.Container>
-        <Table.Title
-          id='project'
+    <PageLayout>
+      <PageLayout.Header>
+        <Button
+          onClick={() => setIsShowAddDialog(true)}
         >
-          Projects
-        </Table.Title>
-        <Table.Subtitle
-          id='project-subtitle'
-        >
+          Add Project
+        </Button>
+        <Text>
           All project you currently working on will shown here.
-        </Table.Subtitle>
-        <DataTable
-          data={MOCK_PROJECTS}
-          columns={MOCK_PROJECTS_COLUMNS}
-        />
+        </Text>
+        <Stack
+          direction='horizontal'
+        >
+          <Table.Container>
+            <Table.Title
+              id='project'
+            >
+              Projects
+            </Table.Title>
+            <Table.Subtitle
+              id='project-subtitle'
+            >
+            </Table.Subtitle>
+            <DataTable
+              data={MOCK_PROJECTS}
+              columns={MOCK_PROJECTS_COLUMNS}
+            />
 
-        <Table.Pagination
-          aria-label='project pagination'
-          totalCount={MOCK_PROJECTS.length}
-          pageSize={4}
-        />
+            <Table.Pagination
+              aria-label='project pagination'
+              totalCount={MOCK_PROJECTS.length}
+              pageSize={4}
+            />
 
-      </Table.Container>
+          </Table.Container>
+        </Stack>
+        <Divider />
+      </PageLayout.Header>
+
+      <PageLayout.Content>
+        <ProjectDetailSection />
+      </PageLayout.Content>
+
+      <PageLayout.Pane
+        width='large'
+      >
+        <CondenseTimeline
+          title='Project Log History'
+          timeLine={MOCK_TIMELINE}
+        />
+      </PageLayout.Pane>
+
       {
         isShowAddDialog && (
           <CustomDialog
@@ -170,7 +246,7 @@ const ProjectPageComponent: React.FC = () => {
           />
         )
       }
-    </>
+    </PageLayout>
   );
 };
 

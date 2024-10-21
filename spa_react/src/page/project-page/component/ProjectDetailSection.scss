@@ -1,0 +1,11 @@
+.project-detail-section {
+  .project-detail-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .project-detail-image {
+    align-self: center;
+    width: calc(100% - 350px);
+  }
+}

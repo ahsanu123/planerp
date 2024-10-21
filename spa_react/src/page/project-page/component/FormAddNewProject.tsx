@@ -1,11 +1,12 @@
 import { observer } from "mobx-react-lite";
 import './FormAddNewProject.scss';
 import { Button, Checkbox, FormControl, Stack, Textarea, TextInput } from "@primer/react";
-import { Project, ProjectRequest } from "../../../model";
 import { ButtonInputFile } from "../../../component/shared-component/ButtonInputFile";
 import { Field, Form, useFormik } from 'formik';
 import { blankProject, blankProjectRequest } from "../../../model/blank-model";
 import { useApiStore } from "../../../api/api-store/useApiStore";
+import { Project } from "../../../model/generated/project";
+import { ProjectRequest } from "../../../model/project-request";
 
 interface FormAddNewProjectProps {
   data: Project
@@ -14,18 +15,18 @@ interface FormAddNewProjectProps {
 }
 
 const mockProjectRequest: ProjectRequest = {
-  resourceDocumentId: 0,
-  procedureId: 0,
   name: "Automatic Coagulant Machine",
-  thumbnailUrl: '',
   deadLineDate: new Date(),
-  lastUpdateDate: new Date(),
-  finishDate: new Date(),
-  planedSellPrice: 1000000,
+  lastUpdatedDate: new Date(),
+  finishedDate: new Date(),
   capital: 500000,
-  isArchived: false,
-  profitInPercent: 50,
   description: "Automatic Coagulant Machine With PID control System",
+  imageUrl: "",
+  createdDate: new Date(),
+  sellPrice: 0,
+  fail: false,
+  finish: false,
+  profitInPersen: 0
 };
 
 const FormAddNewProjectComponent: React.FC<FormAddNewProjectProps> = (props) => {
@@ -102,7 +103,7 @@ const FormAddNewProjectComponent: React.FC<FormAddNewProjectProps> = (props) => 
           name='lastUpdateDate'
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={formik.values.lastUpdateDate.toString()}
+          value={formik.values.lastUpdatedDate.toString()}
         />
 
         <FormControl.Label>
@@ -114,7 +115,7 @@ const FormAddNewProjectComponent: React.FC<FormAddNewProjectProps> = (props) => 
           name='finishDate'
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={formik.values.finishDate.toString()}
+          value={formik.values.finishedDate.toString()}
         />
       </Stack>
 
@@ -137,37 +138,6 @@ const FormAddNewProjectComponent: React.FC<FormAddNewProjectProps> = (props) => 
             />
           </Stack.Item>
 
-          <Stack.Item>
-            <FormControl.Label>
-              Planed Sell Price
-            </FormControl.Label>
-            <TextInput
-              leadingVisual='$'
-              type='number'
-              name='planedSellPrice'
-              id='planedSellPrice'
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.planedSellPrice}
-            />
-          </Stack.Item>
-        </Stack>
-
-        <Stack>
-          <Stack.Item>
-            <FormControl>
-              <Checkbox
-                type='checkbox'
-                name='isArchived'
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.isArchived ? 'true' : 'false'}
-              />
-              <FormControl.Label>
-                Archived
-              </FormControl.Label>
-            </FormControl>
-          </Stack.Item>
         </Stack>
 
         <Stack.Item>
