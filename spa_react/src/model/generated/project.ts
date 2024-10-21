@@ -7,6 +7,7 @@ import { BaseModel } from "./base-model";
 
 export interface Project extends BaseModel {
     name: string;
+    imageUrl: string;
     createdDate: Date;
     deadLineDate: Date;
     lastUpdatedDate: Date;

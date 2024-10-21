@@ -38,29 +38,29 @@ public class ProjectPageRepository : IProjectPageRepository
             .Where(FullNameof(nameof(Project.Id)), projectId)
             .SelectAllClassProperties(typeof(Project));
 
-        var WithProjectLoggerList_CTE = new Query(nameof(ProjectLoggerList))
-            .Select(nameof(ProjectLoggerList.LoggerModelId))
-            .Where(nameof(ProjectLoggerList.ProjectId), projectId);
+        var WithProjectLoggerList_CTE = new Query(nameof(ArrayDatabaseRelation))
+            .Select(nameof(ArrayDatabaseRelation.LoggerModelId))
+            .Where(nameof(ArrayDatabaseRelation.ProjectId), projectId);
 
         var SelectArrayLoggerWhereProjectLoggerIdEqual_QUERY = new Query(nameof(LoggerModel))
             .WithAutoAlias(WithProjectLoggerList_CTE)
             .Join(
                 nameof(WithProjectLoggerList_CTE),
-                nameof(ProjectLoggerList.LoggerModelId),
+                nameof(ArrayDatabaseRelation.LoggerModelId),
                 FullNameof(nameof(LoggerModel.Id))
             )
             .SelectAllClassProperties(typeof(LoggerModel));
 
-        var WithProjectComponentList_CTE = new Query(nameof(ProjectComponentList))
-            .Select(nameof(ProjectComponentList.ComponentId))
-            .Where(nameof(ProjectComponentList.ProjectId), projectId);
+        var WithProjectComponentList_CTE = new Query(nameof(ArrayDatabaseRelation))
+            .Select(nameof(ArrayDatabaseRelation.ComponentId))
+            .Where(nameof(ArrayDatabaseRelation.ProjectId), projectId);
 
         var SelectArrayComponentWhereProjectComponentIdEqual_QUERY = new Query(nameof(Component))
             .WithAutoAlias(WithProjectComponentList_CTE)
             .SelectAllClassProperties(typeof(Component))
             .Join(
                 nameof(WithProjectComponentList_CTE),
-                nameof(ProjectComponentList.ComponentId),
+                nameof(ArrayDatabaseRelation.ComponentId),
                 FullNameof(nameof(Component.Id))
             );
 

@@ -15,9 +15,8 @@ public class ModelMigrationList : MigrationBase
         typeof(Component),
         typeof(Unit),
         typeof(Value),
-        typeof(ProjectComponentList),
         typeof(ComponentValueList),
-        typeof(ProjectLoggerList),
+        typeof(ArrayDatabaseRelation),
         typeof(TaskModel),
     };
 

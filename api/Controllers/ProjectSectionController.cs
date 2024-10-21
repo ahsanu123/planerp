@@ -54,7 +54,7 @@ public class ProjectPageController : ControllerBase
             return NotFound(new ErrorModel { error = "404", reason = "Component NotFound" });
 
         await this._projectDetailRepo.AddIdToDatabaseArray(
-            new ProjectComponentList { ProjectId = projectId, ComponentId = componentId }
+            new ArrayDatabaseRelation { ProjectId = projectId, ComponentId = componentId }
         );
 
         return Ok();
@@ -76,7 +76,7 @@ public class ProjectPageController : ControllerBase
             return NotFound(new ErrorModel { error = "404", reason = "Logger NotFound" });
 
         await this._projectDetailRepo.AddIdToDatabaseArray(
-            new ProjectLoggerList { ProjectId = projectId, LoggerModelId = loggerId }
+            new ArrayDatabaseRelation { ProjectId = projectId, LoggerModelId = loggerId }
         );
 
         return Ok();
