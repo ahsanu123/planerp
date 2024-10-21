@@ -33,3 +33,4 @@
 - [Postgresql Synopsis Convention](https://www.postgresql.org/docs/current/notation.html#NOTATION)
 - [JSON in Postgresql](https://www.cybertec-postgresql.com/en/json-postgresql-how-to-use-it-right/)
 - [Dapper Custom Type Mapper](https://medium.com/dapper-net/custom-type-handling-4b447b97c620)
+- [ASP.NET unit test](https://learn.microsoft.com/en-us/aspnet/web-api/overview/testing-and-debugging/unit-testing-controllers-in-web-api)
