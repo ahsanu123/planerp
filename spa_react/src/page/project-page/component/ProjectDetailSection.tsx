@@ -4,6 +4,8 @@ import { Header, Heading, Stack, Text } from "@primer/react";
 import { ImageViewer } from "../../../component/shared-component";
 import './ProjectDetailSection.scss';
 import { TableComponent } from "../../../component/shared-component/table-component/TableComponent";
+import { useState } from "react";
+import { useApiStore } from "../../../api/api-store/useApiStore";
 
 
 interface ProjectDetailSectionProps {
@@ -30,6 +32,13 @@ const ProjectDetailSectionComponent: React.FC<ProjectDetailSectionProps> = (prop
   const {
     name,
   } = props;
+
+  const {
+    fileUtils,
+  } = useApiStore();
+
+  const [imageUrl, setImageUrl] = useState<string>(MOCK_PROJECT.imageUrl);
+
   return (
     <Stack
       className='project-detail-section'
@@ -42,14 +51,20 @@ const ProjectDetailSectionComponent: React.FC<ProjectDetailSectionProps> = (prop
           className='project-detail-image'
         >
           <ImageViewer
-            imageUrl={MOCK_PROJECT.imageUrl}
+            onImageUrlChanged={(filename) => {
+              setImageUrl(fileUtils.buildImageUrl(filename));
+            }}
+            imageUrl={imageUrl}
             caption={MOCK_PROJECT.name}
+            showChangeButton
           />
         </Stack.Item>
         <Text>
           {MOCK_PROJECT.description}
         </Text>
+
         <TableComponent />
+
       </Stack>
     </Stack>
   );

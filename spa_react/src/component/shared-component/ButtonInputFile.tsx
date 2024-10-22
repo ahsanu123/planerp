@@ -37,12 +37,6 @@ const ButtonInputFileComponent: React.FC<ButtonInputFileProps> = (props) => {
         <FileDirectoryIcon size={16} />
         &nbsp;{!hideLabel && (label)}
       </Button>
-      <Tooltip
-        text={file?.name}
-        direction='s'
-      >
-        {elipsisText(file?.name ?? '')}
-      </Tooltip>
       <input
         onChange={(event) => handleSelectedFile(event)}
         ref={fileInputRef}

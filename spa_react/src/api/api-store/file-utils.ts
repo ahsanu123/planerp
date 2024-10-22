@@ -13,5 +13,9 @@ export class FileUtils {
     return ret.fileName;
   }
 
+  buildImageUrl(fileName: string): string {
+    return `${API_BASE_URL}/File/file?fileName=${fileName}`;
+  }
+
   constructor() { }
 }

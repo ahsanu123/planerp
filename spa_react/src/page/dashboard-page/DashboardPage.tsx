@@ -6,6 +6,7 @@ import { EditableTabModel } from '../../model';
 import './Dashboard.scss';
 import { MermaidDiagramMock } from '../../component/mermaid-diagram/mermaid-diagram-mock';
 import { ProjectPage } from '../project-page/ProjectPage';
+import { StockAndComponentPage } from '../stock-and-component-page/StockAndComponentPage';
 
 const MOCK_TAB: EditableTabModel[] = [
   {
@@ -17,8 +18,8 @@ const MOCK_TAB: EditableTabModel[] = [
     content: <ProjectPage />,
   },
   {
-    title: 'Notes',
-    content: <p>Important Notes</p>
+    title: 'Stock And Component',
+    content: <StockAndComponentPage />
   },
   {
     title: 'Reports',
