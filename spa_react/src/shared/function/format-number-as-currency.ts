@@ -1,4 +1,7 @@
-export const CurrencyType = ['Id'] as const;
+export const CurrencyType = [
+  'Id',
+  'Us',
+] as const;
 export type CurrencyTypeCode = typeof CurrencyType[number];
 
 interface LocalesTypeAndOption {
@@ -10,6 +13,10 @@ export const localesTypes: Record<CurrencyTypeCode, LocalesTypeAndOption> = {
   Id: {
     locales: 'id-ID',
     options: { style: 'currency', currency: 'IDR' },
+  },
+  Us: {
+    locales: 'en-US',
+    options: { style: 'currency', currency: 'USD' },
   }
 };
 

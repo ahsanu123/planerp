@@ -3,6 +3,7 @@ import { Project } from "../../../model/generated/project";
 import { Header, Heading, Stack, Text } from "@primer/react";
 import { ImageViewer } from "../../../component/shared-component";
 import './ProjectDetailSection.scss';
+import { TableComponent } from "../../../component/shared-component/table-component/TableComponent";
 
 
 interface ProjectDetailSectionProps {
@@ -48,6 +49,7 @@ const ProjectDetailSectionComponent: React.FC<ProjectDetailSectionProps> = (prop
         <Text>
           {MOCK_PROJECT.description}
         </Text>
+        <TableComponent />
       </Stack>
     </Stack>
   );

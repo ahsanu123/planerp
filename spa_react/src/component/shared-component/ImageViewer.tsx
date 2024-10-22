@@ -6,18 +6,20 @@ import './ImageViewer.scss';
 interface ImageViewerProps {
   imageUrl: string;
   caption?: string;
+  className?: string;
   children?: React.ReactNode;
 }
 
 const ImageViewerComponent: React.FC<ImageViewerProps> = (props) => {
   const {
     imageUrl,
+    className,
     children,
     caption,
   } = props;
   return (
     <Stack
-      className='image-viewer-container'
+      className={`image-viewer-container ${className}`}
     >
       <img
         style={{
