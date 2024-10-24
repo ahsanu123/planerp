@@ -136,7 +136,7 @@ public class ProjectPageRepository : IProjectPageRepository
             {
                 ListLog = resultLogger,
                 Project = resultProject,
-                ListComponent = resultComponent,
+                ListComponentWithCount = resultComponent,
             };
 
             return projectDetails;

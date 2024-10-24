@@ -20,30 +20,6 @@ class SomeTableName
 [Route("[controller]")]
 public class SqlKataController : ControllerBase
 {
-    private IProjectRepository _projectRepo;
-
-    public SqlKataController(IProjectRepository projectRepo)
-    {
-        this._projectRepo = projectRepo;
-    }
-
-    [HttpGet]
-    [Route("Insert")]
-    public async Task<IActionResult> InsertQuery()
-    {
-        var postgresCompiler = new PostgresCompiler();
-        var query = new Query(nameof(SomeTableName))
-            .WhereFalse(nameof(SomeTableName.IsPublished))
-            .Where(nameof(SomeTableName.Score), SqlConstant.GreatherThan, new { id = 2 });
-
-        var compileResult = postgresCompiler.Compile(query);
-
-        var testDapperQuery = new Query("project").Where("Id", 20).Select("*");
-
-        var queryResult = await this._projectRepo.GetProjects(testDapperQuery);
-        return Ok(queryResult);
-    }
-
     [HttpGet]
     [Route("QRCode")]
     public async Task<IActionResult> GetQRCode()
