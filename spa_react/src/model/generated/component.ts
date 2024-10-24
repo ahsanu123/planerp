@@ -6,18 +6,17 @@
 import { BaseModel } from "./base-model";
 
 export interface Component extends BaseModel {
-  name: string;
-  imageUrl?: string;
-  stock: number;
-  type: string;
-  category: string;
-  description: string;
-  price: number;
-  capital: number;
-  supplier: string;
-  supplierLink: string;
-  isAssembly: boolean;
-  storageId: number;
-  buyDate: Date;
-
+    name: string;
+    imageUrl: string;
+    type: string;
+    category: string;
+    description: string;
+    price: number;
+    capital: number;
+    supplier: string;
+    supplierLink: string;
+    isAssembly: boolean;
+    stock: number;
+    buyDate: Date;
+    storageId: number;
 }
