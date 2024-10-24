@@ -58,7 +58,7 @@ public static class ModelToMigration
 
             if (isPrimaryKey)
             {
-                column.AsInt32().Identity().PrimaryKey();
+                column.AsInt32().Nullable().Identity().PrimaryKey();
                 continue;
             }
             if (isForeignKey)

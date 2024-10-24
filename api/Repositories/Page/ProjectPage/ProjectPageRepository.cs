@@ -9,6 +9,7 @@ namespace Planerp.Repository;
 public interface IProjectPageRepository
 {
     public Task<ProjectPageDetailInformation> GetProjectPageDetail(int projectId);
+    public Task AddUsedComponent(UsedComponent usedComponent);
     public Task AddIdToDatabaseArray<T>(T value);
 }
 
@@ -29,6 +30,49 @@ public class ProjectPageRepository : IProjectPageRepository
         }
     }
 
+    public async Task AddUsedComponent(UsedComponent usedComponent)
+    {
+        var CheckIfUsedComponentAlreadyAdded_QUERY = new Query(nameof(UsedComponent))
+            .SelectAllClassProperties(new[] { typeof(UsedComponent) })
+            .Where(
+                new { ProjectId = usedComponent.ProjectId, ComponentId = usedComponent.ComponentId }
+            );
+
+        var UpdateUsedComponent_Query = new Query(nameof(UsedComponent))
+            .AsUpdate(new { Count = usedComponent.Count, TotalPrice = usedComponent.TotalPrice })
+            .Where(
+                FullNameof(nameof(UsedComponent)),
+                new { ProjectId = usedComponent.ProjectId, ComponentId = usedComponent.ComponentId }
+            );
+
+        var AddUsedComponent_QUERY = new Query(nameof(UsedComponent)).AsInsert(
+            new UsedComponent
+            {
+                ProjectId = usedComponent.ProjectId,
+                ComponentId = usedComponent.ComponentId,
+                Count = usedComponent.Count,
+                TotalPrice = usedComponent.TotalPrice,
+            }
+        );
+
+        using (var conn = _connection.CreateConnection())
+        {
+            var isUsedComponentExists = await conn.QuerySingleSqlKataAsync<UsedComponent>(
+                CheckIfUsedComponentAlreadyAdded_QUERY,
+                true
+            );
+
+            if (isUsedComponentExists == null)
+            {
+                await conn.InsertToDatabase(usedComponent);
+            }
+            else
+            {
+                await conn.ExecuteSqlKataAsync(UpdateUsedComponent_Query);
+            }
+        }
+    }
+
     public async Task<ProjectPageDetailInformation> GetProjectPageDetail(int projectId)
     {
         var SelectProject_QUERY = new Query(nameof(Project));
@@ -36,7 +80,7 @@ public class ProjectPageRepository : IProjectPageRepository
         var SelectProjectWhereProjectIdEqual_QUERY = SelectProject_QUERY
             .Clone()
             .Where(FullNameof(nameof(Project.Id)), projectId)
-            .SelectAllClassProperties(typeof(Project));
+            .SelectAllClassProperties(new[] { typeof(Project) });
 
         var WithProjectLoggerList_CTE = new Query(nameof(ArrayDatabaseRelation))
             .Select(nameof(ArrayDatabaseRelation.LoggerModelId))
@@ -49,18 +93,25 @@ public class ProjectPageRepository : IProjectPageRepository
                 nameof(ArrayDatabaseRelation.LoggerModelId),
                 FullNameof(nameof(LoggerModel.Id))
             )
-            .SelectAllClassProperties(typeof(LoggerModel));
+            .SelectAllClassProperties(new[] { typeof(LoggerModel) });
 
         var WithProjectComponentList_CTE = new Query(nameof(ArrayDatabaseRelation))
             .Select(nameof(ArrayDatabaseRelation.ComponentId))
             .Where(nameof(ArrayDatabaseRelation.ProjectId), projectId);
 
-        var SelectArrayComponentWhereProjectComponentIdEqual_QUERY = new Query(nameof(Component))
+        var SelectArrayComponentWithCountWhereProjectComponentIdEqual_QUERY = new Query(
+            nameof(Component)
+        )
             .WithAutoAlias(WithProjectComponentList_CTE)
-            .SelectAllClassProperties(typeof(Component))
+            .SelectAllClassProperties(new[] { typeof(Component), typeof(UsedComponent) })
             .Join(
                 nameof(WithProjectComponentList_CTE),
                 nameof(ArrayDatabaseRelation.ComponentId),
+                FullNameof(nameof(Component.Id))
+            )
+            .Join(
+                nameof(UsedComponent),
+                FullNameof(nameof(UsedComponent.ComponentId)),
                 FullNameof(nameof(Component.Id))
             );
 
@@ -76,8 +127,8 @@ public class ProjectPageRepository : IProjectPageRepository
                 true
             );
 
-            var resultComponent = await conn.QuerySqlKataAsync<Component>(
-                SelectArrayComponentWhereProjectComponentIdEqual_QUERY,
+            var resultComponent = await conn.QuerySqlKataAsync<ComponentWithCount>(
+                SelectArrayComponentWithCountWhereProjectComponentIdEqual_QUERY,
                 true
             );
 

@@ -17,6 +17,9 @@ public class ModelMigrationList : MigrationBase
         typeof(Value),
         typeof(ComponentValueList),
         typeof(ArrayDatabaseRelation),
+        typeof(UsedComponent),
+        typeof(StockHistory),
+        typeof(PriceHistory),
         typeof(TaskModel),
     };
 

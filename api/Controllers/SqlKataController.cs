@@ -90,12 +90,19 @@ public class SqlKataController : ControllerBase
         // (new Component());
         var project = new Project();
         var keyVal = new Dictionary<string, object>();
+        var keyPair = new List<KeyValuePair<string, object>>();
 
         foreach (var prop in project.GetType().GetProperties())
         {
             keyVal.Add(prop.Name, prop.ToString());
         }
 
-        return Ok(this.PrintObjectName(nameof(Project.Name)));
+        foreach (var obj in project.GetType().GetProperties())
+        {
+            if (obj.Name.ToLower() == "id")
+                continue;
+            keyPair.Add(new KeyValuePair<string, object>(obj.Name, obj.GetValue(project)));
+        }
+        return Ok(keyPair);
     }
 }

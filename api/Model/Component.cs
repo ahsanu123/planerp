@@ -20,3 +20,12 @@ public class Component : BaseModel
 
     public int? StorageId { get; set; }
 }
+
+[ExportTsInterface(OutputDir = Constant.TypeGenBaseDirectory)]
+public class ComponentWithCount : Component
+{
+    public int ProjectId { get; set; }
+    public int ComponentId { get; set; }
+    public int Count { get; set; }
+    public double TotalPrice { get; set; }
+}

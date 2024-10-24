@@ -45,18 +45,18 @@ public class SeedRepository : ISeedRepository
 
         using (IDbConnection conn = _conn.CreateConnection())
         {
-            foreach (var project in this.projects)
-            {
-                await conn.InsertToDatabase(project);
-            }
-            foreach (var logger in this.loggers)
-            {
-                await conn.InsertToDatabase(logger);
-            }
-            foreach (var component in this.components)
-            {
-                await conn.InsertToDatabase(component);
-            }
+            // foreach (var project in this.projects)
+            // {
+            //     await conn.InsertToDatabase(project);
+            // }
+            // foreach (var logger in this.loggers)
+            // {
+            //     await conn.InsertToDatabase(logger);
+            // }
+            // foreach (var component in this.components)
+            // {
+            //     await conn.InsertToDatabase(component);
+            // }
         }
     }
 }

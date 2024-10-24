@@ -1,9 +1,41 @@
 namespace Planerp.Extensions;
 
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 public static class UtilityExtension
 {
+    // object To Dictionary Copied from :https://gist.github.com/jarrettmeyer/798667/a87f9bcac2ec68541511f17da3c244c0e05bdc49
+    private static void ThrowExceptionWhenSourceArgumentIsNull()
+    {
+        throw new NullReferenceException(
+            "Unable to convert anonymous object to a dictionary. The source anonymous object is null."
+        );
+    }
+
+    private static bool IsOfType<T>(object value)
+    {
+        return value is T;
+    }
+
+    public static IDictionary<string, T> ToDictionary<T>(this T source, bool removeId = false)
+    {
+        if (source == null)
+            ThrowExceptionWhenSourceArgumentIsNull();
+
+        var dictionary = new Dictionary<string, T>();
+        foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(source))
+        {
+            object value = property.GetValue(source);
+            if (IsOfType<T>(value))
+            {
+                Console.WriteLine(property.Name);
+                dictionary.Add(property.Name, (T)value);
+            }
+        }
+        return dictionary;
+    }
+
     //  reference https://stackoverflow.com/a/16295702/19270838
     public static void ShowCurrentPosition(
         string message = "",

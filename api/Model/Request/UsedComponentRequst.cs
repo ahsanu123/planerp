@@ -3,7 +3,7 @@ using TypeGen.Core.TypeAnnotations;
 namespace Planerp.Model;
 
 [ExportTsInterface(OutputDir = Constant.TypeGenBaseDirectory)]
-public class UsedComponent : BaseModel
+public class UsedComponentRequest : BaseModel
 {
     public int ProjectId { get; set; }
     public int ComponentId { get; set; }

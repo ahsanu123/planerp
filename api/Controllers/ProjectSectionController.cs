@@ -40,22 +40,24 @@ public class ProjectPageController : ControllerBase
 
     [HttpPost]
     [Route("add-component")]
-    public async Task<IActionResult> AddComponentToProject(
-        [FromQuery] int projectId,
-        [FromQuery] int componentId
-    )
+    public async Task<IActionResult> AddComponentToProject([FromBody] UsedComponent usedComponent)
     {
-        var isProjectExists = await this._projectRepo.Get(projectId);
+        var isProjectExists = await this._projectRepo.Get(usedComponent.ProjectId);
         if (isProjectExists == null)
             return NotFound(new ErrorModel { error = "404", reason = "Project NotFound" });
 
-        var isComponentExists = await this._componentRepo.Get(componentId);
+        var isComponentExists = await this._componentRepo.Get(usedComponent.ComponentId);
         if (isComponentExists == null)
             return NotFound(new ErrorModel { error = "404", reason = "Component NotFound" });
 
         await this._projectDetailRepo.AddIdToDatabaseArray(
-            new ArrayDatabaseRelation { ProjectId = projectId, ComponentId = componentId }
+            new ArrayDatabaseRelation
+            {
+                ProjectId = usedComponent.ProjectId,
+                ComponentId = usedComponent.ComponentId,
+            }
         );
+        await this._projectDetailRepo.AddUsedComponent(usedComponent);
 
         return Ok();
     }

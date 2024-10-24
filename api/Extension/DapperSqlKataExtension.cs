@@ -27,10 +27,21 @@ public class DapperSqlKataExtensionHelper
 
 public static class DapperSqlKataExtension
 {
-    public static async Task<IDbConnection> InsertToDatabase<T>(this IDbConnection conn, T value)
+    public static async Task<IDbConnection> InsertToDatabase<T>(
+        this IDbConnection conn,
+        T value,
+        bool removeId = false
+    )
     {
+        var keyPair = new List<KeyValuePair<string, object>>();
+        foreach (var obj in value.GetType().GetProperties())
+        {
+            if (obj.Name.ToLower() == "id" && removeId)
+                continue;
+            keyPair.Add(new KeyValuePair<string, object>(obj.Name, obj.GetValue(value)));
+        }
         var className = typeof(T).Name;
-        var InsertIntoDatabase_QUERY = new Query(className).AsInsert(value);
+        var InsertIntoDatabase_QUERY = new Query(className).AsInsert(keyPair);
 
         await conn.ExecuteSqlKataAsync(InsertIntoDatabase_QUERY, true);
         return conn;
@@ -49,7 +60,7 @@ public static class DapperSqlKataExtension
         var DataBaseList_Query = new Query(className);
         var CheckIfInsertedValueAlredyExist_Query = DataBaseList_Query
             .Clone()
-            .SelectAllClassProperties(typeof(T))
+            .SelectAllClassProperties(new[] { typeof(T) })
             .Where(value);
 
         var InsertNewValueToDatabase_Query = DataBaseList_Query.Clone().AsInsert(value);
@@ -110,18 +121,21 @@ public static class DapperSqlKataExtension
 
     public static Query SelectAllClassProperties(
         this Query query,
-        Type classType,
+        Type[] listClassType,
         bool printLog = false
     )
     {
         var columnlists = new List<string>();
-        var className = classType.Name;
-
-        var instance = Activator.CreateInstance(classType);
-
-        foreach (var classProperty in instance.GetType().GetProperties())
+        foreach (var classType in listClassType)
         {
-            columnlists.Add($"{className}.{classProperty.Name}");
+            var className = classType.Name;
+
+            var instance = Activator.CreateInstance(classType);
+
+            foreach (var classProperty in instance.GetType().GetProperties())
+            {
+                columnlists.Add($"{className}.{classProperty.Name}");
+            }
         }
 
         if (printLog)
