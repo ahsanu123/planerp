@@ -14,6 +14,7 @@ import { Divider } from "@primer/react/lib-esm/deprecated/ActionList/Divider";
 import { GitCommitIcon } from "@primer/octicons-react";
 import { CondenseTimeline } from "../../component/shared-component";
 import { TimelineModel } from "../../model";
+import { ProjectProperties } from "../../component/shared-component/project-properties/ProjectProperties";
 
 const MOCK_PROJECTS: Project[] = [
   {
@@ -200,6 +201,7 @@ const ProjectPageComponent: React.FC = () => {
       </PageLayout.Header>
 
       <PageLayout.Content>
+        <ProjectProperties />
         <ProjectDetailSection />
       </PageLayout.Content>
 
