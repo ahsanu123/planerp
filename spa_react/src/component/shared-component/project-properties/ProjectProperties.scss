@@ -1,1 +1,9 @@
 .project-properties-container {}
+
+.change-title-anchor-component-container {
+  padding: 10px 20px;
+
+  &>div {
+    margin-bottom: 5px;
+  }
+}
