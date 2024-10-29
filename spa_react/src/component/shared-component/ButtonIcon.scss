@@ -1,5 +1,5 @@
 .button-icon-container {
-  &+span {
+  span[data-component="buttonContent"] {
     flex: none;
   }
 }

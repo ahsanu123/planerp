@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react-lite';
-import { Button } from '@primer/react';
+import { Button, Text } from '@primer/react';
 import './ButtonIcon.scss';
 
 interface ButtonIconProps {
   children: React.ReactNode;
-  icon?: React.ElementType;
+  icon?: JSX.Element;
 }
 const ButtonIconComponent: React.FC<ButtonIconProps> = (props) => {
   const {
@@ -17,12 +17,14 @@ const ButtonIconComponent: React.FC<ButtonIconProps> = (props) => {
     <Button
       className='button-icon-container'
       variant='invisible'
-      style={{
-        width: '100%',
-      }}
+      block
       size='small'
     >
-      {children}
+      {icon}
+      <Text>
+        {' '}
+        {children}
+      </Text>
     </Button>
   );
 };

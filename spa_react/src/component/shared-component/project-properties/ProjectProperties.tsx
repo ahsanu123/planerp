@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { CheckIcon, CrossReferenceIcon, GrabberIcon, HeartIcon, SquareFillIcon } from '@primer/octicons-react';
 import './ProjectProperties.scss';
 import { Divider } from '@primer/react/lib-esm/deprecated/ActionList/Divider';
-import { CrossIcon } from '@blocksuite/blocks/dist/index.js';
 import { ButtonIcon } from '../ButtonIcon';
+import { IconSelector } from '../IconSelector';
 
 export enum ProjectPropertiesTypes {
   Text,
@@ -220,7 +220,7 @@ const ProjectPropertiesComponent: React.FC = () => {
         direction='horizontal'
         align='center'
       >
-        <GrabberIcon size={16} />
+        <IconSelector />
         <TextInput />
       </Stack>
       <Divider />
@@ -237,7 +237,9 @@ const ProjectPropertiesComponent: React.FC = () => {
         direction='horizontal'
         align='stretch'
       >
-        <ButtonIcon>
+        <ButtonIcon
+          icon={<HeartIcon />}
+        >
           hello
         </ButtonIcon>
       </Stack>
