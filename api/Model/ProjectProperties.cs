@@ -54,4 +54,10 @@ public class ProjectProperties : BaseModel
 {
     public string Name { get; set; }
     public ProjectPropertiesType PropertiesType { get; set; }
+    public string Value { get; set; }
+}
+
+public class ProjectDocument
+{
+    public ProjectProperties Properties { get; set; }
 }
