@@ -28,6 +28,15 @@
 - build project 
 - run `dotnet-typegen generate --output-folder <output-directory>`
 
+### 🍒 Note  
+<details>
+  <summary>Personal Docker Note</summary>
+
+- dockerfile use to build docker image
+- compose.yml is to run several service,
+- you can use dockerfile inside compose.yml with [build option](https://docs.docker.com/reference/compose-file/build/)
+</details>
+
 ### 🗒️ References 
 
 - [Postgresql Synopsis Convention](https://www.postgresql.org/docs/current/notation.html#NOTATION)

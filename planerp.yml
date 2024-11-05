@@ -1,0 +1,44 @@
+name: "planerp"
+
+services:
+    api:    
+        tty: true       
+        stdin_open: true
+        entrypoint: ash
+        # entrypoint: sh -c "dotnet watch run"
+        working_dir: /planerp/api
+        build: 
+            context:  ./dockerfile 
+            dockerfile: backend.Dockerfile
+        volumes:
+            - /home/ah/personalProject/planerp/api/:/planerp/api
+        # networks: 
+        #     - planerp-network
+        ports: 
+            - "5000:5000"
+        depends_on: 
+            - db
+    db: 
+        # image: postgres:alpine3.20
+        build: 
+          context: ./dockerfile
+          dockerfile: postgresql.Dockerfile
+        restart: always
+
+        # set shared memory limit when using docker-compose
+        shm_size: 128mb
+        # or set shared memory limit when deploy via swarm stack
+        #volumes:
+        #  - type: tmpfs
+        #    target: /dev/shm
+        #    tmpfs:
+        #      size: 134217728 # 128*2^20 bytes = 128Mb
+        environment:
+          POSTGRES_PASSWORD: 123
+
+        # networks: 
+        #     - planerp-network
+# networks:
+#     planerp-network: 
+#         name: planerp-custom-networks
+#         driver: bridge

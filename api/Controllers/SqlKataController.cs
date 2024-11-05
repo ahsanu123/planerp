@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Planerp.Model;
 using Planerp.Repository;
@@ -17,6 +18,7 @@ class SomeTableName
 }
 
 [ApiController]
+[AllowAnonymous]
 [Route("[controller]")]
 public class SqlKataController : ControllerBase
 {
