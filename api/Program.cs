@@ -22,9 +22,16 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddSwaggerUI();
 builder.Services.AddFluentMigratorProvider(postgresConnectionString);
-builder.Services.AddAspNetDefaultIdentityProvider();
-builder.Services.AddExternalIdentityProvider(configuration);
-builder.Services.AddOpenIdDictProvider();
+
+//==================================================
+//
+// Turn off Authentication for now
+// its request client id if run inside docker container
+//
+//==================================================
+// builder.Services.AddAspNetDefaultIdentityProvider();
+// builder.Services.AddExternalIdentityProvider(configuration);
+// builder.Services.AddOpenIdDictProvider();
 
 builder.Services.AddPostgresqlDbProvider(postgresConnectionString);
 builder.Services.AddGraphQLProvider();
@@ -64,9 +71,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-app.MapGroup("identity").MapIdentityApi<CustomIdentityModel>();
+// app.MapGroup("identity").MapIdentityApi<CustomIdentityModel>();
 
 app.Migrate();
 app.Run();
-
-public partial class Program { }

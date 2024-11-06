@@ -113,6 +113,8 @@ RUN powershell_version=7.4.5 \
 # MAIN
 #===================================================================
 
+ENV DOTNET_URLS=http://+:5000
+
 WORKDIR /planerp/api/
 COPY erpPlanner.csproj .
 RUN dotnet restore erpPlanner.csproj
@@ -120,4 +122,3 @@ RUN dotnet restore erpPlanner.csproj
 RUN apk add postgresql-client
 EXPOSE 5000
 
-WORKDIR /planerp/api/
