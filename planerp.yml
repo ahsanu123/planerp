@@ -51,4 +51,16 @@ services:
             - POSTGRES_DB=planerp
             - POSTGRES_PASSWORD=123
 
-      
+    rabbit_mq_management: 
+        image: rabbitmq:4-management-alpine
+        environment:
+            - RABBITMQ_DEFAULT_PASS=123
+        ports: 
+            - "15672:15672"
+    rabbit_mq: 
+        image: rabbitmq:4-alpine
+        environment:
+            - RABBITMQ_DEFAULT_PASS=123
+        ports: 
+            - "5672:5672"
+

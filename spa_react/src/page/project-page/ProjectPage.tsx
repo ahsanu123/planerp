@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite";
 import { Column, DataTable, Table } from "@primer/react/drafts";
 import { formatDistanceToNow } from "date-fns";
 import { DoubleClickEditor } from "../../component/shared-component/DoubleClickEditor";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CustomDialog } from "../../component/shared-component/CustomDialog";
 import { FormGenerator } from "../../component/shared-component/FormGenerator";
 import { FormAddNewProject } from "./component/FormAddNewProject";
@@ -15,6 +15,7 @@ import { GitCommitIcon } from "@primer/octicons-react";
 import { CondenseTimeline } from "../../component/shared-component";
 import { TimelineModel } from "../../model";
 import { ProjectProperties } from "../../component/shared-component/project-properties/ProjectProperties";
+import { SortableContainer } from "../../component/sortable/Sortable";
 
 const MOCK_PROJECTS: Project[] = [
   {
@@ -171,31 +172,28 @@ const ProjectPageComponent: React.FC = () => {
         <Text>
           All project you currently working on will shown here.
         </Text>
+
         <Stack
           direction='horizontal'
         >
-          <Table.Container>
-            <Table.Title
-              id='project'
-            >
-              Projects
-            </Table.Title>
-            <Table.Subtitle
-              id='project-subtitle'
-            >
-            </Table.Subtitle>
-            <DataTable
-              data={MOCK_PROJECTS}
-              columns={MOCK_PROJECTS_COLUMNS}
-            />
+          <SortableContainer
+            group='DataTable'
+            childrenIsDatatable
+          >
+            <Table.Container>
+              <DataTable
+                data={MOCK_PROJECTS}
+                columns={MOCK_PROJECTS_COLUMNS}
+              />
 
-            <Table.Pagination
-              aria-label='project pagination'
-              totalCount={MOCK_PROJECTS.length}
-              pageSize={4}
-            />
+              <Table.Pagination
+                aria-label='project pagination'
+                totalCount={MOCK_PROJECTS.length}
+                pageSize={4}
+              />
 
-          </Table.Container>
+            </Table.Container>
+          </SortableContainer>
         </Stack>
         <Divider />
       </PageLayout.Header>

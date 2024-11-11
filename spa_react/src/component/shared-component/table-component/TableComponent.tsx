@@ -8,6 +8,7 @@ import { InfoIcon } from "@primer/octicons-react";
 import { FormatNumberAsCurrency } from "../../../shared/function";
 import { format } from "date-fns";
 import { useState } from "react";
+import { SortableContainer } from "../../sortable/Sortable";
 
 const MAX_COMPONENT_TO_SHOW = 4;
 
@@ -123,40 +124,45 @@ const TableComponentComponent: React.FC<TableComponentProps> = (props) => {
     <Stack
       className='table-component-container'
     >
-      <Table.Container>
-        <Table.Title
-          id='table-title'
-        >
-          Used Component
-        </Table.Title>
-        <Table.Subtitle
-          id='table-subtitle'
-        >
-          <Text>
-            list of used component displayed here
-          </Text>
-          <Button>
-            Add Component
-          </Button>
-        </Table.Subtitle>
+      <SortableContainer
+        group='sliced'
+        childrenIsDatatable
+      >
+        <Table.Container>
+          <Table.Title
+            id='table-title'
+          >
+            Used Component
+          </Table.Title>
+          <Table.Subtitle
+            id='table-subtitle'
+          >
+            <Text>
+              list of used component displayed here
+            </Text>
+            <Button>
+              Add Component
+            </Button>
+          </Table.Subtitle>
 
-        <DataTable
-          data={slicedUsedComponent}
-          columns={renderRowComponent}
-        />
-        <Table.Pagination
-          aria-label='project pagination'
-          totalCount={MOCK_USED_COMPONENT.length}
-          pageSize={MAX_COMPONENT_TO_SHOW}
-          onChange={(state) => {
-            console.log(state);
-            setTableIndex(state.pageIndex);
-          }}
-        />
+          <DataTable
+            data={slicedUsedComponent}
+            columns={renderRowComponent}
+          />
+          <Table.Pagination
+            aria-label='project pagination'
+            totalCount={MOCK_USED_COMPONENT.length}
+            pageSize={MAX_COMPONENT_TO_SHOW}
+            onChange={(state) => {
+              console.log(state);
+              setTableIndex(state.pageIndex);
+            }}
+          />
 
-      </Table.Container>
+        </Table.Container>
+      </SortableContainer>
 
-    </Stack>
+    </Stack >
   );
 
 };
