@@ -16,6 +16,7 @@ import { CondenseTimeline } from "../../component/shared-component";
 import { TimelineModel } from "../../model";
 import { ProjectProperties } from "../../component/shared-component/project-properties/ProjectProperties";
 import { SortableContainer } from "../../component/sortable/Sortable";
+import { DynamicForm } from "../../component/dynamic-form/DynamicForm";
 
 const MOCK_PROJECTS: Project[] = [
   {
@@ -163,6 +164,7 @@ const ProjectPageComponent: React.FC = () => {
 
   return (
     <PageLayout>
+      <DynamicForm />
       <PageLayout.Header>
         <Button
           onClick={() => setIsShowAddDialog(true)}
