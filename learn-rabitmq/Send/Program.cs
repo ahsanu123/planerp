@@ -1,23 +1,22 @@
-﻿using System.Text;
-using RabbitMQ.Client;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Send.Extension;
+using Send.Model;
+using Send.Service;
 
-var factory = new ConnectionFactory { HostName = "localhost", Password = "123" };
-using var connection = await factory.CreateConnectionAsync();
-using var channel = await connection.CreateChannelAsync();
+var builder = Host.CreateEmptyApplicationBuilder(null);
+builder.Configuration.AddJsonFile(Path.Join(Directory.GetCurrentDirectory(), "/appsettings.json"));
+var configuration = builder.Configuration;
 
-await channel.QueueDeclareAsync(
-    queue: "hello",
-    durable: false,
-    exclusive: false,
-    autoDelete: false,
-    arguments: null
-);
+var rabbitMQClientConfiguration = configuration
+    .GetSection(nameof(RabbitMQFactorySetting))
+    .Get<RabbitMQFactorySetting>();
 
-const string message = "Hello World!";
-var body = Encoding.UTF8.GetBytes(message);
+builder.AddRabbitMQClient(rabbitMQClientConfiguration);
 
-await channel.BasicPublishAsync(exchange: string.Empty, routingKey: "hello", body: body);
-Console.WriteLine($" [x] Sent {message}");
+builder.Services.AddHostedService<ConsoleWatcher>();
+builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
 
-Console.WriteLine(" Press [enter] to exit.");
-Console.ReadLine();
+var host = builder.Build();
+host.Run();

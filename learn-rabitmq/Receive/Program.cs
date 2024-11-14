@@ -6,26 +6,28 @@ var factory = new ConnectionFactory { HostName = "localhost", Password = "123" }
 using var connection = await factory.CreateConnectionAsync();
 using var channel = await connection.CreateChannelAsync();
 
-await channel.QueueDeclareAsync(
-    queue: "hello",
-    durable: false,
-    exclusive: false,
-    autoDelete: false,
-    arguments: null
-);
+string exchangeName = "console_watcher";
+string routingKey = "watcher_key";
 
-Console.WriteLine(" [*] Waiting for messages.");
+await channel.ExchangeDeclareAsync(exchange: exchangeName, type: ExchangeType.Direct);
+
+var queueDeclareResult = await channel.QueueDeclareAsync();
+string queueName = queueDeclareResult.QueueName;
+
+await channel.QueueBindAsync(queueName, exchange: exchangeName, routingKey);
 
 var consumer = new AsyncEventingBasicConsumer(channel);
-consumer.ReceivedAsync += (model, ea) =>
+
+consumer.ReceivedAsync += (model, eventArgument) =>
 {
-    var body = ea.Body.ToArray();
+    var body = eventArgument.Body.ToArray();
     var message = Encoding.UTF8.GetString(body);
-    Console.WriteLine($" [x] Received {message}");
+    var routingKey = eventArgument.RoutingKey;
+    Console.WriteLine($" [x] Received '{routingKey}':'{message}'");
     return Task.CompletedTask;
 };
 
-await channel.BasicConsumeAsync("hello", autoAck: true, consumer: consumer);
+await channel.BasicConsumeAsync(queueName, autoAck: true, consumer);
 
 Console.WriteLine(" Press [enter] to exit.");
 Console.ReadLine();

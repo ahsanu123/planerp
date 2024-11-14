@@ -1,6 +1,15 @@
 name: "planerp"
 
 services:
+    util: 
+        tty: true       
+        stdin_open: true
+        working_dir: /planerp
+        build:
+            context: ./dockerfile
+            dockerfile: ./util.Dockerfile
+        entrypoint: ash
+        
     spa: 
         tty: true       
         stdin_open: true
