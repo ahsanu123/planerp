@@ -16,7 +16,7 @@ import { CondenseTimeline } from "../../component/shared-component";
 import { TimelineModel } from "../../model";
 import { ProjectProperties } from "../../component/shared-component/project-properties/ProjectProperties";
 import { SortableContainer } from "../../component/sortable/Sortable";
-import { DynamicForm } from "../../component/dynamic-form/DynamicForm";
+import { DynamicForm } from "../../component/dynamic-form/MockDynamicForm";
 
 const MOCK_PROJECTS: Project[] = [
   {

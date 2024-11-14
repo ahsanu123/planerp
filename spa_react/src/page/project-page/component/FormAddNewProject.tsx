@@ -7,6 +7,8 @@ import { blankProject, blankProjectRequest } from "../../../model/blank-model";
 import { useApiStore } from "../../../api/api-store/useApiStore";
 import { Project } from "../../../model/generated/project";
 import { ProjectRequest } from "../../../model/project-request";
+import { defineRSJFForm } from "../../../component/dynamic-form/DynamicFormUtils";
+import { BasicWidgetSchemaType } from "../../../component/dynamic-form/RJSFCustomTypes";
 
 interface FormAddNewProjectProps {
   data: Project
@@ -50,128 +52,62 @@ const FormAddNewProjectComponent: React.FC<FormAddNewProjectProps> = (props) => 
     onSubmit: (values) => console.log(values),
   });
 
+  const RsjfForm = defineRSJFForm<ProjectRequest>({
+    type: 'object',
+    properties: {
+      name: {
+        type: BasicWidgetSchemaType.String
+      },
+      imageUrl: {
+        type: BasicWidgetSchemaType.String
+      },
+      createdDate: {
+        type: BasicWidgetSchemaType.String,
+        format: 'date'
+      },
+      deadLineDate: {
+        type: BasicWidgetSchemaType.String,
+        format: 'date'
+      },
+      lastUpdatedDate: {
+        type: BasicWidgetSchemaType.String,
+        format: 'date'
+      },
+      finishedDate: {
+        type: BasicWidgetSchemaType.String,
+        format: 'date'
+      },
+      sellPrice: {
+        type: BasicWidgetSchemaType.Number
+      },
+      capital: {
+        type: BasicWidgetSchemaType.Number
+      },
+      fail: {
+        type: BasicWidgetSchemaType.Boolean
+      },
+      finish: {
+        type: BasicWidgetSchemaType.Boolean
+      },
+      profitInPersen: {
+        type: BasicWidgetSchemaType.Number
+      },
+      description: {
+        type: BasicWidgetSchemaType.String,
+      }
+    }
+  }, {
+    description: {
+      'ui:widget': 'textarea'
+    }
+  });
+
   return (
-    <form
-      onSubmit={formik.handleSubmit}
+    <div
+      className='project-dialog-request'
     >
-      <Stack
-        direction='horizontal'
-      >
-        <Stack.Item>
-          <FormControl.Label>
-            Project Name
-          </FormControl.Label>
-          <TextInput
-            name='name'
-            type='text'
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            value={formik.values.name}
-          />
-        </Stack.Item>
-
-        <Stack.Item>
-          <FormControl.Label>
-            Thumbnail
-          </FormControl.Label>
-          <ButtonInputFile
-            onFileSelected={(file) => handleUploadFile(file)}
-          />
-        </Stack.Item>
-
-      </Stack>
-
-      <Stack>
-        <FormControl.Label>
-          Deadline Date
-        </FormControl.Label>
-        <TextInput
-          type='date'
-          id='deadLineDate'
-          name='deadLineDate'
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.deadLineDate.toString()}
-        />
-
-        <FormControl.Label>
-          Last Updated Date
-        </FormControl.Label>
-        <TextInput
-          type='date'
-          id='lastUpdateDate'
-          name='lastUpdateDate'
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.lastUpdatedDate.toString()}
-        />
-
-        <FormControl.Label>
-          Finish Date
-        </FormControl.Label>
-        <TextInput
-          type='date'
-          id='finishDate'
-          name='finishDate'
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.finishedDate.toString()}
-        />
-      </Stack>
-
-      <Stack>
-        <Stack
-          direction='horizontal'
-        >
-          <Stack.Item>
-            <FormControl.Label>
-              Capital
-            </FormControl.Label>
-            <TextInput
-              leadingVisual='$'
-              type='number'
-              id='capital'
-              name='capital'
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.capital}
-            />
-          </Stack.Item>
-
-        </Stack>
-
-        <Stack.Item>
-          <FormControl.Label>
-            Description
-          </FormControl.Label>
-          <Textarea
-            cols={70}
-            id='description'
-            name='description'
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.description}
-          />
-        </Stack.Item>
-
-      </Stack>
-
-      <Stack
-        direction='horizontal'
-        align='end'
-      >
-        <Button
-          onClick={() => onCancel()}
-        >
-          Cancel
-        </Button>
-        <Button
-          type='submit'
-        >
-          Submit
-        </Button>
-      </Stack>
-    </form>
+      {RsjfForm}
+    </div>
   );
 };
 

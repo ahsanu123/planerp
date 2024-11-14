@@ -55,3 +55,36 @@ export type DefaultWidgetList =
 
 export type RegistryFieldsTyped = RegistryFieldsType & Partial<Record<DefaultFieldList, Field>>;
 export type RegistryWidgetsTyped = RegistryWidgetsType & Partial<Record<DefaultWidgetList, Widget>>;
+
+export enum BasicWidgetSchemaType {
+  String = 'string',
+  Number = 'number',
+  Textarea = 'textarea',
+  Boolean = 'boolean',
+  File = 'file',
+  Date = 'date'
+}
+
+export interface BasicWidgetSchema {
+  type: BasicWidgetSchemaType,
+  title?: string,
+  defaultValue?: string,
+  placeholder?: string,
+  description?: string,
+  format?: 'data-url' | 'date-time' | 'date' | undefined,
+  onSelectedFile?: (file: File) => void,
+}
+
+export type ExcludedType = Exclude<object, Date | Array<any>>;
+export type NestedKeyof<ObjectType extends ExcludedType> = {
+  [key in keyof ObjectType]:
+  ObjectType[key] extends Date ? any :
+  ObjectType[key] extends Array<any> ? any[] :
+  ObjectType[key] extends ExcludedType ? NestedKeyof<ObjectType[key]> : BasicWidgetSchema
+};
+
+export type NestedSchemaModel<T extends ExcludedType> = {
+  type: string;
+  properties: NestedKeyof<T>;
+};
+export type NestedUISchema<T extends ExcludedType> = NestedKeyof<T> & { [key: string]: any };
