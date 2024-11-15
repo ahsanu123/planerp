@@ -8,7 +8,7 @@ namespace Send.Extension;
 
 public static class SendExtension
 {
-    public static void AddRabbitMQClient(
+    public static async Task AddRabbitMQClient(
         this HostApplicationBuilder builder,
         RabbitMQFactorySetting setting
     )
@@ -20,10 +20,10 @@ public static class SendExtension
         };
         // ref: line 112
         // https://github.com/dotnet/dotnet/blob/00f73459619ed9aed18dfe72870140323ef6a915/src/aspire/src/Components/Aspire.RabbitMQ.Client/AspireRabbitMQExtensions.cs
+        var connection = await factory.CreateConnectionAsync();
+        var channel = await connection.CreateChannelAsync();
         builder.Services.AddSingleton<IChannel>(serviceProvider =>
         {
-            using var connection = factory.CreateConnectionAsync().GetAwaiter().GetResult();
-            var channel = connection.CreateChannelAsync().GetAwaiter().GetResult();
             return channel;
         });
     }

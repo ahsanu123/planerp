@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Hosting;
 using Send.Extension;
+using Send.Model;
 
 namespace Send.Service;
 
@@ -23,7 +24,7 @@ public class ConsoleWatcher : IHostedService
             {
                 Console.Write("Enter Message: ");
                 var message = Console.ReadLine();
-                Console.WriteLine($"Sending Message: {message}\n\n");
+                Console.WriteLine($"Sending Message: {message}\n");
                 this.send(message);
             }
         });

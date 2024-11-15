@@ -13,7 +13,7 @@ var rabbitMQClientConfiguration = configuration
     .GetSection(nameof(RabbitMQFactorySetting))
     .Get<RabbitMQFactorySetting>();
 
-builder.AddRabbitMQClient(rabbitMQClientConfiguration);
+await builder.AddRabbitMQClient(rabbitMQClientConfiguration);
 
 builder.Services.AddHostedService<ConsoleWatcher>();
 builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
