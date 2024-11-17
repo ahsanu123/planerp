@@ -1,9 +1,9 @@
-import { Button, NavList, PageLayout, Stack, Text } from "@primer/react";
+import { Button, PageLayout, Stack, Text } from "@primer/react";
 import { observer } from "mobx-react-lite";
 import { Column, DataTable, Table } from "@primer/react/drafts";
 import { formatDistanceToNow } from "date-fns";
 import { DoubleClickEditor } from "../../component/shared-component/DoubleClickEditor";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { CustomDialog } from "../../component/shared-component/CustomDialog";
 import { FormGenerator } from "../../component/shared-component/FormGenerator";
 import { FormAddNewProject } from "./component/FormAddNewProject";
@@ -16,7 +16,6 @@ import { CondenseTimeline } from "../../component/shared-component";
 import { TimelineModel } from "../../model";
 import { ProjectProperties } from "../../component/shared-component/project-properties/ProjectProperties";
 import { SortableContainer } from "../../component/sortable/Sortable";
-import { DynamicForm } from "../../component/dynamic-form/MockDynamicForm";
 
 const MOCK_PROJECTS: Project[] = [
   {
@@ -164,7 +163,6 @@ const ProjectPageComponent: React.FC = () => {
 
   return (
     <PageLayout>
-      <DynamicForm />
       <PageLayout.Header>
         <Button
           onClick={() => setIsShowAddDialog(true)}

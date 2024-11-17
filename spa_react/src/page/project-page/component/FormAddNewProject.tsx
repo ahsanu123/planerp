@@ -1,14 +1,11 @@
 import { observer } from "mobx-react-lite";
 import './FormAddNewProject.scss';
-import { Button, Checkbox, FormControl, Stack, Textarea, TextInput } from "@primer/react";
-import { ButtonInputFile } from "../../../component/shared-component/ButtonInputFile";
-import { Field, Form, useFormik } from 'formik';
-import { blankProject, blankProjectRequest } from "../../../model/blank-model";
+import { useFormik } from 'formik';
 import { useApiStore } from "../../../api/api-store/useApiStore";
 import { Project } from "../../../model/generated/project";
 import { ProjectRequest } from "../../../model/project-request";
-import { defineRSJFForm } from "../../../component/dynamic-form/DynamicFormUtils";
-import { BasicWidgetSchemaType } from "../../../component/dynamic-form/RJSFCustomTypes";
+import { defineRSJFForm } from "../../../component/rsjf-primer/Utils";
+import { BasicWidgetSchemaType } from "../../../component/rsjf-primer/RJSFCustomTypes";
 
 interface FormAddNewProjectProps {
   data: Project
@@ -42,64 +39,60 @@ const FormAddNewProjectComponent: React.FC<FormAddNewProjectProps> = (props) => 
     fileUtils,
   } = useApiStore();
 
-  const handleUploadFile = async (file: File) => {
-    const fileName = await fileUtils.uploadFile(file);
-    console.log('from add Panel', fileName);
-  };
-
-  const formik = useFormik<ProjectRequest>({
-    initialValues: mockProjectRequest,
-    onSubmit: (values) => console.log(values),
-  });
-
   const RsjfForm = defineRSJFForm<ProjectRequest>({
-    type: 'object',
-    properties: {
-      name: {
-        type: BasicWidgetSchemaType.String
-      },
-      imageUrl: {
-        type: BasicWidgetSchemaType.String
-      },
-      createdDate: {
-        type: BasicWidgetSchemaType.String,
-        format: 'date'
-      },
-      deadLineDate: {
-        type: BasicWidgetSchemaType.String,
-        format: 'date'
-      },
-      lastUpdatedDate: {
-        type: BasicWidgetSchemaType.String,
-        format: 'date'
-      },
-      finishedDate: {
-        type: BasicWidgetSchemaType.String,
-        format: 'date'
-      },
-      sellPrice: {
-        type: BasicWidgetSchemaType.Number
-      },
-      capital: {
-        type: BasicWidgetSchemaType.Number
-      },
-      fail: {
-        type: BasicWidgetSchemaType.Boolean
-      },
-      finish: {
-        type: BasicWidgetSchemaType.Boolean
-      },
-      profitInPersen: {
-        type: BasicWidgetSchemaType.Number
-      },
-      description: {
-        type: BasicWidgetSchemaType.String,
+    schema: {
+      type: 'object',
+      properties: {
+        name: {
+          type: BasicWidgetSchemaType.String,
+          defaultValue: ''
+        },
+        imageUrl: {
+          type: BasicWidgetSchemaType.String,
+          defaultValue: ''
+        },
+        createdDate: {
+          type: BasicWidgetSchemaType.String,
+          format: 'date'
+        },
+        deadLineDate: {
+          type: BasicWidgetSchemaType.String,
+          format: 'date'
+        },
+        lastUpdatedDate: {
+          type: BasicWidgetSchemaType.String,
+          format: 'date'
+        },
+        finishedDate: {
+          type: BasicWidgetSchemaType.String,
+          format: 'date'
+        },
+        sellPrice: {
+          type: BasicWidgetSchemaType.Integer
+        },
+        capital: {
+          type: BasicWidgetSchemaType.Integer
+        },
+        fail: {
+          type: BasicWidgetSchemaType.Boolean
+        },
+        finish: {
+          type: BasicWidgetSchemaType.Boolean
+        },
+        profitInPersen: {
+          type: BasicWidgetSchemaType.Integer
+        },
+        description: {
+          type: BasicWidgetSchemaType.String,
+        }
       }
-    }
-  }, {
-    description: {
-      'ui:widget': 'textarea'
-    }
+    },
+    uiSchema: {
+      description: {
+        'ui:widget': 'textarea'
+      }
+    },
+    onSubmit: (data) => console.log(data.formData),
   });
 
   return (

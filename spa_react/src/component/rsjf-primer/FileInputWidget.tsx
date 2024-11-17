@@ -1,12 +1,9 @@
-
 import { WidgetProps } from "@rjsf/utils";
-import { ChangeEvent, FocusEvent } from "react";
 import { FormControl, Textarea } from "@primer/react";
 import { isNullOrEmpty } from "../../shared/function";
+import { ButtonInputFile } from "../shared-component";
 import { BasicWidgetSchema } from "./RJSFCustomTypes";
-import './TextInputWrapper.scss';
-
-export const TextareaWidgetComponent = (props: WidgetProps<any, BasicWidgetSchema>) => {
+export const FileWidget = (props: WidgetProps<any, any>) => {
   const {
     schema,
     id,
@@ -16,6 +13,7 @@ export const TextareaWidgetComponent = (props: WidgetProps<any, BasicWidgetSchem
     label = '',
     hideLabel,
     autofocus,
+
     onChange,
     onBlur,
     onFocus,
@@ -25,26 +23,17 @@ export const TextareaWidgetComponent = (props: WidgetProps<any, BasicWidgetSchem
     uiSchema
   } = props;
 
-  const _onChange = ({ target: { value } }: ChangeEvent<HTMLTextAreaElement>) => onChange(value);
-  const _onBlur = ({ target }: FocusEvent<HTMLTextAreaElement>) => onBlur(id, target && target.value);
-  const _onFocus = ({ target }: FocusEvent<HTMLTextAreaElement>) => onFocus(id, target && target.value);
 
   const description: string | undefined = options.description ?? schema.description;
+  const _onSelectedFile = schema.onSelectedFile ?? (() => undefined);
 
   return (
     <FormControl
       id={id}
     >
       <FormControl.Label>{label}</FormControl.Label>
-      <Textarea
-        onChange={_onChange}
-        onBlur={_onBlur}
-        onFocus={_onFocus}
-        defaultValue={schema.defaultValue}
-        disabled={disabled}
-        required={required}
-        placeholder={schema.placeholder}
-        value={value}
+      <ButtonInputFile
+        onFileSelected={_onSelectedFile}
       />
       {!isNullOrEmpty(description ?? '') && (
         <FormControl.Caption>

@@ -58,7 +58,7 @@ export type RegistryWidgetsTyped = RegistryWidgetsType & Partial<Record<DefaultW
 
 export enum BasicWidgetSchemaType {
   String = 'string',
-  Number = 'number',
+  Integer = 'integer',
   Textarea = 'textarea',
   Boolean = 'boolean',
   File = 'file',
