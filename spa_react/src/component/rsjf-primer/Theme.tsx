@@ -24,7 +24,7 @@ export const generateTheme = <
 const generateWidgets =
   <T, U, V extends GenericObjectType>(): RegistryWidgetsType<T, U, V> => {
     return {
-      CheckboxesWidget,
+      // CheckboxesWidget,
       CheckboxWidget,
       DateTimeWidget,
       DateWidget,

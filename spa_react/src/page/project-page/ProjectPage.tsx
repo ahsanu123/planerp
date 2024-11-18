@@ -16,8 +16,9 @@ import { CondenseTimeline } from "../../component/shared-component";
 import { TimelineModel } from "../../model";
 import { ProjectProperties } from "../../component/shared-component/project-properties/ProjectProperties";
 import { SortableContainer } from "../../component/sortable/Sortable";
+import { ImageSliderMock } from "../../component/shared-component/Swipper";
 
-const MOCK_PROJECTS: Project[] = [
+export const MOCK_PROJECTS: Project[] = [
   {
     name: "Tofu Control Panel Automation",
     deadLineDate: new Date(2024, 11),
@@ -65,7 +66,7 @@ const MOCK_PROJECTS: Project[] = [
   },
 ];
 
-const MOCK_TIMELINE: TimelineModel[] = [
+export const MOCK_TIMELINE: TimelineModel[] = [
   {
     icon: GitCommitIcon,
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam, ut sint illa vendibiliora, haec uberiora certe sunt. Ne discipulum abducam, times. Ita credo. Expectoque quid ad id, quod quaerebam, respondeas. Ita relinquet duas, de"
@@ -111,46 +112,46 @@ const MOCK_TIMELINE: TimelineModel[] = [
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam, ut sint illa vendibiliora, haec uberiora certe sunt. Ne discipulum abducam, times. Ita credo. Expectoque quid ad id, quod quaerebam, respondeas. Ita relinquet duas, de"
   },
 ];
+export const MOCK_PROJECTS_COLUMNS: Column<Project>[] = [
+  {
+    header: 'Name',
+    field: 'name',
+    renderCell: (data) => (
+      <DoubleClickEditor
+        value={data.name}
+        onDoubleClicked={(status) => undefined}
+      />
+    ),
+  },
+  {
+    header: 'Capital',
+    field: 'capital',
+    renderCell: (data) => (<span>{FormatNumberAsCurrency(data.capital)}</span>),
+  },
+  {
+    header: 'Dead Line',
+    field: 'deadLineDate',
+    renderCell: (data) => (<span>{formatDistanceToNow(data.deadLineDate)}</span>)
+  },
+  {
+    header: 'Dead Line',
+    field: 'deadLineDate',
+    renderCell: (data) => (<span>{formatDistanceToNow(data.deadLineDate)}</span>)
+  },
+  {
+    header: 'Dead Line',
+    field: 'deadLineDate',
+    renderCell: (data) => (<span>{formatDistanceToNow(data.deadLineDate)}</span>)
+  },
+  {
+    header: 'Dead Line',
+    field: 'deadLineDate',
+    renderCell: (data) => (<span>{formatDistanceToNow(data.deadLineDate)}</span>)
+  },
+];
 
 const ProjectPageComponent: React.FC = () => {
 
-  const MOCK_PROJECTS_COLUMNS: Column<Project>[] = [
-    {
-      header: 'Name',
-      field: 'name',
-      renderCell: (data) => (
-        <DoubleClickEditor
-          value={data.name}
-          onDoubleClicked={(status) => handleOnDoubleClicked(data, status)}
-        />
-      ),
-    },
-    {
-      header: 'Capital',
-      field: 'capital',
-      renderCell: (data) => (<span>{FormatNumberAsCurrency(data.capital)}</span>),
-    },
-    {
-      header: 'Dead Line',
-      field: 'deadLineDate',
-      renderCell: (data) => (<span>{formatDistanceToNow(data.deadLineDate)}</span>)
-    },
-    {
-      header: 'Dead Line',
-      field: 'deadLineDate',
-      renderCell: (data) => (<span>{formatDistanceToNow(data.deadLineDate)}</span>)
-    },
-    {
-      header: 'Dead Line',
-      field: 'deadLineDate',
-      renderCell: (data) => (<span>{formatDistanceToNow(data.deadLineDate)}</span>)
-    },
-    {
-      header: 'Dead Line',
-      field: 'deadLineDate',
-      renderCell: (data) => (<span>{formatDistanceToNow(data.deadLineDate)}</span>)
-    },
-  ];
 
   const [selectedProject, setSelectedProject] = useState<Project | undefined>(undefined);
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
@@ -164,38 +165,12 @@ const ProjectPageComponent: React.FC = () => {
   return (
     <PageLayout>
       <PageLayout.Header>
+        <ImageSliderMock />
         <Button
           onClick={() => setIsShowAddDialog(true)}
         >
           Add Project
         </Button>
-        <Text>
-          All project you currently working on will shown here.
-        </Text>
-
-        <Stack
-          direction='horizontal'
-        >
-          <SortableContainer
-            group='DataTable'
-            childrenIsDatatable
-          >
-            <Table.Container>
-              <DataTable
-                data={MOCK_PROJECTS}
-                columns={MOCK_PROJECTS_COLUMNS}
-              />
-
-              <Table.Pagination
-                aria-label='project pagination'
-                totalCount={MOCK_PROJECTS.length}
-                pageSize={4}
-              />
-
-            </Table.Container>
-          </SortableContainer>
-        </Stack>
-        <Divider />
       </PageLayout.Header>
 
       <PageLayout.Content>

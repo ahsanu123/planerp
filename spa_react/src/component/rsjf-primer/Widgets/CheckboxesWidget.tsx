@@ -58,6 +58,8 @@ export const CheckboxesWidget = <
   }: FocusEvent<HTMLInputElement | any>) =>
     onFocus(id, enumOptionsValueForIndex<S>(value, enumOptions, emptyValue));
 
+  const dataReadonly = schema.readonly ?? false;
+
   return (
     <CheckboxGroup required={required}>
       <CheckboxGroup.Label>
@@ -76,7 +78,7 @@ export const CheckboxesWidget = <
             <FormControl id={optionId(id, index)} key={optionId(id, index)}>
               <Checkbox
                 checked={checked}
-                disabled={disabled || itemDisabled || readonly}
+                disabled={disabled || itemDisabled || readonly || dataReadonly}
                 autoFocus={autofocus && index === 0}
                 onChange={_onChange(index)}
                 onBlur={_onBlur}

@@ -56,6 +56,9 @@ const ProjectDetailSectionComponent: React.FC<ProjectDetailSectionProps> = (prop
             }}
             imageUrl={imageUrl}
             caption={MOCK_PROJECT.name}
+            width='400px'
+            height='400px'
+            objectFit='contain'
             showChangeButton
           />
         </Stack.Item>

@@ -54,6 +54,9 @@ const TableComponentComponent: React.FC<TableComponentProps> = (props) => {
           <ImageViewer
             className='table-component-image'
             imageUrl={data.imageUrl ?? ''}
+            width='100px'
+            height='100px'
+            objectFit='contain'
           />
           <Link
             inline

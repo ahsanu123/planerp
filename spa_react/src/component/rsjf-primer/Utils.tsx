@@ -1,8 +1,6 @@
 import { IChangeEvent } from "@rjsf/core";
 import validator from '@rjsf/validator-ajv8';
 import { ExcludedType, NestedSchemaModel, UiSchemaTyped } from "./RJSFCustomTypes";
-import { SubmitButton } from "./Templates/SubmitButton";
-import { FieldTemplate } from "./Templates/FieldTemplate";
 import { generateForm } from "./PrimerForm";
 import { FormContextType, RJSFSchema, StrictRJSFSchema } from "@rjsf/utils";
 
@@ -11,7 +9,7 @@ export interface DefineRSJFFormProps<
   S extends StrictRJSFSchema,
   F extends FormContextType
 > {
-  schema: NestedSchemaModel<T>,
+  schema: NestedSchemaModel<T> & { [key: string]: any },
   uiSchema?: UiSchemaTyped<T>,
   onSubmit?: (data: IChangeEvent<T, S, F>) => void,
 }

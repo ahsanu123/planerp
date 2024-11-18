@@ -39,7 +39,7 @@ const FormAddNewProjectComponent: React.FC<FormAddNewProjectProps> = (props) => 
     fileUtils,
   } = useApiStore();
 
-  const RsjfForm = defineRSJFForm<ProjectRequest>({
+  const RsjfForm = defineRSJFForm<any>({
     schema: {
       type: 'object',
       properties: {
@@ -51,21 +51,27 @@ const FormAddNewProjectComponent: React.FC<FormAddNewProjectProps> = (props) => 
           type: BasicWidgetSchemaType.String,
           defaultValue: ''
         },
-        createdDate: {
-          type: BasicWidgetSchemaType.String,
-          format: 'date'
-        },
-        deadLineDate: {
-          type: BasicWidgetSchemaType.String,
-          format: 'date'
-        },
-        lastUpdatedDate: {
-          type: BasicWidgetSchemaType.String,
-          format: 'date'
-        },
-        finishedDate: {
-          type: BasicWidgetSchemaType.String,
-          format: 'date'
+        dates: {
+          title: 'date think',
+          type: 'object',
+          properties: {
+            createdDate: {
+              type: BasicWidgetSchemaType.String,
+              format: 'date'
+            },
+            deadLineDate: {
+              type: BasicWidgetSchemaType.String,
+              format: 'date'
+            },
+            lastUpdatedDate: {
+              type: BasicWidgetSchemaType.String,
+              format: 'date'
+            },
+            finishedDate: {
+              type: BasicWidgetSchemaType.String,
+              format: 'date'
+            },
+          }
         },
         sellPrice: {
           type: BasicWidgetSchemaType.Integer

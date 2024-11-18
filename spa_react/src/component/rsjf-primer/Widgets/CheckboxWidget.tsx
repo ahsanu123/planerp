@@ -36,22 +36,20 @@ export const CheckboxWidget = <
   // "const" or "enum" keywords
   const required = schemaRequiresTrueValue<S>(schema);
 
-  const _onChange = ({ target: { checked } }: ChangeEvent<HTMLInputElement>) =>
-    onChange(checked);
-  const _onBlur = ({ target: { value } }: FocusEvent<HTMLInputElement | any>) =>
-    onBlur(id, value);
-  const _onFocus = ({
-    target: { value },
-  }: FocusEvent<HTMLInputElement | any>) => onFocus(id, value);
+  const _onChange = ({ target: { checked } }: ChangeEvent<HTMLInputElement>) => onChange(checked);
+  const _onBlur = ({ target: { value } }: FocusEvent<HTMLInputElement | any>) => onBlur(id, value);
+  const _onFocus = ({ target: { value } }: FocusEvent<HTMLInputElement | any>) => onFocus(id, value);
+
+  const dataReadonly = schema.readonly ?? false;
 
   return (
     <FormControl id={id}>
       <Checkbox
         checked={typeof value === "undefined" ? false : Boolean(value)}
         required={required}
-        disabled={disabled || readonly}
+        disabled={disabled || readonly || dataReadonly}
         autoFocus={autofocus}
-        onChange={_onChange}
+        onChange={!dataReadonly ? _onChange : undefined}
         onBlur={_onBlur}
         onFocus={_onFocus}
         aria-describedby={ariaDescribedByIds<T>(id)}

@@ -8,6 +8,9 @@ import { useApiStore } from "../../api/api-store/useApiStore";
 interface ImageViewerProps {
   imageUrl: string;
   onImageUrlChanged?: (uploadedFileName: string) => void;
+  width?: string;
+  objectFit?: 'fill' | 'contain' | 'cover' | 'none' | 'scale-down',
+  height?: string;
   caption?: string;
   className?: string;
   children?: React.ReactNode;
@@ -22,6 +25,9 @@ const ImageViewerComponent: React.FC<ImageViewerProps> = (props) => {
     caption,
     onImageUrlChanged,
     showChangeButton = false,
+    height,
+    width,
+    objectFit,
   } = props;
 
   const {
@@ -34,13 +40,12 @@ const ImageViewerComponent: React.FC<ImageViewerProps> = (props) => {
   };
 
   return (
-    <Stack
-      className={`image-viewer-container ${className}`}
-    >
+    <>
       <img
         style={{
-          width: '100%',
-          height: 'auto',
+          width: width,
+          height: height,
+          objectFit: objectFit
         }}
         src={imageUrl}
       />
@@ -58,7 +63,7 @@ const ImageViewerComponent: React.FC<ImageViewerProps> = (props) => {
         {caption}
       </Text>
       {children}
-    </Stack>
+    </>
   );
 };
 

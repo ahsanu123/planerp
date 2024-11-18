@@ -31,6 +31,9 @@ export const SubmitButton = <
       >
         {submitText}
       </Button>
+      <div>
+        {JSON.stringify(getSubmitButtonOptions<T, S, F>(uiSchema))}
+      </div>
     </Box>
   );
 };

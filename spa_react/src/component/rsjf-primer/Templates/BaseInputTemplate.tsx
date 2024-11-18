@@ -1,4 +1,4 @@
-import { FormControl, TextInput, TextInputProps } from "@primer/react";
+import { FormControl, Text, TextInput, TextInputProps } from "@primer/react";
 import {
   ariaDescribedByIds,
   examplesId,
@@ -8,6 +8,8 @@ import {
   StrictRJSFSchema,
   WidgetProps,
 } from "@rjsf/utils";
+import { BasicWidgetSchema } from "../RJSFCustomTypes";
+import { camelCaseToSpaced } from "../../../shared/function";
 
 /** The `BaseInputTemplate` is the template to use to render the basic `<input>` component for the `core` theme.
  * It is used as the template for rendering many of the <input> based widgets that differ by `type` and callbacks only.
@@ -18,7 +20,7 @@ import {
 export const BaseInputTemplate = <
   T = any,
   S extends StrictRJSFSchema = RJSFSchema,
-  F extends FormContextType = any
+  F extends FormContextType = BasicWidgetSchema | any
 >(props: WidgetProps<T, S, F>) => {
   const {
     id,
@@ -65,17 +67,18 @@ export const BaseInputTemplate = <
 
   const { schemaUtils } = registry;
   const displayLabel = schemaUtils.getDisplayLabel(schema, uiSchema);
+  const dataReadonly = schema.readonly ?? false;
 
   return (
     <>
-      <FormControl.Label visuallyHidden={!displayLabel} htmlFor={id}>{label || schema.title}</FormControl.Label>
+      <FormControl.Label visuallyHidden={!displayLabel} htmlFor={id}>{camelCaseToSpaced(label || schema.title)}</FormControl.Label>
       <TextInput
         id={id}
         name={id}
         placeholder={placeholder}
         autoFocus={autofocus}
         required={required}
-        disabled={disabled || readonly}
+        disabled={disabled || readonly || dataReadonly}
         {...otherProps}
         value={value || value === 0 ? value : ""}
         validationStatus={rawErrors.length > 0 ? "error" : undefined}

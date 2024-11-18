@@ -1,9 +1,9 @@
 import { WidgetProps } from "@rjsf/utils";
 import { ChangeEvent, FocusEvent } from "react";
-import { FormControl, TextInput, Stack } from "@primer/react";
-import { camelCaseToSpaced, isNullOrEmpty } from "../../shared/function";
-import { BasicWidgetSchema } from "./RJSFCustomTypes";
+import { FormControl, TextInput, Stack, Text } from "@primer/react";
 import './TextInputWrapper.scss';
+import { BasicWidgetSchema } from "../RJSFCustomTypes";
+import { camelCaseToSpaced, isNullOrEmpty } from "../../../shared/function";
 
 export const TextWidgetComponent = (props: WidgetProps<any, BasicWidgetSchema>) => {
   const {
@@ -40,7 +40,7 @@ export const TextWidgetComponent = (props: WidgetProps<any, BasicWidgetSchema>) 
           onChange={_onChange}
           onBlur={_onBlur}
           onFocus={_onFocus}
-          defaultValue={schema.defaultValue}
+          defaultValue={schema.default}
           disabled={disabled}
           required={required}
           placeholder={schema.placeholder}
@@ -52,6 +52,7 @@ export const TextWidgetComponent = (props: WidgetProps<any, BasicWidgetSchema>) 
           </FormControl.Caption>
         )}
       </FormControl>
+
     </Stack>
   );
 };

@@ -1,6 +1,7 @@
-import { Button, Dialog, Stack } from "@primer/react";
+import { Button, Stack } from "@primer/react";
 import { observer } from "mobx-react-lite";
 import './CustomDialog.scss';
+import { Dialog } from "@primer/react/drafts";
 
 interface CustomDialogProps {
   isOpen: boolean;
@@ -23,29 +24,32 @@ const CustomDialogComponent: React.FC<CustomDialogProps> = (props) => {
   } = props;
 
   return (
-    <Dialog
-      isOpen={isOpen}
-      className='custom-dialog-container'
-      onDissmis={() => onDismiss()}
-    >
-      <Dialog.Header>
-        <h3>{title}</h3>
-      </Dialog.Header>
+    <>
+      {isOpen && (
 
-      <Stack
-        className='custom-dialog-content'
-      >
-        <span>
-          {sortDescription}
-        </span>
-        <Stack>
-          {
-            content && content
-          }
-        </Stack>
+        <Dialog
+          title={title}
+          onClose={() => onDismiss()}
+        >
+          <Dialog.Header>
+            <h3>{title}</h3>
+          </Dialog.Header>
 
-      </Stack>
-    </Dialog>
+          <Stack
+            className='custom-dialog-content'
+          >
+            <span>
+              {sortDescription}
+            </span>
+            <Stack>
+              {
+                content && content
+              }
+            </Stack>
+          </Stack>
+        </Dialog>
+      )}
+    </>
   );
 };
 

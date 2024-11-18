@@ -2,10 +2,11 @@ import { Field, RegistryFieldsType, RegistryWidgetsType, RJSFSchema, UiSchema, W
 export type Modify<T, R> = Omit<T, keyof R> & R;
 export type UiSchemaProperties =
   'ui:classNames'
+  | 'ui:widget'
   | 'ui:style';
 
 export type PickUiSchemaProperties = Partial<Record<UiSchemaProperties, any>>;
-export type UiSchemaTyped<T = any> = Partial<Record<keyof T, PickUiSchemaProperties | any>> & UiSchema;
+export type UiSchemaTyped<T = any> = Partial<Record<keyof T, PickUiSchemaProperties | { [key: string]: PickUiSchemaProperties }>> & UiSchema;
 
 export interface RJSFSchemaProperties {
   type: any;
@@ -68,7 +69,8 @@ export enum BasicWidgetSchemaType {
 export interface BasicWidgetSchema {
   type: BasicWidgetSchemaType,
   title?: string,
-  defaultValue?: string,
+  readonly?: boolean,
+  default?: string | any,
   placeholder?: string,
   description?: string,
   format?: 'data-url' | 'date-time' | 'date' | undefined,
@@ -80,11 +82,11 @@ export type NestedKeyof<ObjectType extends ExcludedType> = {
   [key in keyof ObjectType]:
   ObjectType[key] extends Date ? any :
   ObjectType[key] extends Array<any> ? any[] :
-  ObjectType[key] extends ExcludedType ? NestedKeyof<ObjectType[key]> : BasicWidgetSchema
+  ObjectType[key] extends ExcludedType ? NestedKeyof<ObjectType[key]> : BasicWidgetSchema & { [key: string]: any }
 };
 
 export type NestedSchemaModel<T extends ExcludedType> = {
   type: string;
-  properties: NestedKeyof<T>;
+  properties: Partial<NestedKeyof<T>>;
 };
 export type NestedUISchema<T extends ExcludedType> = NestedKeyof<T> & { [key: string]: any };

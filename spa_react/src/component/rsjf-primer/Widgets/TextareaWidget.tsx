@@ -39,6 +39,8 @@ export const TextareaWidget = <
   const _onBlur = ({ target: { value } }: FocusEvent<HTMLTextAreaElement>) => onBlur(id, value);
   const _onFocus = ({ target: { value } }: FocusEvent<HTMLTextAreaElement>) => onFocus(id, value);
 
+  const dataReadonly = schema.readonly ?? false;
+
   return (
     <>
       <FormControl.Label
@@ -54,7 +56,7 @@ export const TextareaWidget = <
         placeholder={placeholder}
         autoFocus={autofocus}
         required={required}
-        disabled={disabled || readonly}
+        disabled={disabled || readonly || dataReadonly}
         validationStatus={rawErrors.length > 0 ? "error" : undefined}
         onChange={_onChange}
         onBlur={_onBlur}
