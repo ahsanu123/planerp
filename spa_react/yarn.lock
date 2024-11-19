@@ -2979,6 +2979,11 @@ graphemer@^1.4.0:
   resolved "https://registry.yarnpkg.com/graphemer/-/graphemer-1.4.0.tgz#fb2f1d55e0e3a1849aeffc90c4fa0dd53a0e66c6"
   integrity sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==
 
+gridstack@^11.1.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/gridstack/-/gridstack-11.1.0.tgz#37dc2d15ae950cdcc72a45e82c38299f68f846e7"
+  integrity sha512-+znlk7IzXRfdWejaZk3AYZMPKtgyAeu7AKrBFZqfCaJxwro5l6Ql2CtazWv3ejDXs1J1ku2x0OXNWDG3QnlLQA==
+
 hachure-fill@^0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/hachure-fill/-/hachure-fill-0.5.2.tgz#d19bc4cc8750a5962b47fb1300557a85fcf934cc"
