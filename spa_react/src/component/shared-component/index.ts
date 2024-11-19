@@ -1,5 +1,6 @@
 export * from './ImageViewer';
 export * from './CondenseTimeline';
+export * from './JsonValuePicker';
 export * from './BlockSuite';
 export * from './ButtonInputFile';
 export * from './CustomDialog';

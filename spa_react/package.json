@@ -20,6 +20,7 @@
     "date-fns": "^4.1.0",
     "formik": "^2.4.6",
     "gridstack": "^11.1.0",
+    "highlight.js": "^11.10.0",
     "mermaid": "^11.2.1",
     "mobx": "^6.13.2",
     "mobx-react-lite": "^4.0.7",

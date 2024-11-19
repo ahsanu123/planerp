@@ -1,5 +1,6 @@
 export type ApiMethodType = 'GET' | 'POST' | 'PUT' | 'DELETE';
 export interface FetchApiWrapperOption {
+  mode: RequestMode,
   method: ApiMethodType,
   apiToken?: string,
   header?: HeadersInit,
@@ -15,6 +16,7 @@ export const fetchApiwrapper = async <T>(
   let parsedData: T | undefined;
 
   const response = await fetch(url, {
+    mode: option.mode,
     method: option.method,
     headers: option.header,
     body: body,

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Planerp.BuilderService;
+using Planerp.Hosting;
 using Planerp.PlanerpMigration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,8 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddSwaggerUI();
 builder.Services.AddFluentMigratorProvider(postgresConnectionString);
+builder.Services.AddHttpClient();
+builder.Services.AddQuartzHosting();
 
 //==================================================
 //
