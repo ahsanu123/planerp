@@ -6,7 +6,9 @@ namespace Planerp.Model;
 public class Component : BaseModel
 {
     public string Name { get; set; }
+    public string? PartNumber { get; set; }
     public string? ImageUrl { get; set; }
+    public string? ApiUrl { get; set; }
     public string Type { get; set; }
     public string Category { get; set; }
     public string Description { get; set; }

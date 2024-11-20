@@ -35,6 +35,8 @@ for (let i = 0; i < 50; i++) {
       storageId: 0,
       id: 0,
       stock: 5,
+      partNumber: "",
+      apiUrl: "https://wmsc.lcsc.com/ftps/wm/product/detail?productCode=C8242"
     },
   );
 
@@ -58,6 +60,9 @@ const TableComponentComponent: React.FC<TableComponentProps> = (props) => {
             height='100px'
             objectFit='contain'
           />
+          <Button>
+            Edit Api Price
+          </Button>
           <Link
             inline
             href='#'

@@ -12,7 +12,7 @@ public interface MigrationBase
 
 public static class MigrationExtension
 {
-    public const int MIGRATION_VERSION = 62;
+    public const int MIGRATION_VERSION = 66;
     public const string MIGRATION_DESCRIPTION = $"Add Migration Message Here";
     public static bool UpdateForeignKey = false;
 

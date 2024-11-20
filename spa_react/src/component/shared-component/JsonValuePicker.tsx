@@ -49,6 +49,7 @@ export const JsonValuePicker = () => {
     hljs.highlightAll();
     getJSONResult();
   }, [url]);
+
   const { getDetailsProps } = useDetails({
     closeOnOutsideClick: true,
   });

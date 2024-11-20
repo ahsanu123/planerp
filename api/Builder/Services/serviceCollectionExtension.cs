@@ -19,6 +19,7 @@ public static class ServiceCollectionCustom
         services.AddScoped<GenericRepository<LoggerModel>>();
         services.AddScoped<GenericRepository<Unit>>();
         services.AddScoped<GenericRepository<Value>>();
+        services.AddScoped<IPriceHistoryRepository, PriceHistoryRepository>();
 
         services.AddScoped<IProjectPageRepository, ProjectPageRepository>();
         services.AddScoped<ISeedRepository, SeedRepository>();

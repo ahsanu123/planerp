@@ -10,7 +10,7 @@ public static class QuartzJobsCollection
     {
         jobs.DefineJobsWithName<InsertComponentPriceToDbJob>(
             "autoInsertComponent",
-            option => option.WithCronSchedule("0 * * ? * *")
+            option => option.WithCronSchedule("0 0 * ? * *")
         );
         return jobs;
     }

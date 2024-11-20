@@ -7,7 +7,9 @@ import { BaseModel } from "./base-model";
 
 export interface Component extends BaseModel {
     name: string;
+    partNumber: string;
     imageUrl: string;
+    apiUrl: string;
     type: string;
     category: string;
     description: string;
