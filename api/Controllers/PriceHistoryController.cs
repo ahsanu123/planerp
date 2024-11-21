@@ -16,6 +16,7 @@ public class PriceHistoryController : Controller
     }
 
     [HttpPost]
+    [Route("Add")]
     public async Task<IActionResult> UpsertPriceHistory(
         [FromBody] ComponentPriceHistory priceHistory
     )
@@ -25,9 +26,20 @@ public class PriceHistoryController : Controller
     }
 
     [HttpGet]
+    [Route("GetAll")]
     public async Task<IActionResult> GetAllPriceHistory()
     {
         var listAllPrice = await _priceHistoryRepo.GetAllPriceHistory();
         return Ok(listAllPrice);
+    }
+
+    [HttpGet]
+    [Route("GetById/{componentId}")]
+    public async Task<IActionResult> GetApiPrice([FromRoute] int componentId)
+    {
+        var priceApiData = await _priceHistoryRepo.GetPriceApiById(componentId);
+        if (priceApiData == null)
+            return NotFound();
+        return Ok(priceApiData);
     }
 }

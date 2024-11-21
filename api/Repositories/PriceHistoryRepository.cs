@@ -8,6 +8,7 @@ namespace Planerp.Repository;
 
 public interface IPriceHistoryRepository
 {
+    public Task<ComponentPriceHistory> GetPriceApiById(int componentId);
     public Task AddPriceHistory(ComponentPriceHistory priceHistory);
     public Task<IEnumerable<ComponentPriceHistory>> GetAllPriceHistory();
     public Task AddPriceListHistory(ComponentPriceLists componentPrice);
@@ -71,6 +72,22 @@ public class PriceHistoryRepository : IPriceHistoryRepository
         using (var conn = _connection.CreateConnection())
         {
             await conn.InsertToDatabase(componentPrice);
+        }
+    }
+
+    public async Task<ComponentPriceHistory> GetPriceApiById(int componentId)
+    {
+        var GetPriceApiById_Query = new Query(nameof(ComponentPriceHistory))
+            .SelectAllClassProperties(new[] { typeof(ComponentPriceHistory) })
+            .Where(FullNameof(nameof(ComponentPriceHistory.ComponentId)), componentId);
+
+        using (var conn = _connection.CreateConnection())
+        {
+            var priceApiData = await conn.QuerySingleSqlKataAsync<ComponentPriceHistory>(
+                GetPriceApiById_Query,
+                true
+            );
+            return priceApiData;
         }
     }
 }

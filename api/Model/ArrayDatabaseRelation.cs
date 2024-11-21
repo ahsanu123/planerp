@@ -6,5 +6,5 @@ public class ArrayDatabaseRelation
     public int? LoggerModelId { get; set; }
     public int? ComponentId { get; set; }
     public int? StockHistoryId { get; set; }
-    public int? PriceHistoryId { get; set; }
+    // public int? PriceHistoryId { get; set; }
 }

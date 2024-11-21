@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { Heading, PageLayout, Stack, Text } from "@primer/react";
-import { JsonValuePicker } from "../../component/shared-component";
+import { ImageViewer, JsonValuePicker } from "../../component/shared-component";
 import { TableComponent } from "../../component/shared-component/table-component/TableComponent";
 import './PriceHistoryPage.scss';
 
@@ -11,6 +11,10 @@ const PriceHistoryPageComponent = () => {
         <Heading
           as='h2'
         >
+          <ImageViewer
+            imageUrl='https://cdnb.artstation.com/p/assets/images/images/000/488/525/large/lekso-tiger-art-test-for-banner-saga-by-leksotiger-d8irhmz.jpg?1424529598'
+            width='100%'
+          />
           <Text>
             Component List of Project
           </Text>

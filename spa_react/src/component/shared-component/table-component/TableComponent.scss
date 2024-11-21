@@ -1,4 +1,18 @@
+$header-max-width: 100px;
+
 .table-component-container {
+  .table-image-header {
+    max-width: $header-max-width;
+
+    &_text {
+      font-weight: bold;
+    }
+  }
+
+  .table-description-header {
+    max-width: $header-max-width;
+  }
+
   .table-component-image {
     max-width: 100px;
   }

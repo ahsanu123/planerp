@@ -1,4 +1,4 @@
-import { PageLayout, Stack } from '@primer/react';
+import { Button, PageLayout, Stack } from '@primer/react';
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { EditableTab } from '../../component/shared-component/editable-tab/EditableTab';
@@ -7,6 +7,7 @@ import './Dashboard.scss';
 import { MermaidDiagramMock } from '../../component/mermaid-diagram/mermaid-diagram-mock';
 import { ProjectPage } from '../project-page/ProjectPage';
 import { StockAndComponentPage } from '../stock-and-component-page/StockAndComponentPage';
+import { useMainStore } from '../../store/useMainStore';
 
 const MOCK_TAB: EditableTabModel[] = [
   {
@@ -28,6 +29,10 @@ const MOCK_TAB: EditableTabModel[] = [
 ];
 
 const DashboardPageComponent: React.FC = () => {
+
+  const {
+    dashboardPageStore
+  } = useMainStore();
 
   return (
     <div

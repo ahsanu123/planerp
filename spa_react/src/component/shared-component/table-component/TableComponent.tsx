@@ -1,14 +1,18 @@
 import { observer } from "mobx-react-lite";
 import { Button, Link, Stack, Text } from "@primer/react";
-import { Component } from "../../../model/generated/component";
 import { Column, DataTable, Table } from "@primer/react/drafts";
 import { ImageViewer } from "../ImageViewer";
 import './TableComponent.scss';
 import { InfoIcon } from "@primer/octicons-react";
 import { FormatNumberAsCurrency } from "../../../shared/function";
-import { format } from "date-fns";
 import { useState } from "react";
+import { Link as LinkDom } from "react-router-dom";
 import { SortableContainer } from "../../sortable/Sortable";
+import { Divider } from "@primer/react/lib-esm/deprecated/ActionList/Divider";
+import { useMainStore } from "../../../store/useMainStore";
+import { ComponentPriceHistory, PriceHistoryService } from "../../../api/auto-generated";
+import { Component } from "../../../model/generated/component";
+import { PriceHistoryList } from "../../../page/price-history-page/component/PriceHistoryList";
 
 const MAX_COMPONENT_TO_SHOW = 4;
 
@@ -16,41 +20,38 @@ interface TableComponentProps {
   data?: any;
 }
 
-const MOCK_USED_COMPONENT: Array<Component> = [];
 
-for (let i = 0; i < 50; i++) {
-  MOCK_USED_COMPONENT.push(
-    {
-      name: `STM8F401VGTR2_${i + 1}`,
-      type: '',
-      imageUrl: 'https://assets.lcsc.com/images/lcsc/900x900/20221230_STMicroelectronics-STM8S003F3P6TR_C52717_back.jpg',
-      category: "MCU",
-      description: "8KB 1KB FLASH 16 2.95V~5.5V STM8 16MHz TSSOP-20 Microcontrollers (MCU/MPU/SOC) ROHS",
-      price: 0.2989,
-      buyDate: new Date(),
-      capital: 0.2989,
-      supplier: "LCSC.COM",
-      supplierLink: "https://lcsc.com/product-detail/Microcontrollers-MCU-MPU-SOC_STMicroelectronics-STM8S003F3P6TR_C52717.html",
-      isAssembly: false,
-      storageId: 0,
-      id: 0,
-      stock: 5,
-      partNumber: "",
-      apiUrl: "https://wmsc.lcsc.com/ftps/wm/product/detail?productCode=C8242"
-    },
-  );
+const TableComponentComponent = (props: TableComponentProps) => {
 
-}
+  const {
+    projectHistoryPageStore,
+  } = useMainStore();
 
-const TableComponentComponent: React.FC<TableComponentProps> = (props) => {
+  const usedComponents = projectHistoryPageStore.ProjectComponentList;
+
+  const onEditPriceClicked = async (id: number) => {
+    const { data, error } = await PriceHistoryService.priceHistoryGetApiPrice({
+      path: {
+        componentId: id
+      }
+    });
+
+    console.log(data);
+    projectHistoryPageStore.SetSelectedApiPrice(data as ComponentPriceHistory);
+  };
+
   const [tableIndex, setTableIndex] = useState<number>(0);
   const renderRowComponent: Array<Column<Component>> = [
     {
-      header: 'images',
+      header: 'Images',
       field: 'imageUrl',
       renderCell: (data) => (
-        <Stack>
-          <Text>
+        <Stack
+          className='table-image-header'
+        >
+          <Text
+            className='table-image-header_text'
+          >
             {data.name}
           </Text>
           <ImageViewer
@@ -60,7 +61,9 @@ const TableComponentComponent: React.FC<TableComponentProps> = (props) => {
             height='100px'
             objectFit='contain'
           />
-          <Button>
+          <Button
+            onClick={() => onEditPriceClicked(data.id)}
+          >
             Edit Api Price
           </Button>
           <Link
@@ -74,38 +77,30 @@ const TableComponentComponent: React.FC<TableComponentProps> = (props) => {
       ),
     },
     {
-      header: 'price',
-      field: 'price',
+      header: 'Description',
+      field: 'description',
       renderCell: (data) => (
-        <Stack>
+        <Stack
+          className='table-description-header'
+        >
           <Text>
-            {FormatNumberAsCurrency(data.price, 'Us')} at {format(data.buyDate, 'MM/dd/yyyy')}
+            {data.description}
           </Text>
-          <Text>
-            {FormatNumberAsCurrency(data.price, 'Us')}  at {format(data.buyDate, 'MM/dd/yyyy')}
-          </Text>
-          <Button>
-            Show All Price History
-          </Button>
+          <Divider />
+          <LinkDom
+            to='#'
+          >
+            Price: {data.price}
+          </LinkDom>
+          <LinkDom
+            to='#'
+          >
+            Current Stock:
+            {data.stock}
+          </LinkDom>
+
         </Stack>
       )
-    },
-    {
-      header: 'stock',
-      field: 'stock',
-      renderCell: (data) => (
-        <Stack>
-          <Text>
-            {data.stock} pcs at {format(data.buyDate, 'MM/dd/yyyy')}
-          </Text>
-          <Text>
-            {data.stock} pcs at {format(data.buyDate, 'MM/dd/yyyy')}
-          </Text>
-          <Button>
-            Show All Stock
-          </Button>
-        </Stack>
-      ),
     },
     {
       header: 'count',
@@ -126,7 +121,7 @@ const TableComponentComponent: React.FC<TableComponentProps> = (props) => {
       )
     }
   ];
-  const slicedUsedComponent = MOCK_USED_COMPONENT.slice(tableIndex * MAX_COMPONENT_TO_SHOW, (tableIndex * MAX_COMPONENT_TO_SHOW) + MAX_COMPONENT_TO_SHOW);
+  const slicedUsedComponent = usedComponents.slice(tableIndex * MAX_COMPONENT_TO_SHOW, (tableIndex * MAX_COMPONENT_TO_SHOW) + MAX_COMPONENT_TO_SHOW);
 
   return (
     <Stack
@@ -154,12 +149,12 @@ const TableComponentComponent: React.FC<TableComponentProps> = (props) => {
           </Table.Subtitle>
 
           <DataTable
-            data={slicedUsedComponent}
+            data={usedComponents}
             columns={renderRowComponent}
           />
           <Table.Pagination
             aria-label='project pagination'
-            totalCount={MOCK_USED_COMPONENT.length}
+            totalCount={usedComponents.length}
             pageSize={MAX_COMPONENT_TO_SHOW}
             onChange={(state) => {
               console.log(state);

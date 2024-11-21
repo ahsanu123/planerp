@@ -20,8 +20,8 @@ public class ModelMigrationList : MigrationBase
         typeof(UsedComponent),
         typeof(StockHistory),
         typeof(ComponentPriceHistory),
-        typeof(TaskModel),
         typeof(ComponentPriceLists),
+        typeof(TaskModel),
     };
 
     public void MigrationDown(Migration migration)

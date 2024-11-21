@@ -3,13 +3,20 @@ import { useEffect, useState, ChangeEvent, useRef } from "react";
 import hljs from 'highlight.js';
 import { fetchApiwrapper } from "../../shared/function";
 import { API_BASE_URL } from "../../shared/constant";
-// import './JsonValuePicker.scss';
 import "highlight.js/scss/monokai.scss";
 import { Banner } from "@primer/react/drafts";
+import { observer } from "mobx-react-lite";
+import { useMainStore } from "../../store/useMainStore";
 
 // ref: https://blog.robbie.digital/posts/highlight-js
 
-export const JsonValuePicker = () => {
+const JsonValuePickerComponent = () => {
+
+  const {
+    projectHistoryPageStore
+  } = useMainStore();
+
+  const apiPriceData = projectHistoryPageStore.SelectedApiPrice;
 
   const [url, setUrl] = useState<string>('');
   const [jsonData, setJsonData] = useState<string>('');
@@ -48,83 +55,91 @@ export const JsonValuePicker = () => {
     hljs.highlightBlock(codeRef.current);
     hljs.highlightAll();
     getJSONResult();
-  }, [url]);
+  }, [url, apiPriceData]);
 
   const { getDetailsProps } = useDetails({
     closeOnOutsideClick: true,
   });
 
   return (
-    <Stack
-      style={{
-        padding: '10px 20px'
-      }}
-    >
-      {errorMessage && (
-        <Banner
-          title="Warning"
-          description={
-            <Text>Error When Parsing: {errorMessage}</Text>
-          }
-          variant="warning"
-        />
-      )}
-      <Stack.Item
-        direction='horizontal'
-      >
-        <FormControl.Label>URL</FormControl.Label>
-        <TextInput
-          width='100%'
-          onChange={onUrlChanged}
-        />
-      </Stack.Item>
-
-      <Stack.Item>
-        <FormControl.Label>JSON Result</FormControl.Label>
-        <Stack>
-          <pre
-            className="json"
-            style={{
-              height: '600px',
-              overflowY: 'scroll'
-            }}
-          >
-            <code
-              ref={codeRef}
-            >
-              {jsonData}
-            </code>
-          </pre>
-        </Stack>
-      </Stack.Item>
-
-      <Stack.Item
-        direction='horizontal'
-      >
-        <FormControl.Label>Path</FormControl.Label>
-        <TextInput
-          onChange={onPathChanged}
-          width='100%'
-        />
-      </Stack.Item>
-      <Stack.Item>
-        <pre
-          className="json"
+    <>
+      {projectHistoryPageStore.SelectedApiPrice && (
+        <Stack
           style={{
-            height: '200px',
-            overflowY: 'scroll'
+            padding: '10px 20px'
           }}
         >
-          <code            >
-            {JSON.stringify(parsedPath, null, ' ')}
-          </code>
-        </pre>
-      </Stack.Item>
+          {errorMessage && (
+            <Banner
+              title="Warning"
+              description={
+                <Text>Error When Parsing: {errorMessage}</Text>
+              }
+              variant="warning"
+            />
+          )}
+          <Stack.Item
+            direction='horizontal'
+          >
+            <FormControl.Label>URL</FormControl.Label>
+            <TextInput
+              width='100%'
+              onChange={onUrlChanged}
+              value={apiPriceData?.url ?? ''}
+            />
+          </Stack.Item>
 
-      <Button>
-        Save
-      </Button>
+          <Stack.Item>
+            <FormControl.Label>JSON Result</FormControl.Label>
+            <Stack>
+              <pre
+                className="json"
+                style={{
+                  height: '600px',
+                  overflowY: 'scroll'
+                }}
+              >
+                <code
+                  ref={codeRef}
+                >
+                  {jsonData}
+                </code>
+              </pre>
+            </Stack>
+          </Stack.Item>
 
-    </Stack>
+          <Stack.Item
+            direction='horizontal'
+          >
+            <FormControl.Label>Path</FormControl.Label>
+            <TextInput
+              onChange={onPathChanged}
+              width='100%'
+            />
+          </Stack.Item>
+          <Stack.Item>
+            <pre
+              className="json"
+              style={{
+                height: '200px',
+                overflowY: 'scroll'
+              }}
+            >
+              <code            >
+                {JSON.stringify(parsedPath, null, ' ')}
+              </code>
+            </pre>
+          </Stack.Item>
+
+          <Button>
+            Save
+          </Button>
+
+        </Stack>
+      )
+      }
+    </>
   );
 };
+
+export const JsonValuePicker = observer(JsonValuePickerComponent);

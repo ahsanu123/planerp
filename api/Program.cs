@@ -19,10 +19,11 @@ builder.Services.AddServiceCollectionExtension();
 builder.Services.AddControllers();
 builder.Services.AddAuthorization();
 
-builder.Services.AddSwaggerUI();
+// builder.Services.AddSwaggerUI();
 builder.Services.AddFluentMigratorProvider(postgresConnectionString);
 builder.Services.AddHttpClient();
 builder.Services.AddQuartzHosting();
+builder.Services.AddOpenApiDocument();
 
 //==================================================
 //
@@ -52,11 +53,22 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(option =>
+    app.UseOpenApi();
+    // ref: https://github.com/RicoSuter/NSwag/blob/1a6c959bdb41b41f2f534d3e61a311f1cf0de6f7/src/NSwag.Sample.NETCore20/Startup.cs#L104
+    app.UseSwaggerUi(config =>
     {
-        option.EnableTryItOutByDefault();
+        config.Path = "/swagger";
     });
+    app.UseReDoc(config =>
+    {
+        config.Path = "/redoc";
+        config.DocumentPath = "/swagger/v1/swagger.json";
+    });
+    // app.UseSwagger();
+    // app.UseSwaggerUI(option =>
+    // {
+    //     option.EnableTryItOutByDefault();
+    // });
     app.UseGraphQlProvider();
 
     app.UseCors(option =>
