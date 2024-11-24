@@ -3,9 +3,15 @@ import { Component } from "../../../model/generated/component";
 import { Label, Stack, Text } from "@primer/react";
 import { TableComponent } from "../../../component/shared-component/table-component/TableComponent";
 import { JsonValuePicker } from "../../../component/shared-component";
+import { useMainStore } from "../../../store/useMainStore";
 
 const MOCK_COMPONENTS: Component[] = [];
 const PriceHistoryListComponent = () => {
+
+  const {
+    projectHistoryPageStore,
+  } = useMainStore();
+
   return (
     <Stack>
       <Stack
@@ -16,7 +22,10 @@ const PriceHistoryListComponent = () => {
         </Stack.Item>
 
         <Stack.Item>
-          <JsonValuePicker />
+          <JsonValuePicker
+            onSave={() => console.log('onSave')}
+            onDataChanged={(newData) => projectHistoryPageStore.SetSelectedApiPrice(newData)}
+          />
         </Stack.Item>
       </Stack>
 

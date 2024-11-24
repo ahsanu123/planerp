@@ -1,4 +1,4 @@
-import { Box, Button, Details, FormControl, Stack, Text, TextInput, useDetails } from "@primer/react";
+import { Box, Button, Details, FormControl, Heading, Stack, Text, TextInput, useDetails } from "@primer/react";
 import { useEffect, useState, ChangeEvent, useRef } from "react";
 import hljs from 'highlight.js';
 import { fetchApiwrapper } from "../../shared/function";
@@ -6,48 +6,62 @@ import { API_BASE_URL } from "../../shared/constant";
 import "highlight.js/scss/monokai.scss";
 import { Banner } from "@primer/react/drafts";
 import { observer } from "mobx-react-lite";
-import { useMainStore } from "../../store/useMainStore";
+import { ComponentPriceHistory, UtilService } from "../../api/auto-generated";
 
-// ref: https://blog.robbie.digital/posts/highlight-js
+interface JsonValuePickerProps {
+  title?: string,
+  data?: ComponentPriceHistory,
+  onSave: () => void,
+  onDataChanged: (newData: ComponentPriceHistory) => void,
+}
 
-const JsonValuePickerComponent = () => {
+const JsonValuePickerComponent = ({
+  title,
+  data,
+  onSave,
+  onDataChanged,
+}: JsonValuePickerProps) => {
 
-  const {
-    projectHistoryPageStore
-  } = useMainStore();
-
-  const apiPriceData = projectHistoryPageStore.SelectedApiPrice;
-
-  const [url, setUrl] = useState<string>('');
-  const [jsonData, setJsonData] = useState<string>('');
+  const [jsonString, setJsonString] = useState<string>('');
   const [jsonObject, setJsonObject] = useState<any>();
   const [parsedPath, setParsedPath] = useState<any>();
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const codeRef = useRef<HTMLElement | null>(null);
 
-  const onUrlChanged = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    setUrl(value);
+  const _onUrlChanged = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    const newData: ComponentPriceHistory = {
+      ...data,
+      url: value,
+    };
+    onDataChanged(newData);
   };
-  const onPathChanged = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+  const _onPathChanged = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
     try {
-      const evaluated = eval(`jsonObject.${value}`);
+      const path = `jsonObject.${value}`;
+      const evaluated = eval(path);
       setParsedPath(evaluated);
       setErrorMessage(undefined);
     } catch (error) {
       console.error(error);
       setErrorMessage(String(error));
     }
+
+    const newData: ComponentPriceHistory = {
+      ...data,
+      path: value,
+    };
+    onDataChanged(newData);
   };
 
   const getJSONResult = async () => {
-    const params = new URLSearchParams();
-    params.append("url", url);
-    const result = await fetchApiwrapper<any>(`${API_BASE_URL}/Util?${params.toString()}`, undefined, {
-      method: 'GET',
-      mode: 'cors'
+    const result = await UtilService.utilGetJson({
+      query: {
+        url: data?.url
+      }
     });
-    setJsonObject(result);
-    setJsonData(JSON.stringify(result, null, ' '));
+    const parsedData = JSON.parse((result.data as any) as string);
+    setJsonObject(parsedData);
+    setJsonString(JSON.stringify(parsedData, null, 1));
   };
 
   useEffect(() => {
@@ -55,7 +69,7 @@ const JsonValuePickerComponent = () => {
     hljs.highlightBlock(codeRef.current);
     hljs.highlightAll();
     getJSONResult();
-  }, [url, apiPriceData]);
+  }, [data?.url]);
 
   const { getDetailsProps } = useDetails({
     closeOnOutsideClick: true,
@@ -63,10 +77,10 @@ const JsonValuePickerComponent = () => {
 
   return (
     <>
-      {projectHistoryPageStore.SelectedApiPrice && (
+      {data && (
         <Stack
           style={{
-            padding: '10px 20px'
+            padding: '10px 0'
           }}
         >
           {errorMessage && (
@@ -78,14 +92,17 @@ const JsonValuePickerComponent = () => {
               variant="warning"
             />
           )}
+          <Heading>
+            {title}
+          </Heading>
           <Stack.Item
             direction='horizontal'
           >
             <FormControl.Label>URL</FormControl.Label>
             <TextInput
               width='100%'
-              onChange={onUrlChanged}
-              value={apiPriceData?.url ?? ''}
+              onChange={_onUrlChanged}
+              value={data.url ?? ''}
             />
           </Stack.Item>
 
@@ -102,7 +119,7 @@ const JsonValuePickerComponent = () => {
                 <code
                   ref={codeRef}
                 >
-                  {jsonData}
+                  {jsonString}
                 </code>
               </pre>
             </Stack>
@@ -113,8 +130,9 @@ const JsonValuePickerComponent = () => {
           >
             <FormControl.Label>Path</FormControl.Label>
             <TextInput
-              onChange={onPathChanged}
+              onChange={_onPathChanged}
               width='100%'
+              value={data.path ?? ''}
             />
           </Stack.Item>
           <Stack.Item>
@@ -131,13 +149,14 @@ const JsonValuePickerComponent = () => {
             </pre>
           </Stack.Item>
 
-          <Button>
+          <Button
+            onClick={onSave}
+          >
             Save
           </Button>
 
         </Stack>
-      )
-      }
+      )}
     </>
   );
 };

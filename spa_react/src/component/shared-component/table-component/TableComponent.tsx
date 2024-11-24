@@ -12,7 +12,6 @@ import { Divider } from "@primer/react/lib-esm/deprecated/ActionList/Divider";
 import { useMainStore } from "../../../store/useMainStore";
 import { ComponentPriceHistory, PriceHistoryService } from "../../../api/auto-generated";
 import { Component } from "../../../model/generated/component";
-import { PriceHistoryList } from "../../../page/price-history-page/component/PriceHistoryList";
 
 const MAX_COMPONENT_TO_SHOW = 4;
 
@@ -36,7 +35,6 @@ const TableComponentComponent = (props: TableComponentProps) => {
       }
     });
 
-    console.log(data);
     projectHistoryPageStore.SetSelectedApiPrice(data as ComponentPriceHistory);
   };
 
@@ -164,7 +162,6 @@ const TableComponentComponent = (props: TableComponentProps) => {
 
         </Table.Container>
       </SortableContainer>
-
     </Stack >
   );
 

@@ -1,6 +1,6 @@
-import { Button, PageLayout, Stack, Text } from "@primer/react";
+import { Button, PageLayout } from "@primer/react";
 import { observer } from "mobx-react-lite";
-import { Column, DataTable, Table } from "@primer/react/drafts";
+import { Column } from "@primer/react/drafts";
 import { formatDistanceToNow } from "date-fns";
 import { DoubleClickEditor } from "../../component/shared-component/DoubleClickEditor";
 import { useState } from "react";
@@ -9,14 +9,12 @@ import { FormGenerator } from "../../component/shared-component/FormGenerator";
 import { FormAddNewProject } from "./component/FormAddNewProject";
 import { Project } from "../../model/generated/project";
 import { FormatNumberAsCurrency } from "../../shared/function";
-import { ProjectDetailSection } from "./component/ProjectDetailSection";
-import { Divider } from "@primer/react/lib-esm/deprecated/ActionList/Divider";
 import { GitCommitIcon } from "@primer/octicons-react";
-import { CondenseTimeline } from "../../component/shared-component";
 import { TimelineModel } from "../../model";
-import { ProjectProperties } from "../../component/shared-component/project-properties/ProjectProperties";
-import { SortableContainer } from "../../component/sortable/Sortable";
 import { ImageSliderMock } from "../../component/shared-component/Swipper";
+import { ProjectGetError, ProjectService } from "../../api/auto-generated";
+import { ProjectList } from "./component/ProjectList";
+import { useMainStore } from "../../store/useMainStore";
 
 export const MOCK_PROJECTS: Project[] = [
   {
@@ -152,14 +150,16 @@ export const MOCK_PROJECTS_COLUMNS: Column<Project>[] = [
 
 const ProjectPageComponent: React.FC = () => {
 
+  const {
+    projectPageStore
+  } = useMainStore();
 
-  const [selectedProject, setSelectedProject] = useState<Project | undefined>(undefined);
-  const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
   const [isShowAddDialog, setIsShowAddDialog] = useState<boolean>(false);
 
-  const handleOnDoubleClicked = (data: Project, status: boolean) => {
-    setIsShowDialog(status);
-    setSelectedProject(data);
+  const handleOnAddNewProject = async (data: Project) => {
+    await ProjectService.projectAddNew({
+      body: data,
+    });
   };
 
   return (
@@ -174,17 +174,18 @@ const ProjectPageComponent: React.FC = () => {
       </PageLayout.Header>
 
       <PageLayout.Content>
-        <ProjectProperties />
-        <ProjectDetailSection />
+        <ProjectList
+          data={projectPageStore.ProjectList}
+        />
       </PageLayout.Content>
 
       <PageLayout.Pane
         width='large'
       >
-        <CondenseTimeline
-          title='Project Log History'
-          timeLine={MOCK_TIMELINE}
-        />
+        {/* <CondenseTimeline */}
+        {/*   title='Project Log History' */}
+        {/*   timeLine={MOCK_TIMELINE} */}
+        {/* /> */}
       </PageLayout.Pane>
 
       {
@@ -196,26 +197,8 @@ const ProjectPageComponent: React.FC = () => {
             onConfirm={() => setIsShowAddDialog(false)}
             content={
               <FormAddNewProject
-                data={MOCK_PROJECTS[0]}
                 onCancel={() => setIsShowAddDialog(false)}
-                onSubmit={(data) => console.log(data)}
-              />
-            }
-          />
-        )
-      }
-      {
-        isShowDialog && (
-          <CustomDialog
-            title='Table Content Editor'
-            isOpen={isShowDialog}
-            onDismiss={() => setIsShowDialog(false)}
-            onConfirm={() => setIsShowDialog(false)}
-            content={
-              <FormGenerator
-                data={selectedProject}
-                onSubmit={(data) => console.log(data)}
-                onCancel={() => setIsShowDialog(false)}
+                onSubmit={handleOnAddNewProject}
               />
             }
           />

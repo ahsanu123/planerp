@@ -3,8 +3,23 @@ import { Heading, PageLayout, Stack, Text } from "@primer/react";
 import { ImageViewer, JsonValuePicker } from "../../component/shared-component";
 import { TableComponent } from "../../component/shared-component/table-component/TableComponent";
 import './PriceHistoryPage.scss';
+import { useMainStore } from "../../store/useMainStore";
+import { PriceHistoryService } from "../../api/auto-generated";
 
 const PriceHistoryPageComponent = () => {
+  const {
+    projectHistoryPageStore
+  } = useMainStore();
+
+  const onJsonValuePickerSave = async () => {
+    const currentApiPriceData = projectHistoryPageStore.SelectedApiPrice;
+    if (!currentApiPriceData) return;
+
+    await PriceHistoryService.priceHistoryUpsertPriceHistory({
+      body: currentApiPriceData,
+    });
+  };
+
   return (
     <PageLayout>
       <PageLayout.Header>
@@ -32,7 +47,11 @@ const PriceHistoryPageComponent = () => {
         width='large'
         sticky
       >
-        <JsonValuePicker />
+        <JsonValuePicker
+          data={projectHistoryPageStore.SelectedApiPrice}
+          onSave={onJsonValuePickerSave}
+          onDataChanged={(newData) => projectHistoryPageStore.SetSelectedApiPrice(newData)}
+        />
       </PageLayout.Pane>
 
 

@@ -36,15 +36,11 @@ export const router = createBrowserRouter([
     element: <ProjectListPage />
   },
   {
-    path: Routes.JsonValuePickerMock,
-    element: <JsonValuePicker />
-  },
-  {
     path: Routes.TableComponentMock,
     element: <TableComponent />
   },
   {
     path: Routes.PriceHistoryPage,
     element: <PriceHistoryPage />
-  }
+  },
 ]);
