@@ -1,3 +1,4 @@
+using Learn.Custom;
 using Learn.InternalMigration;
 using Learn.Services;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +17,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddFluentMigratorProvider(sqliteConnectionString);
+
+// builder.Services.AddAuthentication(option =>
+// {
+//     // option.AddScheme();
+//     option.DefaultScheme = "qsv";
+// });
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -48,6 +55,13 @@ if (app.Environment.IsDevelopment())
         option.EnableTryItOutByDefault();
     });
 }
+
+app.UseMiddleware<CustomAuthentication>();
+app.UseMiddleware<RoleMemberships>();
+
+app.UseRouting();
+
+app.UseMiddleware<ClaimsReporter>();
 
 app.UseHttpsRedirection();
 app.MapControllers();

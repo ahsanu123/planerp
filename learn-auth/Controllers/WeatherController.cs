@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize]
+// [Authorize]
 public class WeatherController : ControllerBase
 {
     [HttpGet]
@@ -15,11 +15,18 @@ public class WeatherController : ControllerBase
         return Ok();
     }
 
-    [AllowAnonymous]
+    // [AllowAnonymous]
     [HttpGet]
     [Route("weather-endpoint")]
     public async Task<ActionResult> GetWeather()
     {
         return Ok();
+    }
+
+    [HttpGet]
+    [Route("user")]
+    public async Task<ActionResult> ShowUser([FromQuery] string user)
+    {
+        return Ok(user);
     }
 }
