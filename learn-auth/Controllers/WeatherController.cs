@@ -12,28 +12,7 @@ public class WeatherController : ControllerBase
     [Route("authorized-endpoint-weather")]
     public async Task<ActionResult> GetWeatherAuthorized()
     {
-        var summaries = new[]
-        {
-            "Freezing",
-            "Bracing",
-            "Chilly",
-            "Cool",
-            "Mild",
-            "Warm",
-            "Balmy",
-            "Hot",
-            "Sweltering",
-            "Scorching",
-        };
-        var forecast = Enumerable
-            .Range(1, 5)
-            .Select(index => new WeatherForecast(
-                DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                Random.Shared.Next(-20, 55),
-                summaries[Random.Shared.Next(summaries.Length)]
-            ))
-            .ToArray();
-        return Ok(forecast);
+        return Ok();
     }
 
     [AllowAnonymous]
@@ -41,27 +20,6 @@ public class WeatherController : ControllerBase
     [Route("weather-endpoint")]
     public async Task<ActionResult> GetWeather()
     {
-        var summaries = new[]
-        {
-            "Freezing",
-            "Bracing",
-            "Chilly",
-            "Cool",
-            "Mild",
-            "Warm",
-            "Balmy",
-            "Hot",
-            "Sweltering",
-            "Scorching",
-        };
-        var forecast = Enumerable
-            .Range(1, 5)
-            .Select(index => new WeatherForecast(
-                DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                Random.Shared.Next(-20, 55),
-                summaries[Random.Shared.Next(summaries.Length)]
-            ))
-            .ToArray();
-        return Ok(forecast);
+        return Ok();
     }
 }
