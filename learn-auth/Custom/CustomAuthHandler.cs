@@ -32,7 +32,7 @@ public class CustomAuthHandler : IAuthenticationSignInHandler
 
     public Task ChallengeAsync(AuthenticationProperties? properties)
     {
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        context.Response.Redirect("/sign-in");
         return Task.CompletedTask;
     }
 

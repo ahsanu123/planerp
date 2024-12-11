@@ -2,6 +2,7 @@ namespace Learn.Controller;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 [ApiController]
 [Route("[controller]")]
@@ -10,14 +11,18 @@ public class WeatherController : Controller
 {
     [Authorize(Roles = "Administrator")]
     [HttpGet]
-    [Route("authorized-endpoint-weather")]
+    [Route("authorized-weather")]
     public async Task<ActionResult> GetWeatherAuthorized()
     {
-        return Ok();
+        var context = this.HttpContext;
+        var authReporterData =
+            context.Items["authReport"] ?? new Dictionary<(string, string), bool>();
+
+        return Ok(JsonConvert.SerializeObject(authReporterData, Formatting.Indented));
     }
 
     [HttpGet]
-    [Route("weather-endpoint")]
+    [Route("weather")]
     public async Task<ActionResult> GetWeather()
     {
         return Ok();

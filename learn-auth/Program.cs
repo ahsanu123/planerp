@@ -17,11 +17,14 @@ var sqliteConnectionString = builder.Configuration.GetConnectionString("sqlite")
 
 // builder.Services.AddDbContext<LearnDbContext>();
 
-builder.Services.AddAuthentication(option =>
-{
-    option.AddScheme<CustomAuthHandler>("qsv", "QueryStringValue");
-    option.DefaultScheme = "qsv";
-});
+builder
+    .Services.AddAuthentication(option =>
+    {
+        option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        // option.AddScheme<CustomAuthHandler>("qsv", "QueryStringValue");
+        // option.DefaultScheme = "qsv";
+    })
+    .AddCookie();
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
@@ -72,12 +75,14 @@ if (app.Environment.IsDevelopment())
 
 // app.UseMiddleware<CustomAuthentication>();
 app.UseAuthentication();
-app.UseMiddleware<RoleMemberships>();
+
+// app.UseMiddleware<RoleMemberships>();
 
 app.UseRouting();
 
-app.UseMiddleware<ClaimsReporter>();
-app.UseAuthorization();
+// app.UseMiddleware<ClaimsReporter>();
+// app.UseAuthorization();
+app.UseMiddleware<AuthorizationReporter>();
 
 app.UseHttpsRedirection();
 app.MapControllers();
