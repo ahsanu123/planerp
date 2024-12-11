@@ -4,6 +4,7 @@ using Learn.InternalMigration;
 using Learn.Middleware;
 using Learn.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 
@@ -24,9 +25,12 @@ builder
         // option.AddScheme<CustomAuthHandler>("qsv", "QueryStringValue");
         // option.DefaultScheme = "qsv";
     })
-    .AddCookie();
+    .AddCookie(opts =>
+    {
+        opts.LoginPath = "/sign-in";
+        // opts.AccessDeniedPath = "/signin/403";
+    });
 
-builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -59,6 +63,12 @@ builder.Services.AddSwaggerGen(option =>
 // builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<LearnDbContext>();
 // builder.Services.AddAuthorization();
 
+builder.Services.AddTransient<IAuthorizationHandler, CustomRequirementHandler>();
+builder.Services.AddAuthorization(option =>
+{
+    CustomAuthorizationPolicies.AddPolicies(option);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -70,13 +80,13 @@ if (app.Environment.IsDevelopment())
         option.EnableTryItOutByDefault();
     });
     // app.UseDumpRequestMiddleWare();
-    app.UseHttpLogging();
+    // app.UseHttpLogging();
 }
 
 // app.UseMiddleware<CustomAuthentication>();
 app.UseAuthentication();
 
-// app.UseMiddleware<RoleMemberships>();
+app.UseMiddleware<RoleMemberships>();
 
 app.UseRouting();
 
@@ -84,7 +94,7 @@ app.UseRouting();
 // app.UseAuthorization();
 app.UseMiddleware<AuthorizationReporter>();
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.MapControllers();
 
 app.UseFluentMigrator();

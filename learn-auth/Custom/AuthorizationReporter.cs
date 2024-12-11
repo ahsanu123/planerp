@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Learn.UserClaim;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
 
 namespace Learn.Custom;
 
@@ -42,10 +43,10 @@ public class AuthorizationReporter
             {
                 var userKey = claimPrincipal.Identity.Name ?? "(No User)";
                 var authTypeKey = claimPrincipal.Identity.AuthenticationType;
-                var value =
+                var canAccess =
                     allowAnonymous || policy == null || await AuthorizeUser(claimPrincipal, policy);
 
-                results[(userKey, authTypeKey)] = value;
+                results[(userKey, authTypeKey)] = canAccess;
             }
             context.Items["authReport"] = results;
             await endPoint.RequestDelegate(context);

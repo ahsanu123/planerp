@@ -6,32 +6,32 @@ using Newtonsoft.Json;
 
 [ApiController]
 [Route("[controller]")]
-// [Authorize]
+[Authorize]
 public class WeatherController : Controller
 {
-    [Authorize(Roles = "Administrator")]
+    // [Authorize(Roles = "Administrator")]
     [HttpGet]
     [Route("authorized-weather")]
     public async Task<ActionResult> GetWeatherAuthorized()
+    {
+        return Ok(GetAuthReportData());
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    [Route("weather")]
+    // [Authorize(Roles = "SpecialGuest")]
+    public async Task<ActionResult> GetWeather()
+    {
+        return Ok(GetAuthReportData());
+    }
+
+    private string GetAuthReportData()
     {
         var context = this.HttpContext;
         var authReporterData =
             context.Items["authReport"] ?? new Dictionary<(string, string), bool>();
 
-        return Ok(JsonConvert.SerializeObject(authReporterData, Formatting.Indented));
-    }
-
-    [HttpGet]
-    [Route("weather")]
-    public async Task<ActionResult> GetWeather()
-    {
-        return Ok();
-    }
-
-    [HttpGet]
-    [Route("user")]
-    public async Task<ActionResult> ShowUser([FromQuery] string user)
-    {
-        return Ok(user);
+        return JsonConvert.SerializeObject(authReporterData, Formatting.Indented);
     }
 }

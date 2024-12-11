@@ -32,7 +32,6 @@ public class CustomAuthHandler : IAuthenticationSignInHandler
 
     public Task ChallengeAsync(AuthenticationProperties? properties)
     {
-        context.Response.Redirect("/sign-in");
         return Task.CompletedTask;
     }
 

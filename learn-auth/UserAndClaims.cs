@@ -12,7 +12,7 @@ public static class UsersAndClaims
     >
     {
         { "Alice", new[] { "User", "Administrator" } },
-        { "Bob", new[] { "User" } },
+        { "Bob", new[] { "User", "SpecialGuest" } },
         { "Charlie", new[] { "User" } },
     };
 
