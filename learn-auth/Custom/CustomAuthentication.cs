@@ -1,7 +1,4 @@
 using System.Security.Claims;
-using System.Text.Json;
-using System.Text.Json.Serialization.Metadata;
-using Newtonsoft.Json;
 
 namespace Learn.Custom;
 
@@ -13,8 +10,8 @@ public class CustomAuthentication
 
     public async Task Invoke(HttpContext context)
     {
-        string user = context.Request.Query["user"];
-        // string user = context.Request.Cookies["authUser"];
+        // string user = context.Request.Query["user"];
+        string user = context.Request.Cookies["authUser"];
         if (user != null)
         {
             Claim claim = new Claim(ClaimTypes.Name, user);

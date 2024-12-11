@@ -1,6 +1,9 @@
+using System.Text;
 using Learn.Custom;
 using Learn.InternalMigration;
+using Learn.Middleware;
 using Learn.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 
@@ -13,10 +16,19 @@ var sqliteConnectionString = builder.Configuration.GetConnectionString("sqlite")
 // builder.Services.AddIdentityCore<IdentityUser>();
 
 // builder.Services.AddDbContext<LearnDbContext>();
+
+builder.Services.AddAuthentication(option =>
+{
+    option.AddScheme<CustomAuthHandler>("qsv", "QueryStringValue");
+    option.DefaultScheme = "qsv";
+});
+
+builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddFluentMigratorProvider(sqliteConnectionString);
+builder.Services.AddHttpLogging(config => { });
 
 // builder.Services.AddAuthentication(option =>
 // {
@@ -54,19 +66,21 @@ if (app.Environment.IsDevelopment())
     {
         option.EnableTryItOutByDefault();
     });
+    // app.UseDumpRequestMiddleWare();
+    app.UseHttpLogging();
 }
 
-app.UseMiddleware<CustomAuthentication>();
+// app.UseMiddleware<CustomAuthentication>();
+app.UseAuthentication();
 app.UseMiddleware<RoleMemberships>();
 
 app.UseRouting();
 
 app.UseMiddleware<ClaimsReporter>();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.MapControllers();
 
-// app.UseAuthentication();
-// app.UseAuthorization();
 app.UseFluentMigrator();
 app.Run();
