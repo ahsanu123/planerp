@@ -10,7 +10,7 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var sqliteConnectionString = builder.Configuration.GetConnectionString("sqlite");
+var sqliteConnectionString = builder.Configuration.GetConnectionString("Sqlite");
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -27,7 +27,7 @@ builder
     })
     .AddCookie(opts =>
     {
-        opts.LoginPath = "/sign-in";
+        // opts.LoginPath = "/sign-in";
         // opts.AccessDeniedPath = "/signin/403";
     });
 
@@ -36,6 +36,8 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddFluentMigratorProvider(sqliteConnectionString);
 builder.Services.AddHttpLogging(config => { });
+builder.Services.AddConfigurationProvider(builder.Configuration);
+builder.Services.AddServicesCollection();
 
 // builder.Services.AddAuthentication(option =>
 // {
@@ -91,8 +93,8 @@ app.UseMiddleware<RoleMemberships>();
 app.UseRouting();
 
 // app.UseMiddleware<ClaimsReporter>();
-// app.UseAuthorization();
-app.UseMiddleware<AuthorizationReporter>();
+// app.UseMiddleware<AuthorizationReporter>();
+app.UseAuthorization();
 
 // app.UseHttpsRedirection();
 app.MapControllers();

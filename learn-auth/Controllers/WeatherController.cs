@@ -1,5 +1,6 @@
 namespace Learn.Controller;
 
+using Learn.AppIdentity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -9,6 +10,13 @@ using Newtonsoft.Json;
 [Authorize]
 public class WeatherController : Controller
 {
+    private UserRepository _userRepo;
+
+    public WeatherController(UserRepository userRepo)
+    {
+        _userRepo = userRepo;
+    }
+
     // [Authorize(Roles = "Administrator")]
     [HttpGet]
     [Route("authorized-weather")]
@@ -24,6 +32,15 @@ public class WeatherController : Controller
     public async Task<ActionResult> GetWeather()
     {
         return Ok(GetAuthReportData());
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    [Route("version-info")]
+    public async Task<ActionResult> GetVersionInfo()
+    {
+        var result = await _userRepo.GetAll();
+        return Ok(result);
     }
 
     private string GetAuthReportData()

@@ -18,6 +18,6 @@ public class CustomAuthorizationPolicies
             new[] { CookieAuthenticationDefaults.AuthenticationScheme }
         );
 
-        options.FallbackPolicy = authPolicy;
+        // options.FallbackPolicy = authPolicy;
     }
 }
