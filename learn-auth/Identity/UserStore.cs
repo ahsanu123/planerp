@@ -4,14 +4,23 @@ namespace Learn.AppIdentity;
 
 public class UserStore : IUserStore<AppUser>
 {
-    public Task<IdentityResult> CreateAsync(AppUser user, CancellationToken cancellationToken)
+    private IUserRepository _userRepo;
+
+    public UserStore(IUserRepository userRepo)
     {
-        throw new NotImplementedException();
+        _userRepo = userRepo;
     }
 
-    public Task<IdentityResult> DeleteAsync(AppUser user, CancellationToken cancellationToken)
+    public async Task<IdentityResult> CreateAsync(AppUser user, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await _userRepo.CreateUser(user);
+        return IdentityResult.Success;
+    }
+
+    public async Task<IdentityResult> DeleteAsync(AppUser user, CancellationToken cancellationToken)
+    {
+        await _userRepo.DeleteUser(user);
+        return IdentityResult.Success;
     }
 
     public void Dispose()
@@ -68,8 +77,9 @@ public class UserStore : IUserStore<AppUser>
         throw new NotImplementedException();
     }
 
-    public Task<IdentityResult> UpdateAsync(AppUser user, CancellationToken cancellationToken)
+    public async Task<IdentityResult> UpdateAsync(AppUser user, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await _userRepo.UpdateUser(user);
+        return IdentityResult.Success;
     }
 }

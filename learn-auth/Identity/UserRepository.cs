@@ -1,93 +1,78 @@
 using Dapper;
-using Microsoft.AspNetCore.Identity;
+using Learn.Extension;
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
+using SqlKata;
+using static Learn.Extension.UtilityExtension;
 
 namespace Learn.AppIdentity;
 
-public class UserRepository : IUserStore<AppUser>
+public interface IUserRepository
+{
+    public Task CreateUser(AppUser newUser);
+    public Task DeleteUser(AppUser user);
+    public Task UpdateUser(AppUser user);
+    public Task<object> GetAll();
+}
+
+public class UserRepository : IUserRepository
 {
     private ISqliteConnectionProvider _conn;
+
+    private async Task<bool> CheckIfUserExist(SqliteConnection conn, AppUser user)
+    {
+        var CheckIfUserExist_Query = new Query(nameof(AppUser)).Where(
+            FullNameof(nameof(AppUser.Id)),
+            user.Id
+        );
+        var appUser = await conn.QuerySingleSqlKataAsync<AppUser>(CheckIfUserExist_Query);
+        return appUser != null;
+    }
 
     public UserRepository(ISqliteConnectionProvider connectionProvider)
     {
         _conn = connectionProvider;
     }
 
-    public Task<IdentityResult> CreateAsync(AppUser user, CancellationToken cancellationToken)
+    public async Task CreateUser(AppUser newUser)
     {
-        throw new NotImplementedException();
+        using (var conn = _conn.CreateConnection())
+        {
+            var result = await conn.InsertToDatabase(newUser, true);
+        }
     }
 
-    public Task<IdentityResult> DeleteAsync(AppUser user, CancellationToken cancellationToken)
+    public async Task DeleteUser(AppUser user)
     {
-        throw new NotImplementedException();
+        var DeleteUser_Query = new Query(nameof(AppUser))
+            .Where(FullNameof(nameof(AppUser.Id)), user.Id)
+            .AsDelete();
+
+        using (var conn = _conn.CreateConnection())
+        {
+            if (await CheckIfUserExist(conn, user))
+            {
+                await conn.ExecuteSqlKataAsync(DeleteUser_Query);
+            }
+        }
     }
 
-    public void Dispose()
+    public async Task UpdateUser(AppUser user)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<AppUser?> FindByIdAsync(string userId, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<AppUser?> FindByNameAsync(
-        string normalizedUserName,
-        CancellationToken cancellationToken
-    )
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<string?> GetNormalizedUserNameAsync(
-        AppUser user,
-        CancellationToken cancellationToken
-    )
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<string> GetUserIdAsync(AppUser user, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<string?> GetUserNameAsync(AppUser user, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task SetNormalizedUserNameAsync(
-        AppUser user,
-        string? normalizedName,
-        CancellationToken cancellationToken
-    )
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task SetUserNameAsync(
-        AppUser user,
-        string? userName,
-        CancellationToken cancellationToken
-    )
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IdentityResult> UpdateAsync(AppUser user, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
+        using (var conn = _conn.CreateConnection())
+        {
+            if (await CheckIfUserExist(conn, user))
+            {
+                await conn.InsertToDatabase(user, true);
+            }
+        }
     }
 
     public async Task<object> GetAll()
     {
         using (var conn = _conn.CreateConnection())
         {
-            var result = await conn.QueryAsync<object>("select * from VersionInfo;");
+            var result = await conn.QueryAsync<object>("select * from AppUser;");
             return result;
         }
     }

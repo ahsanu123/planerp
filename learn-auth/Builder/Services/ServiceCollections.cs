@@ -8,7 +8,7 @@ public static class ServiceCollections
     {
         services.AddSingleton<ISqliteConnectionProvider, SqliteConnectionProvider>();
 
-        services.AddScoped<UserRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }

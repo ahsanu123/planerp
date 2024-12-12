@@ -5,7 +5,7 @@ namespace Learn.InternalMigration;
 
 public static class MigrationApplicationBuilder
 {
-    public const int MIGRATION_VERSION = 12;
+    public const int MIGRATION_VERSION = 13;
 
     public const string MIGRATION_DESCRIPTION =
         $"Learning Authentication and Authorization From stratch";

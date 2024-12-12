@@ -1,11 +1,17 @@
 using FluentMigrator;
+using Learn.AppIdentity;
 using Learn.Model;
 
 namespace Learn.InternalMigration;
 
 public class ModelMigrationList : MigrationBase
 {
-    private List<Type> listModel = new List<Type> { typeof(Component), typeof(User) };
+    private List<Type> listModel = new List<Type>
+    {
+        typeof(Component),
+        typeof(User),
+        typeof(AppUser),
+    };
 
     public void MigrationDown(Migration migration)
     {

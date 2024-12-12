@@ -10,9 +10,9 @@ using Newtonsoft.Json;
 [Authorize]
 public class WeatherController : Controller
 {
-    private UserRepository _userRepo;
+    private IUserRepository _userRepo;
 
-    public WeatherController(UserRepository userRepo)
+    public WeatherController(IUserRepository userRepo)
     {
         _userRepo = userRepo;
     }
@@ -39,7 +39,16 @@ public class WeatherController : Controller
     [Route("version-info")]
     public async Task<ActionResult> GetVersionInfo()
     {
+        var newUser = new AppUser()
+        {
+            Id = 1,
+            UserName = "Jangkrik",
+            NormalizedUserName = "jangkrik",
+        };
+        await _userRepo.CreateUser(newUser);
+
         var result = await _userRepo.GetAll();
+
         return Ok(result);
     }
 

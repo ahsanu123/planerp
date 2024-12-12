@@ -2,7 +2,7 @@ namespace Learn.AppIdentity;
 
 public class AppUser
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public int Id { get; set; }
 
     public string UserName { get; set; }
 
