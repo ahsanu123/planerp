@@ -13,73 +13,79 @@ public class UserStore : IUserStore<AppUser>
 
     public async Task<IdentityResult> CreateAsync(AppUser user, CancellationToken cancellationToken)
     {
-        await _userRepo.CreateUser(user);
-        return IdentityResult.Success;
+        var success = await _userRepo.CreateUserAsync(user);
+        if (success)
+            return IdentityResult.Success;
+        return IdentityResult.Failed();
     }
 
     public async Task<IdentityResult> DeleteAsync(AppUser user, CancellationToken cancellationToken)
     {
-        await _userRepo.DeleteUser(user);
+        await _userRepo.DeleteUserAsync(user);
         return IdentityResult.Success;
     }
 
-    public void Dispose()
+    public async Task<AppUser?> FindByIdAsync(string userId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var result = await _userRepo.FindByIdAsync(Int32.Parse(userId));
+        return result;
     }
 
-    public Task<AppUser?> FindByIdAsync(string userId, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<AppUser?> FindByNameAsync(
+    public async Task<AppUser?> FindByNameAsync(
         string normalizedUserName,
         CancellationToken cancellationToken
     )
     {
-        throw new NotImplementedException();
+        var result = await _userRepo.FindByNameAsync(normalizedUserName);
+        return result;
     }
 
-    public Task<string?> GetNormalizedUserNameAsync(
+    public async Task<string?> GetNormalizedUserNameAsync(
         AppUser user,
         CancellationToken cancellationToken
     )
     {
-        throw new NotImplementedException();
+        var result = await _userRepo.FindByIdAsync(user.Id);
+        return result.NormalizedUserName;
     }
 
-    public Task<string> GetUserIdAsync(AppUser user, CancellationToken cancellationToken)
+    public async Task<string> GetUserIdAsync(AppUser user, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var result = await _userRepo.FindByIdAsync(user.Id);
+        return result.Id.ToString();
     }
 
-    public Task<string?> GetUserNameAsync(AppUser user, CancellationToken cancellationToken)
+    public async Task<string?> GetUserNameAsync(AppUser user, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var result = await _userRepo.FindByIdAsync(user.Id);
+        return result.UserName;
     }
 
-    public Task SetNormalizedUserNameAsync(
+    public async Task SetNormalizedUserNameAsync(
         AppUser user,
         string? normalizedName,
         CancellationToken cancellationToken
     )
     {
-        throw new NotImplementedException();
+        user.NormalizedUserName = normalizedName;
+        await _userRepo.UpdateUserAsync(user);
     }
 
-    public Task SetUserNameAsync(
+    public async Task SetUserNameAsync(
         AppUser user,
         string? userName,
         CancellationToken cancellationToken
     )
     {
-        throw new NotImplementedException();
+        user.UserName = userName;
+        await _userRepo.UpdateUserAsync(user);
     }
 
     public async Task<IdentityResult> UpdateAsync(AppUser user, CancellationToken cancellationToken)
     {
-        await _userRepo.UpdateUser(user);
+        await _userRepo.UpdateUserAsync(user);
         return IdentityResult.Success;
     }
+
+    public void Dispose() { }
 }

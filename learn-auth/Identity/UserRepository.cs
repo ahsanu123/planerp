@@ -9,9 +9,11 @@ namespace Learn.AppIdentity;
 
 public interface IUserRepository
 {
-    public Task CreateUser(AppUser newUser);
-    public Task DeleteUser(AppUser user);
-    public Task UpdateUser(AppUser user);
+    public Task<bool> CreateUserAsync(AppUser newUser);
+    public Task DeleteUserAsync(AppUser user);
+    public Task UpdateUserAsync(AppUser user);
+    public Task<AppUser?> FindByIdAsync(int id);
+    public Task<AppUser?> FindByNameAsync(string normalizedUserName);
     public Task<object> GetAll();
 }
 
@@ -34,15 +36,28 @@ public class UserRepository : IUserRepository
         _conn = connectionProvider;
     }
 
-    public async Task CreateUser(AppUser newUser)
+    public async Task<bool> CreateUserAsync(AppUser newUser)
     {
+        var FindByNormalizedName_Query = new Query(nameof(AppUser)).Where(
+            FullNameof(nameof(AppUser.NormalizedUserName)),
+            newUser.NormalizedUserName
+        );
         using (var conn = _conn.CreateConnection())
         {
-            var result = await conn.InsertToDatabase(newUser, true);
+            var nameAlreadyExist = await conn.QuerySingleSqlKataAsync<AppUser>(
+                FindByNormalizedName_Query
+            );
+
+            if (nameAlreadyExist == null)
+            {
+                var result = await conn.InsertToDatabase(newUser, true);
+                return true;
+            }
+            return false;
         }
     }
 
-    public async Task DeleteUser(AppUser user)
+    public async Task DeleteUserAsync(AppUser user)
     {
         var DeleteUser_Query = new Query(nameof(AppUser))
             .Where(FullNameof(nameof(AppUser.Id)), user.Id)
@@ -57,7 +72,7 @@ public class UserRepository : IUserRepository
         }
     }
 
-    public async Task UpdateUser(AppUser user)
+    public async Task UpdateUserAsync(AppUser user)
     {
         using (var conn = _conn.CreateConnection())
         {
@@ -73,6 +88,30 @@ public class UserRepository : IUserRepository
         using (var conn = _conn.CreateConnection())
         {
             var result = await conn.QueryAsync<object>("select * from AppUser;");
+            return result;
+        }
+    }
+
+    public async Task<AppUser?> FindByIdAsync(int id)
+    {
+        var FindById_Query = new Query(nameof(AppUser)).Where(FullNameof(nameof(AppUser.Id)), id);
+        using (var conn = _conn.CreateConnection())
+        {
+            var result = await conn.QuerySingleSqlKataAsync<AppUser>(FindById_Query);
+            return result;
+        }
+    }
+
+    public async Task<AppUser?> FindByNameAsync(string normalizedUserName)
+    {
+        var FindByNormalizedName_Query = new Query(nameof(AppUser)).Where(
+            FullNameof(nameof(AppUser.NormalizedUserName)),
+            normalizedUserName
+        );
+
+        using (var conn = _conn.CreateConnection())
+        {
+            var result = await conn.QuerySingleSqlKataAsync<AppUser>(FindByNormalizedName_Query);
             return result;
         }
     }

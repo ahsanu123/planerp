@@ -1,4 +1,5 @@
 using System.Text;
+using Learn.AppIdentity;
 using Learn.Custom;
 using Learn.InternalMigration;
 using Learn.Middleware;
@@ -65,7 +66,11 @@ builder.Services.AddSwaggerGen(option =>
 // builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<LearnDbContext>();
 // builder.Services.AddAuthorization();
 
-builder.Services.AddTransient<IAuthorizationHandler, CustomRequirementHandler>();
+// builder.Services.AddTransient<IAuthorizationHandler, CustomRequirementHandler>();
+
+builder.Services.AddSingleton<IUserStore<AppUser>, UserStore>();
+builder.Services.AddIdentityCore<AppUser>();
+
 builder.Services.AddAuthorization(option =>
 {
     CustomAuthorizationPolicies.AddPolicies(option);

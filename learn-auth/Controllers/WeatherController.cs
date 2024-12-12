@@ -45,7 +45,7 @@ public class WeatherController : Controller
             UserName = "Jangkrik",
             NormalizedUserName = "jangkrik",
         };
-        await _userRepo.CreateUser(newUser);
+        await _userRepo.CreateUserAsync(newUser);
 
         var result = await _userRepo.GetAll();
 
