@@ -36,17 +36,9 @@ public class WeatherController : Controller
 
     [HttpGet]
     [AllowAnonymous]
-    [Route("version-info")]
+    [Route("get-all-user")]
     public async Task<ActionResult> GetVersionInfo()
     {
-        var newUser = new AppUser()
-        {
-            Id = 1,
-            UserName = "Jangkrik",
-            NormalizedUserName = "jangkrik",
-        };
-        await _userRepo.CreateUserAsync(newUser);
-
         var result = await _userRepo.GetAll();
 
         return Ok(result);

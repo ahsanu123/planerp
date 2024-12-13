@@ -1,8 +1,9 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 
 namespace Learn.AppIdentity;
 
-public class UserStore : IUserStore<AppUser>
+public class UserStore : IUserClaimStore<AppUser>
 {
     private IUserRepository _userRepo;
 
@@ -11,6 +12,9 @@ public class UserStore : IUserStore<AppUser>
         _userRepo = userRepo;
     }
 
+    public void Dispose() { }
+
+    // IUserStore
     public async Task<IdentityResult> CreateAsync(AppUser user, CancellationToken cancellationToken)
     {
         var success = await _userRepo.CreateUserAsync(user);
@@ -52,13 +56,17 @@ public class UserStore : IUserStore<AppUser>
     public async Task<string> GetUserIdAsync(AppUser user, CancellationToken cancellationToken)
     {
         var result = await _userRepo.FindByIdAsync(user.Id);
-        return result.Id.ToString();
+        if (result == null)
+            return user.Id.ToString();
+        return null;
     }
 
     public async Task<string?> GetUserNameAsync(AppUser user, CancellationToken cancellationToken)
     {
         var result = await _userRepo.FindByIdAsync(user.Id);
-        return result.UserName;
+        if (result == null)
+            return user.UserName;
+        return null;
     }
 
     public async Task SetNormalizedUserNameAsync(
@@ -87,5 +95,45 @@ public class UserStore : IUserStore<AppUser>
         return IdentityResult.Success;
     }
 
-    public void Dispose() { }
+    // IUserClaimStore
+    public Task<IList<Claim>> GetClaimsAsync(AppUser user, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task AddClaimsAsync(
+        AppUser user,
+        IEnumerable<Claim> claims,
+        CancellationToken cancellationToken
+    )
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task ReplaceClaimAsync(
+        AppUser user,
+        Claim claim,
+        Claim newClaim,
+        CancellationToken cancellationToken
+    )
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task RemoveClaimsAsync(
+        AppUser user,
+        IEnumerable<Claim> claims,
+        CancellationToken cancellationToken
+    )
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IList<AppUser>> GetUsersForClaimAsync(
+        Claim claim,
+        CancellationToken cancellationToken
+    )
+    {
+        throw new NotImplementedException();
+    }
 }

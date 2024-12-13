@@ -111,7 +111,10 @@ public class UserRepository : IUserRepository
 
         using (var conn = _conn.CreateConnection())
         {
-            var result = await conn.QuerySingleSqlKataAsync<AppUser>(FindByNormalizedName_Query);
+            var result = await conn.QuerySingleSqlKataAsync<AppUser>(
+                FindByNormalizedName_Query,
+                true
+            );
             return result;
         }
     }

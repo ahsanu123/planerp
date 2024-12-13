@@ -1,3 +1,5 @@
+using System.Security.Claims;
+
 namespace Learn.AppIdentity;
 
 public class AppUser
@@ -7,4 +9,6 @@ public class AppUser
     public string UserName { get; set; }
 
     public string NormalizedUserName { get; set; }
+
+    public IList<Claim> Claims { get; set; }
 }

@@ -12,8 +12,8 @@ public class DapperSqlKataExtensionHelper
 {
     public static void LogRaw(SqlResult sqlResult)
     {
-        // UtilityExtension.ShowCurrentPosition(sqlResult.Sql);
-        // UtilityExtension.ShowCurrentPosition(JsonConvert.SerializeObject(sqlResult.NamedBindings));
+        UtilityExtension.ShowCurrentPosition(sqlResult.Sql);
+        UtilityExtension.ShowCurrentPosition(JsonConvert.SerializeObject(sqlResult.NamedBindings));
     }
 
     public static SqlResult CompilePostgresqlQuery(Query query)
@@ -86,7 +86,7 @@ public static class DapperSqlKataExtension
 
         if (LogRaw)
         {
-            // UtilityExtension.ShowCurrentPosition(sqlResult.Sql);
+            UtilityExtension.ShowCurrentPosition(sqlResult.Sql);
         }
 
         var result = await conn.QueryAsync<T>(sqlResult.Sql, sqlResult.NamedBindings);
@@ -140,9 +140,9 @@ public static class DapperSqlKataExtension
 
         if (printLog)
         {
-            // UtilityExtension.ShowCurrentPosition(
-            //     JsonConvert.SerializeObject(columnlists, Formatting.Indented)
-            // );
+            UtilityExtension.ShowCurrentPosition(
+                JsonConvert.SerializeObject(columnlists, Formatting.Indented)
+            );
         }
 
         query.Select(columnlists);
