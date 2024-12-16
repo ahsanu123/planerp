@@ -5,7 +5,7 @@ namespace Learn.InternalMigration;
 
 public static class MigrationApplicationBuilder
 {
-    public const int MIGRATION_VERSION = 13;
+    public const int MIGRATION_VERSION = 17;
 
     public const string MIGRATION_DESCRIPTION =
         $"Learning Authentication and Authorization From stratch";
@@ -30,6 +30,7 @@ public static class MigrationApplicationBuilder
             // this is for update foreign key
             // after table is established in database
             // MigrationExtension.UpdateForeignKey = true;
+
             MigrationApplicationBuilder.UpdateForeignKey = true;
             runner.Up(new MainMigration());
         }

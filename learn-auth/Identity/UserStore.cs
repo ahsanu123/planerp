@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Learn.Repository;
 using Microsoft.AspNetCore.Identity;
 
 namespace Learn.AppIdentity;
@@ -107,7 +108,8 @@ public class UserStore : IUserClaimStore<AppUser>
         CancellationToken cancellationToken
     )
     {
-        throw new NotImplementedException();
+        foreach (var claim in claims) { }
+        return Task.CompletedTask;
     }
 
     public Task ReplaceClaimAsync(

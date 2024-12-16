@@ -12,3 +12,12 @@ public class AppUser
 
     public IList<Claim> Claims { get; set; }
 }
+
+public class AppUserMigration
+{
+    public int Id { get; set; }
+
+    public string UserName { get; set; }
+
+    public string NormalizedUserName { get; set; }
+}

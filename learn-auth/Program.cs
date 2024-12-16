@@ -23,6 +23,7 @@ builder
     .Services.AddAuthentication(option =>
     {
         option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        option.AddScheme<CustomExternalAuthHandler>("demoAuth", "Demo Service");
         // option.AddScheme<CustomAuthHandler>("qsv", "QueryStringValue");
         // option.DefaultScheme = "qsv";
     })
@@ -30,7 +31,8 @@ builder
     {
         // opts.LoginPath = "/sign-in";
         // opts.AccessDeniedPath = "/signin/403";
-    });
+    })
+    .AddCookie(IdentityConstants.ExternalScheme);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

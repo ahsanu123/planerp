@@ -1,11 +1,12 @@
 using Dapper;
+using Learn.AppIdentity;
 using Learn.Extension;
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
 using SqlKata;
 using static Learn.Extension.UtilityExtension;
 
-namespace Learn.AppIdentity;
+namespace Learn.Repository;
 
 public interface IUserRepository
 {

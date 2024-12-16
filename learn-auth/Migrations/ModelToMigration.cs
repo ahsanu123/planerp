@@ -1,5 +1,6 @@
 namespace Learn.InternalMigration;
 
+using System.Collections;
 using System.Data;
 using System.Text.RegularExpressions;
 using FluentMigrator;
@@ -52,6 +53,12 @@ public static class ModelToMigration
 
         foreach (var key in modelType.GetProperties())
         {
+            if (key.GetType() is IList)
+            {
+                // skip create column if modelType not supported
+                Console.WriteLine($"{tableName} is Not Supported Type");
+                continue;
+            }
             var typeString = key.ToString();
             var column = table.WithColumn(key.Name);
             var isPrimaryKey = Regex.IsMatch(key.Name.ToLower(), "^id$");

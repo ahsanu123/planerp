@@ -8,9 +8,9 @@ public class ModelMigrationList : MigrationBase
 {
     private List<Type> listModel = new List<Type>
     {
-        typeof(Component),
         typeof(User),
-        typeof(AppUser),
+        typeof(ClaimModel),
+        typeof(AppUserMigration),
     };
 
     public void MigrationDown(Migration migration)
