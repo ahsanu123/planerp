@@ -4,13 +4,15 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Learn.AppIdentity;
 
-public class UserStore : IUserClaimStore<AppUser>
+public partial class UserStore : IUserStore<AppUser>
 {
     private IUserRepository _userRepo;
+    private IClaimRepository _claimRepo;
 
-    public UserStore(IUserRepository userRepo)
+    public UserStore(IUserRepository userRepo, IClaimRepository claimRepo)
     {
         _userRepo = userRepo;
+        _claimRepo = claimRepo;
     }
 
     public void Dispose() { }
@@ -94,48 +96,5 @@ public class UserStore : IUserClaimStore<AppUser>
     {
         await _userRepo.UpdateUserAsync(user);
         return IdentityResult.Success;
-    }
-
-    // IUserClaimStore
-    public Task<IList<Claim>> GetClaimsAsync(AppUser user, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task AddClaimsAsync(
-        AppUser user,
-        IEnumerable<Claim> claims,
-        CancellationToken cancellationToken
-    )
-    {
-        foreach (var claim in claims) { }
-        return Task.CompletedTask;
-    }
-
-    public Task ReplaceClaimAsync(
-        AppUser user,
-        Claim claim,
-        Claim newClaim,
-        CancellationToken cancellationToken
-    )
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task RemoveClaimsAsync(
-        AppUser user,
-        IEnumerable<Claim> claims,
-        CancellationToken cancellationToken
-    )
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IList<AppUser>> GetUsersForClaimAsync(
-        Claim claim,
-        CancellationToken cancellationToken
-    )
-    {
-        throw new NotImplementedException();
     }
 }

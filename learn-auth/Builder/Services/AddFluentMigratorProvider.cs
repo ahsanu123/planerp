@@ -1,5 +1,6 @@
 using System.Reflection;
 using FluentMigrator.Runner;
+using Learn.Extension;
 
 namespace Learn.Services;
 
@@ -14,7 +15,8 @@ public static class BuilderAddFluentMigratorProvider
             .AddFluentMigratorCore()
             .ConfigureRunner(runnerBuilder =>
                 runnerBuilder
-                    .AddSQLite()
+                    // .AddSQLite()
+                    .AddSQLiteWithCompatibilityMode(false, false, CompatibilityMode.LOOSE)
                     .WithGlobalConnectionString(connectionString)
                     .ScanIn(Assembly.GetExecutingAssembly())
                     .For.All()

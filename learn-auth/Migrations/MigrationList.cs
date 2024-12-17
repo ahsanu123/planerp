@@ -10,8 +10,10 @@ public class ModelMigrationList : MigrationBase
     {
         typeof(User),
         typeof(ClaimModel),
-        typeof(AppUserMigration),
+        typeof(AppUser),
     };
+
+    private List<string> listExcludedType = new List<string> { nameof(System.Collections) };
 
     public void MigrationDown(Migration migration)
     {
@@ -20,7 +22,7 @@ public class ModelMigrationList : MigrationBase
 
     public void MigrationUp(Migration migration)
     {
-        this.listModel.ForEach((type) => migration.ConvertModelToMigration(type));
+        this.listModel.ForEach((type) => migration.ConvertModelToMigration(type, listExcludedType));
     }
 
     public void GenerateForeignKey(Migration migration)

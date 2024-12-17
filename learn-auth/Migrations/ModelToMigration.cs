@@ -44,7 +44,11 @@ public static class ModelToMigration
         return migration;
     }
 
-    public static Migration ConvertModelToMigration(this Migration migration, Type modelType)
+    public static Migration ConvertModelToMigration(
+        this Migration migration,
+        Type modelType,
+        IEnumerable<string> excludedTypes = null
+    )
     {
         var tableName = modelType.FullName.Split('.').Last();
         Console.WriteLine(tableName);
@@ -53,13 +57,16 @@ public static class ModelToMigration
 
         foreach (var key in modelType.GetProperties())
         {
-            if (key.GetType() is IList)
-            {
-                // skip create column if modelType not supported
-                Console.WriteLine($"{tableName} is Not Supported Type");
-                continue;
-            }
             var typeString = key.ToString();
+
+            if (excludedTypes != null)
+            {
+                Console.WriteLine($"{tableName}.{key.Name} = {typeString}");
+                var excluded = excludedTypes.Any(item => typeString.Contains(item));
+                if (excluded)
+                    continue;
+            }
+
             var column = table.WithColumn(key.Name);
             var isPrimaryKey = Regex.IsMatch(key.Name.ToLower(), "^id$");
             var isForeignKey = Regex.IsMatch(key.Name, "Id$");
