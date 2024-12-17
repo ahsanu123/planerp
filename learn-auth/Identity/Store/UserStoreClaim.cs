@@ -1,4 +1,3 @@
-using Learn.Repository;
 using Microsoft.AspNetCore.Identity;
 
 namespace Learn.AppIdentity;
@@ -28,26 +27,25 @@ public partial class UserStore : IUserRoleStore<AppUser>
         CancellationToken cancellationToken
     )
     {
-        // TODO: This Must not work correctly
         var listUser = await _claimRepo.GetUserWithClaimAsync(roleName);
         return listUser.ToList();
     }
 
-    public Task<bool> IsInRoleAsync(
+    public async Task<bool> IsInRoleAsync(
         AppUser user,
         string roleName,
         CancellationToken cancellationToken
     )
     {
-        throw new NotImplementedException();
+        return await _claimRepo.IsUserInRoleAsync(user, roleName);
     }
 
-    public Task RemoveFromRoleAsync(
+    public async Task RemoveFromRoleAsync(
         AppUser user,
         string roleName,
         CancellationToken cancellationToken
     )
     {
-        throw new NotImplementedException();
+        await _claimRepo.RemoveFromRoleAsync(user, roleName);
     }
 }

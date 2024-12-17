@@ -10,7 +10,7 @@ public static class ServiceCollections
         services.AddSingleton<ISqliteConnectionProvider, SqliteConnectionProvider>();
 
         services.AddTransient<IUserRepository, UserRepository>();
-        services.AddTransient<IClaimRepository, ClaimRepository>();
+        services.AddTransient<IRoleRepository, RoleRepository>();
 
         return services;
     }

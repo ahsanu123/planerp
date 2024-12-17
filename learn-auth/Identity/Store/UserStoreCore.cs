@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Learn.Repository;
 using Microsoft.AspNetCore.Identity;
 
@@ -7,9 +6,9 @@ namespace Learn.AppIdentity;
 public partial class UserStore : IUserStore<AppUser>
 {
     private IUserRepository _userRepo;
-    private IClaimRepository _claimRepo;
+    private IRoleRepository _claimRepo;
 
-    public UserStore(IUserRepository userRepo, IClaimRepository claimRepo)
+    public UserStore(IUserRepository userRepo, IRoleRepository claimRepo)
     {
         _userRepo = userRepo;
         _claimRepo = claimRepo;
