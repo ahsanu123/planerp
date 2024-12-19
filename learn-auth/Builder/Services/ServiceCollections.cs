@@ -11,6 +11,7 @@ public static class ServiceCollections
 
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<IRoleRepository, RoleRepository>();
+        services.AddTransient<IUserClaimRepository, UserClaimRepository>();
 
         return services;
     }

@@ -1,4 +1,4 @@
-namespace Learn.Controller;
+namespace Learn.LearnController;
 
 using Learn.Repository;
 using Microsoft.AspNetCore.Authorization;

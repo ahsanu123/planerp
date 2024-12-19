@@ -1,3 +1,4 @@
+using Learn.Model;
 using Learn.Repository;
 using Microsoft.AspNetCore.Identity;
 
@@ -6,12 +7,18 @@ namespace Learn.AppIdentity;
 public partial class UserStore : IUserStore<AppUser>
 {
     private IUserRepository _userRepo;
-    private IRoleRepository _claimRepo;
+    private IRoleRepository _roleRepo;
+    private IUserClaimRepository _userClaimRepo;
 
-    public UserStore(IUserRepository userRepo, IRoleRepository claimRepo)
+    public UserStore(
+        IUserRepository userRepo,
+        IRoleRepository claimRepo,
+        IUserClaimRepository userClaimRepository
+    )
     {
         _userRepo = userRepo;
-        _claimRepo = claimRepo;
+        _roleRepo = claimRepo;
+        _userClaimRepo = userClaimRepository;
     }
 
     public void Dispose() { }

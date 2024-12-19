@@ -47,6 +47,30 @@ public static class DapperSqlKataExtension
         return conn;
     }
 
+    public static async Task<IDbConnection> UpdateByCondition<T>(
+        this IDbConnection conn,
+        T value,
+        Action<Query> whereClause,
+        bool removeId = false
+    )
+    {
+        var keyPair = new List<KeyValuePair<string, object>>();
+        foreach (var obj in value.GetType().GetProperties())
+        {
+            if (obj.Name.ToLower() == "id" && removeId)
+                continue;
+            keyPair.Add(new KeyValuePair<string, object>(obj.Name, obj.GetValue(value)));
+        }
+
+        var updateQuery = new Query(nameof(T));
+
+        whereClause(updateQuery);
+        updateQuery.AsUpdate(keyPair);
+
+        await conn.ExecuteSqlKataAsync(updateQuery);
+        return conn;
+    }
+
     /*
      * <summary>
      * Add Id to Database Array

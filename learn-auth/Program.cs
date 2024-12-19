@@ -1,13 +1,10 @@
-using System.Text;
 using Learn.AppIdentity;
 using Learn.Custom;
 using Learn.InternalMigration;
-using Learn.Middleware;
+using Learn.Model;
 using Learn.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,3 +1,4 @@
+using Learn.Model;
 using Microsoft.AspNetCore.Identity;
 
 namespace Learn.AppIdentity;
@@ -10,7 +11,7 @@ public partial class UserStore : IUserRoleStore<AppUser>
         CancellationToken cancellationToken
     )
     {
-        await _claimRepo.AddClaimsAsync(user, roleName);
+        await _roleRepo.AddClaimsAsync(user, roleName);
     }
 
     public async Task<IList<string>> GetRolesAsync(
@@ -18,7 +19,7 @@ public partial class UserStore : IUserRoleStore<AppUser>
         CancellationToken cancellationToken
     )
     {
-        var claims = await _claimRepo.GetClaimsAsync(user);
+        var claims = await _roleRepo.GetClaimsAsync(user);
         return claims.Select(claim => claim.Value).ToList();
     }
 
@@ -27,7 +28,7 @@ public partial class UserStore : IUserRoleStore<AppUser>
         CancellationToken cancellationToken
     )
     {
-        var listUser = await _claimRepo.GetUserWithClaimAsync(roleName);
+        var listUser = await _roleRepo.GetUserWithClaimAsync(roleName);
         return listUser.ToList();
     }
 
@@ -37,7 +38,7 @@ public partial class UserStore : IUserRoleStore<AppUser>
         CancellationToken cancellationToken
     )
     {
-        return await _claimRepo.IsUserInRoleAsync(user, roleName);
+        return await _roleRepo.IsUserInRoleAsync(user, roleName);
     }
 
     public async Task RemoveFromRoleAsync(
@@ -46,6 +47,6 @@ public partial class UserStore : IUserRoleStore<AppUser>
         CancellationToken cancellationToken
     )
     {
-        await _claimRepo.RemoveFromRoleAsync(user, roleName);
+        await _roleRepo.RemoveFromRoleAsync(user, roleName);
     }
 }

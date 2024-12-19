@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace Learn.AppIdentity;
+namespace Learn.Model;
 
 public class AppUser
 {

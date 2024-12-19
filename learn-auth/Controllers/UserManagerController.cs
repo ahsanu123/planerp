@@ -1,21 +1,20 @@
-namespace Learn.Controller;
-
 using System.Security.Claims;
-using Learn.AppIdentity;
-using Learn.UserClaim;
+using Learn.Model;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
+namespace Learn.LearnController;
+
 [ApiController]
 [Route("[controller]")]
-public class UserController : Controller
+public class UserManagerController : Controller
 {
     private UserManager<AppUser> _userManager;
 
-    public UserController(UserManager<AppUser> userManager)
+    public UserManagerController(UserManager<AppUser> userManager)
     {
         _userManager = userManager;
     }
