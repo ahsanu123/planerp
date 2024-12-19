@@ -45,13 +45,13 @@ export type GetUserManagerSignOutResponse = (unknown);
 
 export type GetUserManagerSignOutError = unknown;
 
-export type PostUserManagerCreateData = {
+export type PostUserManagerCreateUserData = {
     body?: AppUser;
 };
 
-export type PostUserManagerCreateResponse = (unknown);
+export type PostUserManagerCreateUserResponse = (unknown);
 
-export type PostUserManagerCreateError = unknown;
+export type PostUserManagerCreateUserError = unknown;
 
 export type GetUserManagerGetUserData = {
     query?: {
@@ -66,15 +66,3 @@ export type GetUserManagerGetUserError = unknown;
 export type GetUserManagerSeedResponse = (unknown);
 
 export type GetUserManagerSeedError = unknown;
-
-export type GetWeatherAuthorizedWeatherResponse = (unknown);
-
-export type GetWeatherAuthorizedWeatherError = unknown;
-
-export type GetWeatherWeatherResponse = (unknown);
-
-export type GetWeatherWeatherError = unknown;
-
-export type GetWeatherGetAllUserResponse = (unknown);
-
-export type GetWeatherGetAllUserError = unknown;

@@ -55,7 +55,7 @@ public class UserManagerController : Controller
     }
 
     [HttpPost]
-    [Route("create")]
+    [Route("create-user")]
     [AllowAnonymous]
     public async Task<ActionResult> CreateUser([FromBody] AppUser newUser)
     {

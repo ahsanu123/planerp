@@ -5,7 +5,7 @@ export default defineConfig({
   input: 'http://localhost:5136/swagger/v1/swagger.json',
   output: {
     format: 'prettier',
-    path: './app/api/generated/',
+    path: './src/api/generated/',
   },
   plugins: [
     ...defaultPlugins,

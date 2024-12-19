@@ -13,7 +13,7 @@ public class ModelMigrationList : MigrationBase
         typeof(AppUser),
     };
 
-    private List<string> listExcludedType = new List<string> { nameof(System.Collections) };
+    public static List<string> listExcludedType = new List<string> { nameof(System.Collections) };
 
     public void MigrationDown(Migration migration)
     {

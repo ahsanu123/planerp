@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Dapper;
+using Learn.InternalMigration;
 using Newtonsoft.Json;
 using SqlKata;
 using SqlKata.Compilers;
@@ -36,8 +37,13 @@ public static class DapperSqlKataExtension
         var keyPair = new List<KeyValuePair<string, object>>();
         foreach (var obj in value.GetType().GetProperties())
         {
-            if (obj.Name.ToLower() == "id" && removeId)
+            var excludedType = ModelMigrationList.listExcludedType.Any(exludedType =>
+                obj.ToString().Contains(exludedType)
+            );
+
+            if ((obj.Name.ToLower() == "id" && removeId) || excludedType)
                 continue;
+
             keyPair.Add(new KeyValuePair<string, object>(obj.Name, obj.GetValue(value)));
         }
         var className = typeof(T).Name;
