@@ -1,5 +1,7 @@
 import { useFetcher } from "react-router";
 import type { Route } from "../+types/root";
+import "./SignupPage.css"
+import { simpleFormGenerator } from "../component/SimpleFormGenerator";
 
 export async function clientAction({
   params,
@@ -10,35 +12,74 @@ export async function clientAction({
   console.log("form data: ", formData)
   console.log("params: ", params)
 }
+
+const signupModel = {
+  username: "",
+  email: "",
+  password: "",
+}
+
 export default function SignupPage() {
 
   const fetcher = useFetcher()
 
+  const internalSignup = (
+    <fetcher.Form
+      method="POST"
+    >
+      {simpleFormGenerator(signupModel, {
+        email: {
+          type: "email"
+        },
+        password: {
+          type: "password"
+        }
+      })}
+
+
+      <p>
+        <button
+          type="submit"
+        >
+          Sign Up
+        </button>
+      </p>
+    </fetcher.Form>
+  )
+
+  const externalSignup = (
+    <>
+      <button>
+        Gmail
+      </button>
+
+      <button>
+        Github
+      </button>
+
+      <button>
+        Microsoft
+      </button>
+    </>
+  );
+
   return (
     <>
-      <h2>Signup Page</h2>
+      <h2>🔑 Signup Page</h2>
 
-      <fetcher.Form
-        method="POST"
+      <div
+        className="signup-container"
       >
-        <label
-          htmlFor="input-username"
-        >
-          Username
-        </label>
-        <input
-          id="input-username"
-          name="username"
-        />
+        <div>
+          {internalSignup}
+        </div>
 
-        <p>
-          <button
-            type="submit"
-          >
-            Sign Up
-          </button>
-        </p>
-      </fetcher.Form>
+        <div
+          className="external-signup"
+        >
+          {externalSignup}
+        </div>
+      </div>
 
     </>
   )

@@ -27,6 +27,8 @@ public class AuthorizationReporter
     public async Task Invoke(HttpContext context)
     {
         var endPoint = context.GetEndpoint();
+        Console.WriteLine("=========================");
+        Console.WriteLine("Authorization Reporter Called");
 
         if (endPoint != null)
         {
@@ -48,11 +50,10 @@ public class AuthorizationReporter
 
                 results[(userKey, authTypeKey)] = canAccess;
             }
-            context.Items["authReport"] = results;
-            await endPoint.RequestDelegate(context);
+            // context.Items["authReport"] = results;
+            // await endPoint.RequestDelegate(context);
         }
-        else
-            await next(context);
+        await next(context);
     }
 
     private IEnumerable<ClaimsPrincipal> GetUsers()

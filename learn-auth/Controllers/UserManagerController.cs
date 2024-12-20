@@ -57,17 +57,18 @@ public class UserManagerController : Controller
     [HttpPost]
     [Route("create-user")]
     [AllowAnonymous]
-    public async Task<ActionResult> CreateUser([FromBody] AppUser newUser)
+    public async Task<ActionResult> CreateUser([FromBody] LoginModel newUser)
     {
-        var result = await _userManager.CreateAsync(newUser);
-        if (result.Succeeded)
-            return Ok();
-        return BadRequest();
+        var isEmailExists = await _userManager.FindByEmailAsync(newUser.Email);
+        // var result = await _userManager.CreateAsync(r);
+        // if (result.Succeeded)
+        return Ok();
+        // return BadRequest();
     }
 
     [HttpGet]
     [Route("get-user")]
-    [AllowAnonymous]
+    [Authorize(Roles = "Administrator")]
     public async Task<ActionResult> GetUser([FromQuery] string userName)
     {
         var result = await _userManager.FindByNameAsync(userName);

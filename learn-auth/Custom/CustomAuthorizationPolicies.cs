@@ -19,6 +19,18 @@ public class CustomAuthorizationPolicies
             new[] { CookieAuthenticationDefaults.AuthenticationScheme }
         );
 
+        var adminRequirement = new IAuthorizationRequirement[]
+        {
+            new RolesAuthorizationRequirement(new[] { "Administrato" }),
+        };
+
+        var adminPolicy = new AuthorizationPolicy(
+            adminRequirement,
+            new[] { CookieAuthenticationDefaults.AuthenticationScheme }
+        );
+
+        options.DefaultPolicy = adminPolicy;
+
         // options.FallbackPolicy = authPolicy;
     }
 }

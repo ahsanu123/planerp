@@ -1,37 +1,88 @@
-export default function SigninPage() {
+import { useFetcher } from "react-router";
+import type { Route } from "../+types/root";
+import { simpleFormGenerator } from "../component/SimpleFormGenerator";
+import "./SigninPage.css"
+
+export async function clientAction({
+  params,
+  request
+}: Route.ActionArgs) {
+  const formData = await request.formData()
+  formData.forEach((item, key) => console.log(`key: ${key}, value: ${item}`))
+  console.log("form data: ", formData)
+  console.log("params: ", params)
+}
+
+const signinModel = {
+  email: "",
+  password: "",
+}
+
+export default function SignupPage() {
+
+  const fetcher = useFetcher()
+
+  const internalSignin = (
+    <fetcher.Form
+      method="POST"
+    >
+      {simpleFormGenerator(signinModel, {
+        email: {
+          type: "email"
+        },
+        password: {
+          type: "password"
+        }
+      })}
+
+
+      <p>
+        <button
+          type="submit"
+        >
+          Sign In
+        </button>
+      </p>
+    </fetcher.Form>
+  )
+
+  const externalSignin = (
+    <>
+      <p>
+        or Signin With
+      </p>
+      <button>
+        Gmail
+      </button>
+
+      <button>
+        Github
+      </button>
+
+      <button>
+        Microsoft
+      </button>
+    </>
+  );
+
   return (
     <>
-      <h2>Sign In Page</h2>
-      <form>
-        <label
-          htmlFor="input-email"
+      <h2>🔏 Signin Page</h2>
+
+      <div
+        className="signin-container"
+      >
+        <div>
+          {internalSignin}
+        </div>
+
+        <div
+          className="external-signin"
         >
-          Email
-        </label>
+          {externalSignin}
+        </div>
+      </div>
 
-        <input
-          id="input-email"
-          type="email"
-        />
-
-        <label
-          htmlFor="input-password"
-        >
-          Password
-        </label>
-
-        <input
-          id="input-password"
-          type="password"
-        />
-
-        <p>
-          <button>
-            Submit
-          </button>
-        </p>
-
-      </form>
     </>
   )
 }

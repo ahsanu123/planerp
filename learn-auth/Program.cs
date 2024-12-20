@@ -20,7 +20,7 @@ builder
     .Services.AddAuthentication(option =>
     {
         option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        option.AddScheme<CustomExternalAuthHandler>("demoAuth", "Demo Service");
+        // option.AddScheme<CustomExternalAuthHandler>("demoAuth", "Demo Service");
         // option.AddScheme<CustomAuthHandler>("qsv", "QueryStringValue");
         // option.DefaultScheme = "qsv";
     })
@@ -38,12 +38,6 @@ builder.Services.AddFluentMigratorProvider(sqliteConnectionString);
 builder.Services.AddHttpLogging(config => { });
 builder.Services.AddConfigurationProvider(builder.Configuration);
 builder.Services.AddServicesCollection();
-
-// builder.Services.AddAuthentication(option =>
-// {
-//     // option.AddScheme();
-//     option.DefaultScheme = "qsv";
-// });
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -63,11 +57,9 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 // builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<LearnDbContext>();
-// builder.Services.AddAuthorization();
-
 // builder.Services.AddTransient<IAuthorizationHandler, CustomRequirementHandler>();
 
-builder.Services.AddSingleton<IUserStore<AppUser>, UserStore>();
+builder.Services.AddCustomIdentityServiceCollection();
 builder.Services.AddIdentityCore<AppUser>();
 
 builder.Services.AddAuthorization(option =>
@@ -92,16 +84,15 @@ if (app.Environment.IsDevelopment())
 // app.UseMiddleware<CustomAuthentication>();
 app.UseAuthentication();
 
-app.UseMiddleware<RoleMemberships>();
-
-app.UseRouting();
-
+// app.UseMiddleware<RoleMemberships>();
 // app.UseMiddleware<ClaimsReporter>();
-// app.UseMiddleware<AuthorizationReporter>();
+app.UseRouting();
+app.UseMiddleware<AuthorizationReporter>();
 app.UseAuthorization();
 
-// app.UseHttpsRedirection();
 app.MapControllers();
+
+// app.UseHttpsRedirection();
 
 app.UseFluentMigrator();
 app.Run();

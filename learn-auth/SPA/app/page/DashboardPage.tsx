@@ -1,49 +1,37 @@
 import { AppRoutes } from "../routes"
-import type { JSX } from "react"
-import { Link } from "react-router"
+import { Link, Navigate, useNavigate } from "react-router"
+import './DashboardPage.css'
+import CampaignCardManager from "../component/CampaignCardManager";
 
-const listRouteButton: JSX.Element[] = []
-let index = 0;
-for (const route in AppRoutes) {
-  if (route === 'PagePrefix') continue
-
-  listRouteButton.push((
-    <li
-      key={index}
-    >
-      <Link
-        to={`${AppRoutes.PagePrefix}${AppRoutes[route]}`}
-      >
-        {route}
-      </Link>
-    </li>
-  ))
-  index++
-}
 export default function DashboardPage() {
+  const navigate = useNavigate();
   return (
     <>
-      <h1>Home ASPNET Core Identity</h1>
-      <p>aspnet core identity basic POC</p>
+      <h1>📣 Campaign Manager</h1>
+      <p>ASPNET Core Identity Basic POC</p>
 
-      <p>
-        <button>
-          Authorized Endpoint
+      <div
+        className="login-container"
+      >
+        <button
+          onClick={() => navigate(`${AppRoutes.PagePrefix}${AppRoutes.SigninPage}`)}
+        >
+          Signin
         </button>
-      </p>
 
-      <p>
-        <button>
-          Anonymous Endpoint
+        <button
+          onClick={() => navigate(`${AppRoutes.PagePrefix}${AppRoutes.SignupPage}`)}
+        >
+          Signup
         </button>
-      </p>
-
-      <ul>
-        {
-          listRouteButton.map((ButtonRoute) => ButtonRoute)
-        }
-      </ul>
+      </div>
       <hr />
+
+      <p>
+        if user already signin, remove those signup/signin button with signout button and display what user can access below
+      </p>
+
+      <CampaignCardManager />
     </>
   )
 }
