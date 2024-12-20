@@ -1,9 +1,9 @@
-using Learn.AppIdentity;
 using Learn.Custom;
 using Learn.InternalMigration;
 using Learn.Model;
 using Learn.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,23 +19,26 @@ var sqliteConnectionString = builder.Configuration.GetConnectionString("Sqlite")
 builder
     .Services.AddAuthentication(option =>
     {
+        option.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
         option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         // option.AddScheme<CustomExternalAuthHandler>("demoAuth", "Demo Service");
         // option.AddScheme<CustomAuthHandler>("qsv", "QueryStringValue");
         // option.DefaultScheme = "qsv";
     })
-    .AddCookie(opts =>
+    .AddGoogle(option =>
     {
-        // opts.LoginPath = "/sign-in";
-        // opts.AccessDeniedPath = "/signin/403";
+        option.ClientId = "";
+        option.ClientSecret = "";
     })
-    .AddCookie(IdentityConstants.ExternalScheme);
+    .AddCookie(IdentityConstants.ExternalScheme)
+    .AddCookie();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddFluentMigratorProvider(sqliteConnectionString);
 builder.Services.AddHttpLogging(config => { });
+
 builder.Services.AddConfigurationProvider(builder.Configuration);
 builder.Services.AddServicesCollection();
 
@@ -64,7 +67,7 @@ builder.Services.AddIdentityCore<AppUser>();
 
 builder.Services.AddAuthorization(option =>
 {
-    CustomAuthorizationPolicies.AddPolicies(option);
+    // CustomAuthorizationPolicies.AddPolicies(option);
 });
 
 var app = builder.Build();

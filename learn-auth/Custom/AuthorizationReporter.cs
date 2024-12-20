@@ -30,29 +30,33 @@ public class AuthorizationReporter
         Console.WriteLine("=========================");
         Console.WriteLine("Authorization Reporter Called");
 
-        if (endPoint != null)
-        {
-            var results = new Dictionary<(string, string), bool>();
+        // Console.WriteLine(
+        //     JsonConvert.SerializeObject(context.User.Identities, Formatting.Indented)
+        // );
 
-            var allowAnonymous = endPoint.Metadata.GetMetadata<IAllowAnonymous>() != null;
-            var authData =
-                endPoint.Metadata.GetOrderedMetadata<IAuthorizeData>()
-                ?? Array.Empty<IAuthorizeData>();
-
-            var policy = await AuthorizationPolicy.CombineAsync(policyProvider, authData);
-
-            foreach (var claimPrincipal in GetUsers())
-            {
-                var userKey = claimPrincipal.Identity.Name ?? "(No User)";
-                var authTypeKey = claimPrincipal.Identity.AuthenticationType;
-                var canAccess =
-                    allowAnonymous || policy == null || await AuthorizeUser(claimPrincipal, policy);
-
-                results[(userKey, authTypeKey)] = canAccess;
-            }
-            // context.Items["authReport"] = results;
-            // await endPoint.RequestDelegate(context);
-        }
+        // if (endPoint != null)
+        // {
+        //     var results = new Dictionary<(string, string), bool>();
+        //
+        //     var allowAnonymous = endPoint.Metadata.GetMetadata<IAllowAnonymous>() != null;
+        //     var authData =
+        //         endPoint.Metadata.GetOrderedMetadata<IAuthorizeData>()
+        //         ?? Array.Empty<IAuthorizeData>();
+        //
+        //     var policy = await AuthorizationPolicy.CombineAsync(policyProvider, authData);
+        //
+        //     foreach (var claimPrincipal in GetUsers())
+        //     {
+        //         var userKey = claimPrincipal.Identity.Name ?? "(No User)";
+        //         var authTypeKey = claimPrincipal.Identity.AuthenticationType;
+        //         var canAccess =
+        //             allowAnonymous || policy == null || await AuthorizeUser(claimPrincipal, policy);
+        //
+        //         results[(userKey, authTypeKey)] = canAccess;
+        //     }
+        //     // context.Items["authReport"] = results;
+        //     // await endPoint.RequestDelegate(context);
+        // }
         await next(context);
     }
 

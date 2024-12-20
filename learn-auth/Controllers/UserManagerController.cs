@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Learn.LearnController;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class UserManagerController : Controller
 {
     private UserManager<AppUser> _userManager;
@@ -68,7 +70,6 @@ public class UserManagerController : Controller
 
     [HttpGet]
     [Route("get-user")]
-    [Authorize(Roles = "Administrator")]
     public async Task<ActionResult> GetUser([FromQuery] string userName)
     {
         var result = await _userManager.FindByNameAsync(userName);
@@ -108,5 +109,18 @@ public class UserManagerController : Controller
             await _userManager.CreateAsync(user);
         }
         return Ok();
+    }
+
+    [HttpGet]
+    [Route("user-info")]
+    public async Task<ActionResult> GetUserInformation()
+    {
+        var ident = User.Claims;
+        var claims = new Dictionary<string, string>();
+        foreach (var claim in ident)
+        {
+            claims.Add(claim.Type, claim.Value);
+        }
+        return Ok(claims);
     }
 }

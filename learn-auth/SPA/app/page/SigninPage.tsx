@@ -15,7 +15,6 @@ export async function clientAction({
 
 const signinModel = {
   email: "",
-  password: "",
 }
 
 export default function SignupPage() {
@@ -30,9 +29,6 @@ export default function SignupPage() {
         email: {
           type: "email"
         },
-        password: {
-          type: "password"
-        }
       })}
 
 
