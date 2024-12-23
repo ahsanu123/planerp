@@ -1,6 +1,7 @@
 using FluentMigrator;
 using Learn.AppIdentity;
 using Learn.Model;
+using Microsoft.AspNetCore.Identity;
 
 namespace Learn.InternalMigration;
 
@@ -8,6 +9,12 @@ public class ModelMigrationList : MigrationBase
 {
     private List<Type> listModel = new List<Type>
     {
+        typeof(IntIdentityRole),
+        typeof(IntIdentityUser),
+        typeof(IntIdentityUserClaim),
+        typeof(IntIdentityUserLogin),
+        typeof(IntIdentityUserRole),
+        typeof(IntIdentityUserToken),
         typeof(User),
         typeof(ClaimModel),
         typeof(AppUser),

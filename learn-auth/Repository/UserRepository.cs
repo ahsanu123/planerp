@@ -3,7 +3,6 @@ using Learn.AppIdentity;
 using Learn.Extension;
 using Learn.Model;
 using Microsoft.Data.Sqlite;
-using Newtonsoft.Json;
 using SqlKata;
 using static Learn.Extension.UtilityExtension;
 

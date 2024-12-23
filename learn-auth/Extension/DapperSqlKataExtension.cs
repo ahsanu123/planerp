@@ -31,7 +31,8 @@ public static class DapperSqlKataExtension
     public static async Task<IDbConnection> InsertToDatabase<T>(
         this IDbConnection conn,
         T value,
-        bool removeId = false
+        bool removeId = false,
+        Type TableName = null
     )
     {
         var keyPair = new List<KeyValuePair<string, object>>();
@@ -46,7 +47,7 @@ public static class DapperSqlKataExtension
 
             keyPair.Add(new KeyValuePair<string, object>(obj.Name, obj.GetValue(value)));
         }
-        var className = typeof(T).Name;
+        var className = TableName != null ? TableName.Name : typeof(T).Name;
         var InsertIntoDatabase_QUERY = new Query(className).AsInsert(keyPair);
 
         await conn.ExecuteSqlKataAsync(InsertIntoDatabase_QUERY, true);
@@ -57,7 +58,8 @@ public static class DapperSqlKataExtension
         this IDbConnection conn,
         T value,
         Action<Query> whereClause,
-        bool removeId = false
+        bool removeId = false,
+        Type TableName = null
     )
     {
         var keyPair = new List<KeyValuePair<string, object>>();
@@ -68,7 +70,7 @@ public static class DapperSqlKataExtension
             keyPair.Add(new KeyValuePair<string, object>(obj.Name, obj.GetValue(value)));
         }
 
-        var updateQuery = new Query(nameof(T));
+        var updateQuery = new Query(TableName != null ? TableName.Name : nameof(T));
 
         whereClause(updateQuery);
         updateQuery.AsUpdate(keyPair);
@@ -77,12 +79,14 @@ public static class DapperSqlKataExtension
         return conn;
     }
 
-    /*
-     * <summary>
-     * Add Id to Database Array
-     * used model need to have primaryId, and newInsertedId
-     * </summary>
-     * */
+    /// <summary>
+    ///  Add Id to Database Array
+    ///  used model need to have primaryId, and newInsertedId
+    /// </summary>
+    /// <param name="conn"></param>
+    /// <param name="value"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static async Task AddIdToDatabaseArray<T>(IDbConnection conn, T value)
     {
         var className = typeof(T).Name;
@@ -147,6 +151,33 @@ public static class DapperSqlKataExtension
         DapperSqlKataExtensionHelper.LogRaw(sqlResult);
 
         return await conn.QueryAsync<T>(sqlResult.Sql, sqlResult.NamedBindings);
+    }
+
+    public static Query SelectAllClassProperties(
+        this Query query,
+        Type classType,
+        bool printLog = false
+    )
+    {
+        var columnlists = new List<string>();
+        var className = classType.Name;
+
+        var instance = Activator.CreateInstance(classType);
+
+        foreach (var classProperty in instance.GetType().GetProperties())
+        {
+            columnlists.Add($"{classType.Name}.{classProperty.Name}");
+        }
+
+        if (printLog)
+        {
+            UtilityExtension.ShowCurrentPosition(
+                JsonConvert.SerializeObject(columnlists, Formatting.Indented)
+            );
+        }
+
+        query.Select(columnlists);
+        return query;
     }
 
     public static Query SelectAllClassProperties(

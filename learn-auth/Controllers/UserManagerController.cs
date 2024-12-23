@@ -14,9 +14,9 @@ namespace Learn.LearnController;
 [Authorize]
 public class UserManagerController : Controller
 {
-    private UserManager<AppUser> _userManager;
+    private UserManager<IntIdentityUser> _userManager;
 
-    public UserManagerController(UserManager<AppUser> userManager)
+    public UserManagerController(UserManager<IntIdentityUser> userManager)
     {
         _userManager = userManager;
     }
@@ -61,7 +61,14 @@ public class UserManagerController : Controller
     [AllowAnonymous]
     public async Task<ActionResult> CreateUser([FromBody] LoginModel newUser)
     {
-        var isEmailExists = await _userManager.FindByEmailAsync(newUser.Email);
+        var user = new IntIdentityUser()
+        {
+            UserName = "Ahsanu",
+            Email = "ahsanu@amala.com",
+            EmailConfirmed = true,
+        };
+        await _userManager.CreateAsync(user);
+        // var isEmailExists = await _userManager.FindByEmailAsync(newUser.Email);
         // var result = await _userManager.CreateAsync(r);
         // if (result.Succeeded)
         return Ok();
@@ -104,10 +111,10 @@ public class UserManagerController : Controller
                 NormalizedUserName = "bob",
             },
         };
-        foreach (var user in users)
-        {
-            await _userManager.CreateAsync(user);
-        }
+        // foreach (var user in users)
+        // {
+        //     await _userManager.CreateAsync(user);
+        // }
         return Ok();
     }
 

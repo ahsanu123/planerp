@@ -1,6 +1,5 @@
 namespace Learn.InternalMigration;
 
-using System.Collections;
 using System.Data;
 using System.Text.RegularExpressions;
 using FluentMigrator;
@@ -51,13 +50,13 @@ public static class ModelToMigration
     )
     {
         var tableName = modelType.FullName.Split('.').Last();
-        Console.WriteLine(tableName);
 
         var table = migration.Create.Table(tableName);
 
         foreach (var key in modelType.GetProperties())
         {
             var typeString = key.ToString();
+            Console.WriteLine(typeString);
 
             if (excludedTypes != null)
             {
@@ -84,7 +83,8 @@ public static class ModelToMigration
 
             if (typeString.Contains(nameof(System.String)))
             {
-                column.AsString().IsNullable(typeString);
+                // column.AsString().IsNullable(typeString);
+                column.AsString().Nullable();
                 continue;
             }
 

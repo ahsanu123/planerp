@@ -2,9 +2,11 @@ using Learn.Custom;
 using Learn.InternalMigration;
 using Learn.Model;
 using Learn.Services;
+using Learn.StandardIdentity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,25 +18,24 @@ var sqliteConnectionString = builder.Configuration.GetConnectionString("Sqlite")
 
 // builder.Services.AddDbContext<LearnDbContext>();
 
+
 builder
-    .Services.AddAuthentication(option =>
-    {
-        option.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-        option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        // option.AddScheme<CustomExternalAuthHandler>("demoAuth", "Demo Service");
-        // option.AddScheme<CustomAuthHandler>("qsv", "QueryStringValue");
-        // option.DefaultScheme = "qsv";
-    })
-    .AddGoogle(option =>
-    {
-        option.ClientId = "";
-        option.ClientSecret = "";
-    })
-    .AddCookie(IdentityConstants.ExternalScheme)
-    .AddCookie();
+    .Services.AddIdentity<IntIdentityUser, IntIdentityRole>(option => { })
+    .AddStandardCustomIdentityStores();
+
+// builder
+//     .Services.AddAuthentication()
+//     .AddGoogle(option =>
+//     {
+//         option.ClientId = "";
+//         option.ClientSecret = "";
+//     });
+//
+// .AddCookie();
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
+
+// builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddFluentMigratorProvider(sqliteConnectionString);
 builder.Services.AddHttpLogging(config => { });
@@ -62,8 +63,8 @@ builder.Services.AddSwaggerGen(option =>
 // builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<LearnDbContext>();
 // builder.Services.AddTransient<IAuthorizationHandler, CustomRequirementHandler>();
 
-builder.Services.AddCustomIdentityServiceCollection();
-builder.Services.AddIdentityCore<AppUser>();
+// builder.Services.AddCustomIdentityServiceCollection();
+// builder.Services.AddIdentityCore<AppUser>();
 
 builder.Services.AddAuthorization(option =>
 {
