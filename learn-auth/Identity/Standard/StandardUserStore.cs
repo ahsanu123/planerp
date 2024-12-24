@@ -10,6 +10,11 @@ using static Learn.Extension.UtilityExtension;
 
 namespace Learn.StandardIdentity;
 
+/// <summary>
+/// Class that implement UserStoreBase, and IUserStore with TKey = int
+/// </summary>
+/// <typeparam name="TUser"></typeparam>
+/// <typeparam name="TRole"></typeparam>
 public class StandardUserStore<TUser, TRole>
     : UserStoreBase<
         TUser,

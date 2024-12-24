@@ -11,6 +11,11 @@ namespace Learn.StandardIdentity;
 /// </summary>
 public static class StandardUserStoreExtensionBuilder
 {
+    /// <summary>
+    /// a Static Function To Add Custom Store For IdentityUser with TKey = int
+    /// </summary>
+    /// <param name="IdentityBuilder"></param>
+    /// <returns></returns>
     public static IdentityBuilder AddStandardCustomIdentityStores(this IdentityBuilder builder)
     {
         builder.Services.AddScoped<
@@ -21,19 +26,6 @@ public static class StandardUserStoreExtensionBuilder
             IRoleStore<IntIdentityRole>,
             StandardRoleStore<IntIdentityRole>
         >();
-        // builder.Services.TryAddScoped(
-        //     typeof(IUserStore<>).MakeGenericType(builder.UserType),
-        //     builder.UserType
-        // );
-        //
-        // if (builder.RoleType != null)
-        // {
-        //     builder.Services.TryAddScoped(
-        //         typeof(IRoleStore<>).MakeGenericType(builder.RoleType),
-        //         builder.RoleType
-        //     );
-        // }
-        //
         return builder;
     }
 }

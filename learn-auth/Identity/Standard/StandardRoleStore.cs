@@ -11,8 +11,7 @@ using static Learn.Extension.UtilityExtension;
 namespace Learn.StandardIdentity;
 
 /// <summary>
-/// TODO:
-/// Note -> Every Role Have Claims
+/// Class that Implement RoleStoreBase with TKey = int
 /// </summary>
 /// <typeparam name="TRole"></typeparam>
 public class StandardRoleStore<TRole>
@@ -40,13 +39,34 @@ public class StandardRoleStore<TRole>
 
     public override IQueryable<TRole> Roles => throw new NotImplementedException();
 
-    public override Task AddClaimAsync(
+    public override async Task AddClaimAsync(
         TRole role,
         Claim claim,
         CancellationToken cancellationToken = default
     )
     {
-        throw new NotImplementedException();
+        var roleClaim = CreateRoleClaim(role, claim);
+
+        var constraint = new Dictionary<string, string>
+        {
+            { nameof(IntIdentityRoleClaim.ClaimType), roleClaim.ClaimType },
+            { nameof(IntIdentityRoleClaim.ClaimValue), roleClaim.ClaimValue },
+            { nameof(IntIdentityRoleClaim.RoleId), role.Id.ToString() },
+        };
+        var CheckIfClaimAlreadyExists_Query = new Query(nameof(IntIdentityRoleClaim)).Where(
+            constraint
+        );
+
+        await CreateConnection(async conn =>
+        {
+            var roleClaimInDb = await conn.QuerySingleSqlKataAsync<IntIdentityRoleClaim>(
+                CheckIfClaimAlreadyExists_Query
+            );
+            if (roleClaimInDb == null)
+            {
+                await conn.InsertToDatabase(roleClaim, false, typeof(IntIdentityRoleClaim));
+            }
+        });
     }
 
     public override int ConvertIdFromString(string? id)
@@ -59,12 +79,29 @@ public class StandardRoleStore<TRole>
         return base.ConvertIdToString(id);
     }
 
-    public override Task<IdentityResult> CreateAsync(
+    public override async Task<IdentityResult> CreateAsync(
         TRole role,
         CancellationToken cancellationToken = default
     )
     {
-        throw new NotImplementedException();
+        TRole? roleInDb = null;
+
+        var CheckIfRoleAlreadyExist_Query = new Query(nameof(IntIdentityRole)).Where(
+            nameof(IntIdentityRole.NormalizedName),
+            role.NormalizedName
+        );
+        await CreateConnection(async conn =>
+        {
+            roleInDb =
+                (await conn.QuerySingleSqlKataAsync<IntIdentityRole>(CheckIfRoleAlreadyExist_Query))
+                as TRole;
+            if (roleInDb == null)
+            {
+                await conn.InsertToDatabase(role, false, typeof(IntIdentityRole));
+            }
+        });
+
+        return roleInDb == null ? IdentityResult.Success : IdentityResult.Failed();
     }
 
     public override async Task<IdentityResult> DeleteAsync(
@@ -175,13 +212,28 @@ public class StandardRoleStore<TRole>
         return base.GetRoleNameAsync(role, cancellationToken);
     }
 
-    public override Task RemoveClaimAsync(
+    public override async Task RemoveClaimAsync(
         TRole role,
         Claim claim,
         CancellationToken cancellationToken = default
     )
     {
-        throw new NotImplementedException();
+        var roleClaim = CreateRoleClaim(role, claim);
+
+        var constraint = new Dictionary<string, string>
+        {
+            { nameof(IntIdentityRoleClaim.RoleId), roleClaim.RoleId.ToString() },
+            { nameof(IntIdentityRoleClaim.ClaimValue), roleClaim.ClaimValue },
+            { nameof(IntIdentityRoleClaim.ClaimType), roleClaim.ClaimType },
+        };
+        var RemoveClaim_Query = new Query(nameof(IntIdentityRoleClaim))
+            .Where(constraint)
+            .AsDelete();
+
+        await CreateConnection(async conn =>
+        {
+            await conn.ExecuteSqlKataAsync(RemoveClaim_Query);
+        });
     }
 
     public override Task SetNormalizedRoleNameAsync(
@@ -207,12 +259,21 @@ public class StandardRoleStore<TRole>
         return base.ToString();
     }
 
-    public override Task<IdentityResult> UpdateAsync(
+    public override async Task<IdentityResult> UpdateAsync(
         TRole role,
         CancellationToken cancellationToken = default
     )
     {
-        throw new NotImplementedException();
+        var UpdateRole_Query = new Query(nameof(IntIdentityRole))
+            .Where(nameof(IntIdentityRole.Id), role.Id)
+            .AsUpdate(role);
+
+        await CreateConnection(async conn =>
+        {
+            await conn.ExecuteSqlKataAsync(UpdateRole_Query);
+        });
+
+        return IdentityResult.Success;
     }
 
     protected override IdentityRoleClaim<int> CreateRoleClaim(TRole role, Claim claim)
