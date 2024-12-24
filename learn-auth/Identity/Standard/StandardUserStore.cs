@@ -40,7 +40,22 @@ public class StandardUserStore<TUser, TRole>
 
     private readonly ISqliteConnectionProvider _conn;
 
-    public override IQueryable<TUser> Users => throw new NotImplementedException();
+    private async Task<IEnumerable<TUser>> ListUser()
+    {
+        IEnumerable<TUser>? users = null;
+        var GetUsers_Query = new Query(nameof(IdentityUserIntKey));
+        await CreateConnection(async conn =>
+        {
+            users =
+                (await conn.QuerySqlKataAsync<IdentityUserIntKey>(GetUsers_Query))
+                as IEnumerable<TUser>;
+        });
+
+        return users;
+    }
+
+    public override IQueryable<TUser> Users =>
+        Task.Run(async () => await ListUser()).Result.AsQueryable();
 
     public StandardUserStore(
         ISqliteConnectionProvider sqliteConnectionProvider,
@@ -210,7 +225,7 @@ public class StandardUserStore<TUser, TRole>
 
                 if (claimExist == null)
                 {
-                    await conn.InsertToDatabase(userClaim);
+                    await conn.InsertToDatabase(userClaim, true);
                 }
             }
         });
@@ -285,7 +300,7 @@ public class StandardUserStore<TUser, TRole>
             );
             if (userLoginExists == null)
             {
-                await conn.InsertToDatabase(CreateUserLogin(user, login));
+                await conn.InsertToDatabase(CreateUserLogin(user, login), true);
             }
         });
     }
@@ -419,7 +434,7 @@ public class StandardUserStore<TUser, TRole>
                 );
             }
 
-            await conn.InsertToDatabase(CreateUserRole(user, roleEntity));
+            await conn.InsertToDatabase(CreateUserRole(user, roleEntity), true);
         });
     }
 
@@ -591,7 +606,7 @@ public class StandardUserStore<TUser, TRole>
     {
         await CreateConnection(async conn =>
         {
-            await conn.InsertToDatabase(token, false, typeof(IdentityUserTokenIntKey));
+            await conn.InsertToDatabase(token, true, typeof(IdentityUserTokenIntKey));
         });
     }
 

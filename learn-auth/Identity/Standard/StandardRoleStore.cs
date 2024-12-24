@@ -37,7 +37,23 @@ public class StandardRoleStore<TRole>
 
     private readonly ISqliteConnectionProvider _conn;
 
-    public override IQueryable<TRole> Roles => throw new NotImplementedException();
+    private async Task<IEnumerable<TRole>> ListRole()
+    {
+        var GetRoles_Query = new Query(nameof(IdentityRoleIntKey));
+
+        IEnumerable<TRole>? roles = null;
+        await CreateConnection(async conn =>
+        {
+            roles =
+                (await conn.QuerySqlKataAsync<IdentityRoleIntKey>(GetRoles_Query))
+                as IEnumerable<TRole>;
+        });
+
+        return roles;
+    }
+
+    public override IQueryable<TRole> Roles =>
+        Task.Run(async () => await ListRole()).Result.AsQueryable();
 
     public override async Task AddClaimAsync(
         TRole role,
@@ -64,7 +80,7 @@ public class StandardRoleStore<TRole>
             );
             if (roleClaimInDb == null)
             {
-                await conn.InsertToDatabase(roleClaim, false, typeof(IdentityRoleClaimIntKey));
+                await conn.InsertToDatabase(roleClaim, true, typeof(IdentityRoleClaimIntKey));
             }
         });
     }
@@ -100,7 +116,7 @@ public class StandardRoleStore<TRole>
                 ) as TRole;
             if (roleInDb == null)
             {
-                await conn.InsertToDatabase(role, false, typeof(IdentityRoleIntKey));
+                await conn.InsertToDatabase(role, true, typeof(IdentityRoleIntKey));
             }
         });
 

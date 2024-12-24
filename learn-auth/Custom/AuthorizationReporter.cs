@@ -26,9 +26,13 @@ public class AuthorizationReporter
 
     public async Task Invoke(HttpContext context)
     {
+        var query = context.Request.Query;
+        var state = query["state"];
+
         var endPoint = context.GetEndpoint();
         Console.WriteLine("=========================");
         Console.WriteLine("Authorization Reporter Called");
+        Console.WriteLine(state);
 
         // Console.WriteLine(
         //     JsonConvert.SerializeObject(context.User.Identities, Formatting.Indented)
