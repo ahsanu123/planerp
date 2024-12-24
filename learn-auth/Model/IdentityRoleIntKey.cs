@@ -2,4 +2,4 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Learn.Model;
 
-public class IntIdentityRole : IdentityRole<int> { }
+public class IdentityRoleIntKey : IdentityRole<int> { }

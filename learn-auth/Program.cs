@@ -20,7 +20,7 @@ var sqliteConnectionString = builder.Configuration.GetConnectionString("Sqlite")
 
 
 builder
-    .Services.AddIdentity<IntIdentityUser, IntIdentityRole>(option => { })
+    .Services.AddIdentity<IdentityUserIntKey, IdentityRoleIntKey>(option => { })
     .AddStandardCustomIdentityStores();
 
 // builder

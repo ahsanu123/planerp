@@ -9,15 +9,12 @@ public class ModelMigrationList : MigrationBase
 {
     private List<Type> listModel = new List<Type>
     {
-        typeof(IntIdentityRole),
-        typeof(IntIdentityUser),
-        typeof(IntIdentityUserClaim),
-        typeof(IntIdentityUserLogin),
-        typeof(IntIdentityUserRole),
-        typeof(IntIdentityUserToken),
-        typeof(User),
-        typeof(ClaimModel),
-        typeof(AppUser),
+        typeof(IdentityRoleIntKey),
+        typeof(IdentityUserIntKey),
+        typeof(IdentityUserClaimIntKey),
+        typeof(IdentityUserLoginIntKey),
+        typeof(IdentityUserRoleIntKey),
+        typeof(IdentityUserTokenIntKey),
     };
 
     public static List<string> listExcludedType = new List<string> { nameof(System.Collections) };
