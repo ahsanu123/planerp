@@ -5,6 +5,7 @@ using Learn.Extension;
 using Learn.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
+using Newtonsoft.Json;
 using SqlKata;
 using static Learn.Extension.UtilityExtension;
 
@@ -434,7 +435,11 @@ public class StandardUserStore<TUser, TRole>
                 );
             }
 
-            await conn.InsertToDatabase(CreateUserRole(user, roleEntity), true);
+            await conn.InsertToDatabase(
+                CreateUserRole(user, roleEntity),
+                true,
+                typeof(IdentityUserRoleIntKey)
+            );
         });
     }
 
@@ -478,18 +483,19 @@ public class StandardUserStore<TUser, TRole>
     )
     {
         var roles = new List<string>();
-        var GetRolesForUser_Query = new Query(nameof(IdentityRoleIntKey))
+
+        var GetRoles_Query = new Query(nameof(IdentityUserRoleIntKey))
             .Join(
-                nameof(IdentityUserRoleIntKey),
-                FullNameof(nameof(IdentityUserRoleIntKey.RoleId)),
-                FullNameof(nameof(IdentityRoleIntKey.Id))
+                nameof(IdentityRoleIntKey),
+                FullNameof(nameof(IdentityRoleIntKey.Id)),
+                FullNameof(nameof(IdentityUserRoleIntKey.RoleId))
             )
-            .Where(FullNameof(nameof(IdentityUserRoleIntKey.UserId)), user.Id)
+            .Where(FullNameof(nameof(IdentityUserRoleIntKey.UserId)), user.Id.ToString())
             .SelectAllClassProperties(typeof(IdentityRoleIntKey));
 
         await CreateConnection(async conn =>
         {
-            roles = (await conn.QuerySqlKataAsync<IdentityRoleIntKey>(GetRolesForUser_Query))
+            roles = (await conn.QuerySqlKataAsync<IdentityRoleIntKey>(GetRoles_Query))
                 .Select(role => role.NormalizedName)
                 .ToList();
         });
@@ -503,20 +509,26 @@ public class StandardUserStore<TUser, TRole>
     )
     {
         bool userInRole = false;
-
-        var GetRolesForUser_Query = new Query(nameof(IdentityRoleIntKey))
-            .Join(
-                nameof(IdentityUserRoleIntKey),
-                FullNameof(nameof(IdentityUserRoleIntKey.RoleId)),
-                FullNameof(nameof(IdentityRoleIntKey.Id))
-            )
-            .Where(FullNameof(nameof(IdentityUserRoleIntKey.UserId)), user.Id)
-            .SelectAllClassProperties(typeof(IdentityUserRoleIntKey));
+        var GetRoles_Query = new Query(nameof(IdentityRoleIntKey)).Where(
+            nameof(IdentityRoleIntKey.NormalizedName),
+            normalizedRoleName
+        );
 
         await CreateConnection(async conn =>
         {
-            var userRole = await conn.QuerySqlKataAsync<IdentityRoleIntKey>(GetRolesForUser_Query);
-            userInRole = userRole != null ? true : false;
+            var role = await conn.QuerySingleSqlKataAsync<IdentityRoleIntKey>(GetRoles_Query);
+            if (role != null)
+            {
+                var DoesUserAlreadyOnRole_Query = new Query(nameof(IdentityUserRoleIntKey))
+                    .Where(nameof(IdentityUserRoleIntKey.RoleId), role.Id)
+                    .Where(nameof(IdentityUserRoleIntKey.UserId), user.Id);
+
+                var userRole = await conn.QuerySingleSqlKataAsync<IdentityUserRoleIntKey>(
+                    DoesUserAlreadyOnRole_Query,
+                    false
+                );
+                userInRole = userRole != null ? true : false;
+            }
         });
 
         return userInRole;

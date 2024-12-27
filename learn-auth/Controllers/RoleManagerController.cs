@@ -10,6 +10,7 @@ namespace Learn.LearnController;
 public class RoleManagerController : Controller
 {
     // TODO: Implement This Endpoint
+    // - addRoleForUser
     // - createRole
     // - getRole
     // - getRoleForUser
@@ -36,6 +37,24 @@ public class RoleManagerController : Controller
     }
 
     [HttpPost]
+    [Route("add-role-for-user/{userName}")]
+    public async Task<ActionResult> AddRoleForUser(
+        [FromRoute] string userName,
+        [FromBody] string roleName
+    )
+    {
+        var role = await _roleManager.FindByNameAsync(roleName);
+        var user = await _userManager.FindByNameAsync(userName);
+        if (role != null && user != null)
+        {
+            var result = await _userManager.AddToRoleAsync(user, role.Name);
+            return Ok(result);
+        }
+
+        return NotFound();
+    }
+
+    [HttpPost]
     [Route("create-role")]
     public async Task<ActionResult> CreateRole([FromBody] IdentityRoleIntKey role)
     {
@@ -58,12 +77,31 @@ public class RoleManagerController : Controller
         return Ok();
     }
 
-    [HttpPost]
-    [Route("get-role-for-user")]
-    public async Task<ActionResult> GetRoleForUser([FromBody] IdentityUserIntKey user)
+    [HttpGet]
+    [Route("get-role-for-user/{userName}")]
+    public async Task<ActionResult> GetRoleForUser([FromRoute] string userName)
     {
-        var roles = await _userManager.GetRolesAsync(user);
-        return Ok(roles);
+        var user = await _userManager.FindByNameAsync(userName);
+        if (user != null)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            return Ok(roles);
+        }
+
+        return NotFound();
+    }
+
+    [HttpGet]
+    [Route("is-user-in-role/{userName}")]
+    public async Task<ActionResult> IsUserInRole([FromRoute] string userName)
+    {
+        var user = await _userManager.FindByNameAsync(userName);
+        if (user != null)
+        {
+            var result = await _userManager.IsInRoleAsync(user, "Administrator");
+            return Ok(result);
+        }
+        return NotFound();
     }
 
     [HttpGet]

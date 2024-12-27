@@ -11,6 +11,7 @@ public class ModelMigrationList : MigrationBase
     {
         typeof(IdentityRoleIntKey),
         typeof(IdentityUserIntKey),
+        typeof(IdentityRoleClaimIntKey),
         typeof(IdentityUserClaimIntKey),
         typeof(IdentityUserLoginIntKey),
         typeof(IdentityUserRoleIntKey),

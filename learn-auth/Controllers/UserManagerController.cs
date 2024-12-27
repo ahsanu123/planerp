@@ -2,6 +2,7 @@ using Learn.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Learn.LearnController;
 
@@ -19,10 +20,48 @@ public class UserManagerController : Controller
     // - deleteUser
 
     private UserManager<IdentityUserIntKey> _userManager;
+    private SignInManager<IdentityUserIntKey> _signinManager;
 
-    public UserManagerController(UserManager<IdentityUserIntKey> userManager)
+    public UserManagerController(
+        UserManager<IdentityUserIntKey> userManager,
+        SignInManager<IdentityUserIntKey> signInManager
+    )
     {
         _userManager = userManager;
+        _signinManager = signInManager;
+    }
+
+    [HttpPost]
+    [Route("mock-authenticate")]
+    [AllowAnonymous]
+    public async Task<ActionResult> MockAuthenticate()
+    {
+        var mockUser = new IdentityUserIntKey
+        {
+            Id = 1,
+            UserName = "Ahsanu_Amala",
+            Email = "ahsanuamala@gmail.com",
+            EmailConfirmed = true,
+            SecurityStamp = Guid.NewGuid().ToString(),
+        };
+
+        IdentityUserIntKey? user = await _userManager.FindByEmailAsync(mockUser.Email);
+
+        if (user == null)
+        {
+            await _userManager.CreateAsync(mockUser);
+        }
+        await _signinManager.SignInAsync(user, true);
+
+        return Ok();
+    }
+
+    [HttpGet]
+    [Route("who-am-i")]
+    [AllowAnonymous]
+    public async Task<ActionResult> GetUserInformation()
+    {
+        return Ok(User.Claims.Select(claim => claim.Value).ToList());
     }
 
     [HttpPost]

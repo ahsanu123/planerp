@@ -15,14 +15,18 @@ builder.Services.AddControllers();
 
 builder
     .Services.AddIdentity<IdentityUserIntKey, IdentityRoleIntKey>()
-    .AddStandardCustomIdentityStores();
+    .AddRoles<IdentityRoleIntKey>()
+    .AddStandardCustomIdentityStores()
+    .AddClaimsPrincipalFactory<CustomUserClaimsPrincipalFactory>();
 
 builder.Services.AddIdentityCore<IdentityUserIntKey>();
 
 builder
     .Services.AddAuthentication(option =>
     {
-        option.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+        // option.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+
+        option.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     })
     .AddGoogle(option =>
@@ -30,12 +34,12 @@ builder
     })
     .AddCookie();
 
-builder.Services.ConfigureApplicationCookie(option =>
-{
-    option.LoginPath = "/signin-google";
-    option.LogoutPath = "/Identity/SignOut";
-    option.AccessDeniedPath = "/Identity/Forbidden";
-});
+// builder.Services.ConfigureApplicationCookie(option =>
+// {
+//     option.LoginPath = "/signin-google";
+//     option.LogoutPath = "/Identity/SignOut";
+//     option.AccessDeniedPath = "/Identity/Forbidden";
+// });
 
 builder.Services.AddAuthorization(option =>
 {
@@ -88,4 +92,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseFluentMigrator();
+app.AddDefaultRoles();
 app.Run();
