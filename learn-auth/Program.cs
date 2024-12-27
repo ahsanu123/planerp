@@ -93,5 +93,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseFluentMigrator();
-app.AddDefaultRoles();
+await app.AddDefaultRoles();
 app.Run();

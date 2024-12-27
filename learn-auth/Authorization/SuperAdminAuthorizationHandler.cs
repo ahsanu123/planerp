@@ -26,16 +26,19 @@ public class SuperAdminAuthorizationHandler
             );
         }
 
-        var currentUserEmail = context.User.Claims.First(claim => claim.Type == ClaimTypes.Email);
+        var currentUserEmail = context.User.Claims.FirstOrDefault(
+            claim => claim?.Type == ClaimTypes.Email,
+            null
+        );
 
-        if (String.Equals(requirement.Email, currentUserEmail.Value))
+        if (String.Equals(requirement.Email, currentUserEmail?.Value ?? ""))
         {
             context.Succeed(requirement);
         }
         else
         {
             _logger.LogInformation(
-                $"Email Miss Match, Super Admin Email : {requirement.Email}, User Email : {currentUserEmail.Value ?? "notfound"}"
+                $"Email Miss Match, Super Admin Email : {requirement.Email}, User Email : {currentUserEmail?.Value ?? "notfound"}"
             );
             context.Fail();
         }

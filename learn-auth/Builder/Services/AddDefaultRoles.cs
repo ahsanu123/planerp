@@ -5,7 +5,7 @@ namespace Learn.Services;
 
 public static class DefaultRolesBuilder
 {
-    public static IApplicationBuilder AddDefaultRoles(this IApplicationBuilder builder)
+    public static async Task<IApplicationBuilder> AddDefaultRoles(this IApplicationBuilder builder)
     {
         using var scope = builder.ApplicationServices.CreateScope();
 
@@ -21,15 +21,16 @@ public static class DefaultRolesBuilder
             "EuropeAdmin",
             "AsiaAdmin",
             "AmericanAdmin",
+            "AustralianAdmin",
         };
 
         foreach (var role in DefaultRoles)
         {
             var roleEntity = new IdentityRoleIntKey() { Name = role };
-            Task.Run(async () =>
-            {
+
+            var isExist = await roleManager.FindByNameAsync(role);
+            if (isExist == null)
                 await roleManager.CreateAsync(roleEntity);
-            });
         }
 
         return builder;

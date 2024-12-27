@@ -32,14 +32,4 @@ public class AuthorizedTestController : Controller
     {
         return Ok("Its Super Admin Secret !!!");
     }
-
-    [HttpGet]
-    [Route("env")]
-    public async Task<ActionResult> EnvVariable()
-    {
-        var superAdminEmail = Environment.GetEnvironmentVariable(
-            AuthorizationConstant.SuperAdminEmail
-        );
-        return Ok(superAdminEmail ?? "not found");
-    }
 }
