@@ -1,6 +1,0 @@
-@learn_auth_HostAddress = http://localhost:5136
-
-GET {{learn_auth_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

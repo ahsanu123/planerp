@@ -44,6 +44,14 @@ public class RoleManagerController : Controller
     }
 
     [HttpGet]
+    [Route("get-roles")]
+    public async Task<ActionResult> GetRoles()
+    {
+        var roles = _roleManager.Roles;
+        return Ok(roles);
+    }
+
+    [HttpGet]
     [Route("get-role")]
     public async Task<ActionResult> GetRole([FromQuery] int id)
     {
