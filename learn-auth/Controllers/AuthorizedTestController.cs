@@ -22,6 +22,24 @@ public class AuthorizedTestController : Controller
     [Authorize(Roles = RoleConstant.Administrator)]
     public async Task<ActionResult> AdministratorSecret()
     {
-        return Ok("Its Baker Administrator Secret!!!");
+        return Ok("Its Administrator Secret!!!");
+    }
+
+    [HttpGet]
+    [Route("super-admin-info")]
+    [Authorize(Policy = PolicyConstant.SuperAdmin)]
+    public async Task<ActionResult> SuperAdminSecret()
+    {
+        return Ok("Its Super Admin Secret !!!");
+    }
+
+    [HttpGet]
+    [Route("env")]
+    public async Task<ActionResult> EnvVariable()
+    {
+        var superAdminEmail = Environment.GetEnvironmentVariable(
+            AuthorizationConstant.SuperAdminEmail
+        );
+        return Ok(superAdminEmail ?? "not found");
     }
 }

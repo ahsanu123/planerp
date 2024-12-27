@@ -31,8 +31,6 @@ public class CustomUserClaimsPrincipalFactory
 
         foreach (var role in userRoles)
         {
-            Console.WriteLine("====================");
-            Console.WriteLine($"Role: {role}");
             identity.AddClaim(new Claim(ClaimTypes.Role, role));
         }
 

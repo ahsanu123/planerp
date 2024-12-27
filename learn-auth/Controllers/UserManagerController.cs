@@ -31,6 +31,14 @@ public class UserManagerController : Controller
         _signinManager = signInManager;
     }
 
+    [HttpGet]
+    [Route("sign-out")]
+    public async Task<ActionResult> SignOutUser()
+    {
+        await _signinManager.SignOutAsync();
+        return Ok();
+    }
+
     [HttpPost]
     [Route("mock-authenticate")]
     [AllowAnonymous]
@@ -61,7 +69,9 @@ public class UserManagerController : Controller
     [AllowAnonymous]
     public async Task<ActionResult> GetUserInformation()
     {
-        return Ok(User.Claims.Select(claim => claim.Value).ToList());
+        return Ok(
+            User.Claims.Select(claim => new { Type = claim.Type, Value = claim.Value }).ToList()
+        );
     }
 
     [HttpPost]

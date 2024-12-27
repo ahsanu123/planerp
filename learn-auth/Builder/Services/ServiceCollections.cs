@@ -1,7 +1,9 @@
+using Learn.AppAuthorization;
 using Learn.AppIdentity;
 using Learn.Model;
 using Learn.Repository;
 using Learn.StandardIdentity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace Learn.Services;
@@ -15,6 +17,8 @@ public static class ServiceCollections
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<IRoleRepository, RoleRepository>();
         services.AddTransient<IUserClaimRepository, UserClaimRepository>();
+
+        services.AddSingleton<IAuthorizationHandler, SuperAdminAuthorizationHandler>();
 
         return services;
     }

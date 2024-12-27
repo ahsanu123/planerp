@@ -98,7 +98,7 @@ public class RoleManagerController : Controller
         var user = await _userManager.FindByNameAsync(userName);
         if (user != null)
         {
-            var result = await _userManager.IsInRoleAsync(user, "Administrator");
+            var result = await _userManager.IsInRoleAsync(user, "Baker");
             return Ok(result);
         }
         return NotFound();

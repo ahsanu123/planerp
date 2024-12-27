@@ -1,3 +1,4 @@
+using Learn.AppAuthorization;
 using Learn.InternalMigration;
 using Learn.Model;
 using Learn.Services;
@@ -43,7 +44,7 @@ builder
 
 builder.Services.AddAuthorization(option =>
 {
-    // CustomAuthorizationPolicies.AddPolicies(option);
+    option.AddCustomPolicies();
 });
 
 builder.Services.AddFluentMigratorProvider(sqliteConnectionString);
