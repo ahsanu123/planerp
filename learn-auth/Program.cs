@@ -1,4 +1,5 @@
 using Learn.AppAuthorization;
+using Learn.Constant;
 using Learn.InternalMigration;
 using Learn.Model;
 using Learn.Services;
@@ -9,31 +10,41 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 var sqliteConnectionString = builder.Configuration.GetConnectionString("Sqlite");
 
 builder.Services.AddControllers();
 
 builder
-    .Services.AddIdentity<IdentityUserIntKey, IdentityRoleIntKey>()
-    .AddRoles<IdentityRoleIntKey>()
-    .AddStandardCustomIdentityStores()
-    .AddClaimsPrincipalFactory<CustomUserClaimsPrincipalFactory>();
-
-builder.Services.AddIdentityCore<IdentityUserIntKey>();
-
-builder
-    .Services.AddAuthentication(option =>
-    {
-        // option.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-
-        option.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    })
+    .Services.AddAuthentication()
     .AddGoogle(option =>
     {
+        option.ClientId = configuration[GoogleConstant.ClientId]!;
+        option.ClientSecret = configuration[GoogleConstant.ClientSecret]!;
     })
-    .AddCookie();
+    .AddCookie(IdentityConstants.BearerScheme);
+
+builder
+    .Services.AddIdentity<IdentityUserIntKey, IdentityRoleIntKey>(option =>
+    {
+        option.Password.RequireDigit = false;
+        option.Password.RequireLowercase = false;
+        option.Password.RequireUppercase = false;
+        option.Password.RequireNonAlphanumeric = false;
+        option.SignIn.RequireConfirmedAccount = false;
+    })
+    .AddRoles<IdentityRoleIntKey>()
+    .AddClaimsPrincipalFactory<CustomUserClaimsPrincipalFactory>()
+    .AddStandardCustomIdentityStores()
+    .AddDefaultTokenProviders();
+
+// builder
+//     .Services.AddDefaultIdentity<IdentityUserIntKey>()
+//     .AddRoles<IdentityRoleIntKey>()
+//     .AddStandardCustomIdentityStores()
+//     .AddClaimsPrincipalFactory<CustomUserClaimsPrincipalFactory>();
+
 
 // builder.Services.ConfigureApplicationCookie(option =>
 // {
@@ -52,7 +63,7 @@ builder.Services.AddFluentMigratorProvider(sqliteConnectionString);
 builder.Services.AddConfigurationProvider(builder.Configuration);
 builder.Services.AddServicesCollection();
 
-// builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
     // look at this https://github.com/domaindrivendev/Swashbuckle.AspNetCore?tab=readme-ov-file#add-security-definitions-and-requirements
@@ -90,6 +101,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapGroup("IdentityAccount").MapIdentityApi<IdentityUserIntKey>();
 app.MapControllers();
 
 app.UseFluentMigrator();

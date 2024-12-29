@@ -6,37 +6,507 @@ import {
   type OptionsLegacyParser,
 } from "@hey-api/client-fetch";
 import type {
-  GetUserManagerSignInData,
-  GetUserManagerSignInError,
-  GetUserManagerSignInResponse,
+  PostAccountLoginData,
+  PostAccountLoginError,
+  PostAccountLoginResponse,
+  GetAuthorizedTestBakerInfoError,
+  GetAuthorizedTestBakerInfoResponse,
+  GetAuthorizedTestBakerAdministratorError,
+  GetAuthorizedTestBakerAdministratorResponse,
+  GetAuthorizedTestSuperAdminInfoError,
+  GetAuthorizedTestSuperAdminInfoResponse,
+  PostIdentityAccountRegisterData,
+  PostIdentityAccountRegisterError,
+  PostIdentityAccountRegisterResponse,
+  PostIdentityAccountLoginData,
+  PostIdentityAccountLoginError,
+  PostIdentityAccountLoginResponse,
+  PostIdentityAccountRefreshData,
+  PostIdentityAccountRefreshError,
+  PostIdentityAccountRefreshResponse,
+  MapIdentityApiIdentityAccountConfirmEmailData,
+  MapIdentityApiIdentityAccountConfirmEmailError,
+  MapIdentityApiIdentityAccountConfirmEmailResponse,
+  PostIdentityAccountResendConfirmationEmailData,
+  PostIdentityAccountResendConfirmationEmailError,
+  PostIdentityAccountResendConfirmationEmailResponse,
+  PostIdentityAccountForgotPasswordData,
+  PostIdentityAccountForgotPasswordError,
+  PostIdentityAccountForgotPasswordResponse,
+  PostIdentityAccountResetPasswordData,
+  PostIdentityAccountResetPasswordError,
+  PostIdentityAccountResetPasswordResponse,
+  PostIdentityAccountManage2FaData,
+  PostIdentityAccountManage2FaError,
+  PostIdentityAccountManage2FaResponse,
+  GetIdentityAccountManageInfoError,
+  GetIdentityAccountManageInfoResponse,
+  PostIdentityAccountManageInfoData,
+  PostIdentityAccountManageInfoError,
+  PostIdentityAccountManageInfoResponse,
+  GetLoginInfoError,
+  GetLoginInfoResponse,
+  PostRoleManagerAddRoleForEmailByEmailData,
+  PostRoleManagerAddRoleForEmailByEmailError,
+  PostRoleManagerAddRoleForEmailByEmailResponse,
+  PostRoleManagerAddRoleForUserByUserNameData,
+  PostRoleManagerAddRoleForUserByUserNameError,
+  PostRoleManagerAddRoleForUserByUserNameResponse,
+  PostRoleManagerCreateRoleData,
+  PostRoleManagerCreateRoleError,
+  PostRoleManagerCreateRoleResponse,
+  GetRoleManagerGetRolesError,
+  GetRoleManagerGetRolesResponse,
+  GetRoleManagerGetRoleData,
+  GetRoleManagerGetRoleError,
+  GetRoleManagerGetRoleResponse,
+  GetRoleManagerGetRoleForEmailByEmailData,
+  GetRoleManagerGetRoleForEmailByEmailError,
+  GetRoleManagerGetRoleForEmailByEmailResponse,
+  GetRoleManagerGetRoleForUserByUserNameData,
+  GetRoleManagerGetRoleForUserByUserNameError,
+  GetRoleManagerGetRoleForUserByUserNameResponse,
+  GetRoleManagerIsUserInRoleByUserNameData,
+  GetRoleManagerIsUserInRoleByUserNameError,
+  GetRoleManagerIsUserInRoleByUserNameResponse,
+  GetRoleManagerGetUserForRoleError,
+  GetRoleManagerGetUserForRoleResponse,
+  PostRoleManagerUpdateRoleError,
+  PostRoleManagerUpdateRoleResponse,
+  DeleteRoleManagerDeleteRoleError,
+  DeleteRoleManagerDeleteRoleResponse,
   GetUserManagerSignOutError,
   GetUserManagerSignOutResponse,
+  PostUserManagerMockAuthenticateError,
+  PostUserManagerMockAuthenticateResponse,
+  GetUserManagerWhoAmIError,
+  GetUserManagerWhoAmIResponse,
+  PostUserManagerRefreshError,
+  PostUserManagerRefreshResponse,
+  PostUserManagerUserInfoData,
+  PostUserManagerUserInfoError,
+  PostUserManagerUserInfoResponse,
   PostUserManagerCreateUserData,
   PostUserManagerCreateUserError,
   PostUserManagerCreateUserResponse,
-  GetUserManagerGetUserData,
-  GetUserManagerGetUserError,
-  GetUserManagerGetUserResponse,
-  GetUserManagerSeedError,
-  GetUserManagerSeedResponse,
+  GetUserManagerGetUsersError,
+  GetUserManagerGetUsersResponse,
+  PostUserManagerUpdateUserError,
+  PostUserManagerUpdateUserResponse,
+  DeleteUserManagerDeleteUserError,
+  DeleteUserManagerDeleteUserResponse,
 } from "./types.gen";
 
 export const client = createClient(createConfig());
 
-export class UserManagerService {
-  public static getUserManagerSignIn<ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetUserManagerSignInData, ThrowOnError>
+export class AccountService {
+  public static postAccountLogin<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<PostAccountLoginData, ThrowOnError>
   ) {
-    return (options?.client ?? client).get<
-      GetUserManagerSignInResponse,
-      GetUserManagerSignInError,
+    return (options?.client ?? client).post<
+      PostAccountLoginResponse,
+      PostAccountLoginError,
       ThrowOnError
     >({
       ...options,
-      url: "/UserManager/sign-in",
+      url: "/Account/Login",
+    });
+  }
+}
+
+export class AuthorizedTestService {
+  public static getAuthorizedTestBakerInfo<
+    ThrowOnError extends boolean = false
+  >(options?: OptionsLegacyParser<unknown, ThrowOnError>) {
+    return (options?.client ?? client).get<
+      GetAuthorizedTestBakerInfoResponse,
+      GetAuthorizedTestBakerInfoError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/AuthorizedTest/baker-info",
     });
   }
 
+  public static getAuthorizedTestBakerAdministrator<
+    ThrowOnError extends boolean = false
+  >(options?: OptionsLegacyParser<unknown, ThrowOnError>) {
+    return (options?.client ?? client).get<
+      GetAuthorizedTestBakerAdministratorResponse,
+      GetAuthorizedTestBakerAdministratorError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/AuthorizedTest/baker-administrator",
+    });
+  }
+
+  public static getAuthorizedTestSuperAdminInfo<
+    ThrowOnError extends boolean = false
+  >(options?: OptionsLegacyParser<unknown, ThrowOnError>) {
+    return (options?.client ?? client).get<
+      GetAuthorizedTestSuperAdminInfoResponse,
+      GetAuthorizedTestSuperAdminInfoError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/AuthorizedTest/super-admin-info",
+    });
+  }
+}
+
+export class LearnAuthService {
+  public static postIdentityAccountRegister<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<PostIdentityAccountRegisterData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).post<
+      PostIdentityAccountRegisterResponse,
+      PostIdentityAccountRegisterError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/IdentityAccount/register",
+    });
+  }
+
+  public static postIdentityAccountLogin<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<PostIdentityAccountLoginData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).post<
+      PostIdentityAccountLoginResponse,
+      PostIdentityAccountLoginError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/IdentityAccount/login",
+    });
+  }
+
+  public static postIdentityAccountRefresh<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<PostIdentityAccountRefreshData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).post<
+      PostIdentityAccountRefreshResponse,
+      PostIdentityAccountRefreshError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/IdentityAccount/refresh",
+    });
+  }
+
+  public static mapIdentityApiIdentityAccountConfirmEmail<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<
+      MapIdentityApiIdentityAccountConfirmEmailData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).get<
+      MapIdentityApiIdentityAccountConfirmEmailResponse,
+      MapIdentityApiIdentityAccountConfirmEmailError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/IdentityAccount/confirmEmail",
+    });
+  }
+
+  public static postIdentityAccountResendConfirmationEmail<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<
+      PostIdentityAccountResendConfirmationEmailData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).post<
+      PostIdentityAccountResendConfirmationEmailResponse,
+      PostIdentityAccountResendConfirmationEmailError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/IdentityAccount/resendConfirmationEmail",
+    });
+  }
+
+  public static postIdentityAccountForgotPassword<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<
+      PostIdentityAccountForgotPasswordData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).post<
+      PostIdentityAccountForgotPasswordResponse,
+      PostIdentityAccountForgotPasswordError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/IdentityAccount/forgotPassword",
+    });
+  }
+
+  public static postIdentityAccountResetPassword<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<
+      PostIdentityAccountResetPasswordData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).post<
+      PostIdentityAccountResetPasswordResponse,
+      PostIdentityAccountResetPasswordError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/IdentityAccount/resetPassword",
+    });
+  }
+
+  public static postIdentityAccountManage2Fa<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<
+      PostIdentityAccountManage2FaData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).post<
+      PostIdentityAccountManage2FaResponse,
+      PostIdentityAccountManage2FaError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/IdentityAccount/manage/2fa",
+    });
+  }
+
+  public static getIdentityAccountManageInfo<
+    ThrowOnError extends boolean = false
+  >(options?: OptionsLegacyParser<unknown, ThrowOnError>) {
+    return (options?.client ?? client).get<
+      GetIdentityAccountManageInfoResponse,
+      GetIdentityAccountManageInfoError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/IdentityAccount/manage/info",
+    });
+  }
+
+  public static postIdentityAccountManageInfo<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<
+      PostIdentityAccountManageInfoData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).post<
+      PostIdentityAccountManageInfoResponse,
+      PostIdentityAccountManageInfoError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/IdentityAccount/manage/info",
+    });
+  }
+}
+
+export class LoginInfoService {
+  public static getLoginInfo<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>
+  ) {
+    return (options?.client ?? client).get<
+      GetLoginInfoResponse,
+      GetLoginInfoError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/LoginInfo",
+    });
+  }
+}
+
+export class RoleManagerService {
+  public static postRoleManagerAddRoleForEmailByEmail<
+    ThrowOnError extends boolean = false
+  >(
+    options: OptionsLegacyParser<
+      PostRoleManagerAddRoleForEmailByEmailData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).post<
+      PostRoleManagerAddRoleForEmailByEmailResponse,
+      PostRoleManagerAddRoleForEmailByEmailError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/RoleManager/add-role-for-email/{email}",
+    });
+  }
+
+  public static postRoleManagerAddRoleForUserByUserName<
+    ThrowOnError extends boolean = false
+  >(
+    options: OptionsLegacyParser<
+      PostRoleManagerAddRoleForUserByUserNameData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).post<
+      PostRoleManagerAddRoleForUserByUserNameResponse,
+      PostRoleManagerAddRoleForUserByUserNameError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/RoleManager/add-role-for-user/{userName}",
+    });
+  }
+
+  public static postRoleManagerCreateRole<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<PostRoleManagerCreateRoleData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).post<
+      PostRoleManagerCreateRoleResponse,
+      PostRoleManagerCreateRoleError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/RoleManager/create-role",
+    });
+  }
+
+  public static getRoleManagerGetRoles<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>
+  ) {
+    return (options?.client ?? client).get<
+      GetRoleManagerGetRolesResponse,
+      GetRoleManagerGetRolesError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/RoleManager/get-roles",
+    });
+  }
+
+  public static getRoleManagerGetRole<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetRoleManagerGetRoleData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).get<
+      GetRoleManagerGetRoleResponse,
+      GetRoleManagerGetRoleError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/RoleManager/get-role",
+    });
+  }
+
+  public static getRoleManagerGetRoleForEmailByEmail<
+    ThrowOnError extends boolean = false
+  >(
+    options: OptionsLegacyParser<
+      GetRoleManagerGetRoleForEmailByEmailData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).get<
+      GetRoleManagerGetRoleForEmailByEmailResponse,
+      GetRoleManagerGetRoleForEmailByEmailError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/RoleManager/get-role-for-email/{email}",
+    });
+  }
+
+  public static getRoleManagerGetRoleForUserByUserName<
+    ThrowOnError extends boolean = false
+  >(
+    options: OptionsLegacyParser<
+      GetRoleManagerGetRoleForUserByUserNameData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).get<
+      GetRoleManagerGetRoleForUserByUserNameResponse,
+      GetRoleManagerGetRoleForUserByUserNameError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/RoleManager/get-role-for-user/{userName}",
+    });
+  }
+
+  public static getRoleManagerIsUserInRoleByUserName<
+    ThrowOnError extends boolean = false
+  >(
+    options: OptionsLegacyParser<
+      GetRoleManagerIsUserInRoleByUserNameData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).get<
+      GetRoleManagerIsUserInRoleByUserNameResponse,
+      GetRoleManagerIsUserInRoleByUserNameError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/RoleManager/is-user-in-role/{userName}",
+    });
+  }
+
+  public static getRoleManagerGetUserForRole<
+    ThrowOnError extends boolean = false
+  >(options?: OptionsLegacyParser<unknown, ThrowOnError>) {
+    return (options?.client ?? client).get<
+      GetRoleManagerGetUserForRoleResponse,
+      GetRoleManagerGetUserForRoleError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/RoleManager/get-user-for-role",
+    });
+  }
+
+  public static postRoleManagerUpdateRole<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>
+  ) {
+    return (options?.client ?? client).post<
+      PostRoleManagerUpdateRoleResponse,
+      PostRoleManagerUpdateRoleError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/RoleManager/update-role",
+    });
+  }
+
+  public static deleteRoleManagerDeleteRole<
+    ThrowOnError extends boolean = false
+  >(options?: OptionsLegacyParser<unknown, ThrowOnError>) {
+    return (options?.client ?? client).delete<
+      DeleteRoleManagerDeleteRoleResponse,
+      DeleteRoleManagerDeleteRoleError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/RoleManager/delete-role",
+    });
+  }
+}
+
+export class UserManagerService {
   public static getUserManagerSignOut<ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>
   ) {
@@ -47,6 +517,58 @@ export class UserManagerService {
     >({
       ...options,
       url: "/UserManager/sign-out",
+    });
+  }
+
+  public static postUserManagerMockAuthenticate<
+    ThrowOnError extends boolean = false
+  >(options?: OptionsLegacyParser<unknown, ThrowOnError>) {
+    return (options?.client ?? client).post<
+      PostUserManagerMockAuthenticateResponse,
+      PostUserManagerMockAuthenticateError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/UserManager/mock-authenticate",
+    });
+  }
+
+  public static getUserManagerWhoAmI<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>
+  ) {
+    return (options?.client ?? client).get<
+      GetUserManagerWhoAmIResponse,
+      GetUserManagerWhoAmIError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/UserManager/who-am-i",
+    });
+  }
+
+  public static postUserManagerRefresh<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>
+  ) {
+    return (options?.client ?? client).post<
+      PostUserManagerRefreshResponse,
+      PostUserManagerRefreshError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/UserManager/refresh",
+    });
+  }
+
+  public static postUserManagerUserInfo<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<PostUserManagerUserInfoData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).post<
+      PostUserManagerUserInfoResponse,
+      PostUserManagerUserInfoError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/UserManager/user-info",
     });
   }
 
@@ -63,29 +585,42 @@ export class UserManagerService {
     });
   }
 
-  public static getUserManagerGetUser<ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetUserManagerGetUserData, ThrowOnError>
-  ) {
-    return (options?.client ?? client).get<
-      GetUserManagerGetUserResponse,
-      GetUserManagerGetUserError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/UserManager/get-user",
-    });
-  }
-
-  public static getUserManagerSeed<ThrowOnError extends boolean = false>(
+  public static getUserManagerGetUsers<ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>
   ) {
     return (options?.client ?? client).get<
-      GetUserManagerSeedResponse,
-      GetUserManagerSeedError,
+      GetUserManagerGetUsersResponse,
+      GetUserManagerGetUsersError,
       ThrowOnError
     >({
       ...options,
-      url: "/UserManager/seed",
+      url: "/UserManager/get-users",
+    });
+  }
+
+  public static postUserManagerUpdateUser<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>
+  ) {
+    return (options?.client ?? client).post<
+      PostUserManagerUpdateUserResponse,
+      PostUserManagerUpdateUserError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/UserManager/update-user",
+    });
+  }
+
+  public static deleteUserManagerDeleteUser<
+    ThrowOnError extends boolean = false
+  >(options?: OptionsLegacyParser<unknown, ThrowOnError>) {
+    return (options?.client ?? client).delete<
+      DeleteUserManagerDeleteUserResponse,
+      DeleteUserManagerDeleteUserError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/UserManager/delete-user",
     });
   }
 }

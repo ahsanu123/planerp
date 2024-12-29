@@ -37,6 +37,24 @@ public class RoleManagerController : Controller
     }
 
     [HttpPost]
+    [Route("add-role-for-email/{email}")]
+    public async Task<ActionResult> AddRoleForUserByEmail(
+        [FromRoute] string email,
+        [FromBody] string roleName
+    )
+    {
+        var role = await _roleManager.FindByNameAsync(roleName);
+        var user = await _userManager.FindByEmailAsync(email);
+        if (role != null && user != null)
+        {
+            var result = await _userManager.AddToRoleAsync(user, role.Name);
+            return Ok(result);
+        }
+
+        return NotFound();
+    }
+
+    [HttpPost]
     [Route("add-role-for-user/{userName}")]
     public async Task<ActionResult> AddRoleForUser(
         [FromRoute] string userName,
@@ -75,6 +93,20 @@ public class RoleManagerController : Controller
     public async Task<ActionResult> GetRole([FromQuery] int id)
     {
         return Ok();
+    }
+
+    [HttpGet]
+    [Route("get-role-for-email/{email}")]
+    public async Task<ActionResult> GetRoleForEmail([FromRoute] string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user != null)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            return Ok(roles);
+        }
+
+        return NotFound();
     }
 
     [HttpGet]

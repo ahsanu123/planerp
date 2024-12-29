@@ -20,6 +20,8 @@ public static class ServiceCollections
 
         services.AddSingleton<IAuthorizationHandler, SuperAdminAuthorizationHandler>();
 
+        services.AddSingleton<IEmailSender<IdentityUserIntKey>, ConsoleEmailSender>();
+
         return services;
     }
 }
