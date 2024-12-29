@@ -389,12 +389,9 @@ public class StandardUserStore<TUser, TRole>
         CancellationToken cancellationToken
     )
     {
-        var constraint = new Dictionary<string, string>
-        {
-            { nameof(IdentityUserLoginIntKey.LoginProvider), loginProvider },
-            { nameof(IdentityUserLoginIntKey.ProviderKey), providerKey },
-        };
-        var GetUserLogin_Query = new Query(nameof(IdentityUserLoginIntKey)).Where(constraint);
+        var GetUserLogin_Query = new Query(nameof(IdentityUserLoginIntKey))
+            .Where(nameof(IdentityUserLoginIntKey.LoginProvider), loginProvider)
+            .Where(nameof(IdentityUserLoginIntKey.ProviderKey), providerKey);
 
         IdentityUserLogin<int>? userLogin = null;
 
