@@ -111,6 +111,10 @@ export type PostAccountLoginResponse = unknown;
 
 export type PostAccountLoginError = unknown;
 
+export type PostAccountTryRedirectResponse = unknown;
+
+export type PostAccountTryRedirectError = unknown;
+
 export type GetAuthorizedTestBakerInfoResponse = unknown;
 
 export type GetAuthorizedTestBakerInfoError = unknown;

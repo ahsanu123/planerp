@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Learn.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +8,7 @@ namespace Learn.LearnController;
 
 [ApiController]
 [Route("[controller]")]
+[AllowAnonymous]
 public class LoginInfoController : Controller
 {
     private SignInManager<IdentityUserIntKey> _signinManager;
@@ -18,9 +20,11 @@ public class LoginInfoController : Controller
 
     [HttpGet]
     [AllowAnonymous]
+    [Route("ExternalLoginInfo")]
     public async Task<ActionResult> GetExternalLoginInfo()
     {
+        // var externalLogins = await _signinManager.GetExternalAuthenticationSchemesAsync();
         var externalLogins = await _signinManager.GetExternalLoginInfoAsync();
-        return Ok(externalLogins == null ? "no list" : externalLogins);
+        return Ok(externalLogins?.Principal.FindFirstValue(ClaimTypes.Email));
     }
 }

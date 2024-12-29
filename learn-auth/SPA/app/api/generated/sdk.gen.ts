@@ -9,6 +9,8 @@ import type {
   PostAccountLoginData,
   PostAccountLoginError,
   PostAccountLoginResponse,
+  PostAccountTryRedirectError,
+  PostAccountTryRedirectResponse,
   GetAuthorizedTestBakerInfoError,
   GetAuthorizedTestBakerInfoResponse,
   GetAuthorizedTestBakerAdministratorError,
@@ -110,6 +112,19 @@ export class AccountService {
     >({
       ...options,
       url: "/Account/Login",
+    });
+  }
+
+  public static postAccountTryRedirect<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>
+  ) {
+    return (options?.client ?? client).post<
+      PostAccountTryRedirectResponse,
+      PostAccountTryRedirectError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/Account/try-redirect",
     });
   }
 }

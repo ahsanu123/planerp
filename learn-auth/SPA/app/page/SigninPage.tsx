@@ -2,6 +2,8 @@ import { useFetcher } from "react-router";
 import type { Route } from "../+types/root";
 import { simpleFormGenerator } from "../component/SimpleFormGenerator";
 import "./SigninPage.css"
+import { AccountService } from "../api/generated";
+import { BASE_URL } from "../api/constant";
 
 export async function clientAction({
   params,
@@ -20,6 +22,22 @@ const signinModel = {
 export default function SignupPage() {
 
   const fetcher = useFetcher()
+
+  const onGmailButtonClicked = async () => {
+    await AccountService.postAccountTryRedirect({
+      baseUrl: BASE_URL,
+      mode: 'no-cors',
+    })
+    // window.open("http://localhost:5136/Account/Login?returnUrl=%2Fsignin-google")
+    // const data = await AccountService.postAccountLogin({
+    //   baseUrl: BASE_URL,
+    //   mode: 'no-cors',
+    //   query: {
+    //     returnUrl: "/signin-google"
+    //   }
+    // })
+    // console.log("return data: ", data);
+  }
 
   const internalSignin = (
     <fetcher.Form
@@ -47,7 +65,9 @@ export default function SignupPage() {
       <p>
         or Signin With
       </p>
-      <button>
+      <button
+        onClick={() => onGmailButtonClicked()}
+      >
         Gmail
       </button>
 

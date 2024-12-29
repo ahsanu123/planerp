@@ -14,16 +14,20 @@ var configuration = builder.Configuration;
 
 var sqliteConnectionString = builder.Configuration.GetConnectionString("Sqlite");
 
+// builder.Services.AddHttpsRedirection(opts =>
+// {
+//     opts.HttpsPort = 5136;
+// });
 builder.Services.AddControllers();
 
 builder
     .Services.AddAuthentication()
+    .AddCookie(IdentityConstants.BearerScheme)
     .AddGoogle(option =>
     {
         option.ClientId = configuration[GoogleConstant.ClientId]!;
         option.ClientSecret = configuration[GoogleConstant.ClientSecret]!;
-    })
-    .AddCookie(IdentityConstants.BearerScheme);
+    });
 
 builder
     .Services.AddIdentity<IdentityUserIntKey, IdentityRoleIntKey>(option =>
@@ -97,6 +101,15 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseCors(option =>
+{
+    option.AllowAnyOrigin();
+    option.AllowAnyMethod();
+    option.AllowAnyHeader();
+});
+
+app.UseCookiePolicy(new CookiePolicyOptions() { MinimumSameSitePolicy = SameSiteMode.None });
 
 app.UseAuthentication();
 app.UseAuthorization();
