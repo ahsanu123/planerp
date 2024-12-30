@@ -101,15 +101,26 @@ export type TwoFactorResponse = {
   isMachineRemembered: boolean;
 };
 
-export type PostAccountLoginData = {
+export type GetAccountExternalLoginData = {
+  query?: {
+    provider?: string;
+    returnUrl?: string;
+  };
+};
+
+export type GetAccountExternalLoginResponse = unknown;
+
+export type GetAccountExternalLoginError = unknown;
+
+export type GetAccountExternalLoginCallbackData = {
   query?: {
     returnUrl?: string;
   };
 };
 
-export type PostAccountLoginResponse = unknown;
+export type GetAccountExternalLoginCallbackResponse = unknown;
 
-export type PostAccountLoginError = unknown;
+export type GetAccountExternalLoginCallbackError = unknown;
 
 export type PostAccountTryRedirectResponse = unknown;
 
@@ -219,10 +230,6 @@ export type PostIdentityAccountManageInfoError =
   | HttpValidationProblemDetails
   | unknown;
 
-export type GetLoginInfoResponse = unknown;
-
-export type GetLoginInfoError = unknown;
-
 export type PostRoleManagerAddRoleForEmailByEmailData = {
   body?: string;
   path: {
@@ -312,10 +319,6 @@ export type DeleteRoleManagerDeleteRoleError = unknown;
 export type GetUserManagerSignOutResponse = unknown;
 
 export type GetUserManagerSignOutError = unknown;
-
-export type PostUserManagerMockAuthenticateResponse = unknown;
-
-export type PostUserManagerMockAuthenticateError = unknown;
 
 export type GetUserManagerWhoAmIResponse = unknown;
 

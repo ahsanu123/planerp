@@ -6,9 +6,12 @@ import {
   type OptionsLegacyParser,
 } from "@hey-api/client-fetch";
 import type {
-  PostAccountLoginData,
-  PostAccountLoginError,
-  PostAccountLoginResponse,
+  GetAccountExternalLoginData,
+  GetAccountExternalLoginError,
+  GetAccountExternalLoginResponse,
+  GetAccountExternalLoginCallbackData,
+  GetAccountExternalLoginCallbackError,
+  GetAccountExternalLoginCallbackResponse,
   PostAccountTryRedirectError,
   PostAccountTryRedirectResponse,
   GetAuthorizedTestBakerInfoError,
@@ -46,8 +49,6 @@ import type {
   PostIdentityAccountManageInfoData,
   PostIdentityAccountManageInfoError,
   PostIdentityAccountManageInfoResponse,
-  GetLoginInfoError,
-  GetLoginInfoResponse,
   PostRoleManagerAddRoleForEmailByEmailData,
   PostRoleManagerAddRoleForEmailByEmailError,
   PostRoleManagerAddRoleForEmailByEmailResponse,
@@ -79,8 +80,6 @@ import type {
   DeleteRoleManagerDeleteRoleResponse,
   GetUserManagerSignOutError,
   GetUserManagerSignOutResponse,
-  PostUserManagerMockAuthenticateError,
-  PostUserManagerMockAuthenticateResponse,
   GetUserManagerWhoAmIError,
   GetUserManagerWhoAmIResponse,
   PostUserManagerRefreshError,
@@ -102,16 +101,34 @@ import type {
 export const client = createClient(createConfig());
 
 export class AccountService {
-  public static postAccountLogin<ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<PostAccountLoginData, ThrowOnError>
+  public static getAccountExternalLogin<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetAccountExternalLoginData, ThrowOnError>
   ) {
-    return (options?.client ?? client).post<
-      PostAccountLoginResponse,
-      PostAccountLoginError,
+    return (options?.client ?? client).get<
+      GetAccountExternalLoginResponse,
+      GetAccountExternalLoginError,
       ThrowOnError
     >({
       ...options,
-      url: "/Account/Login",
+      url: "/Account/ExternalLogin",
+    });
+  }
+
+  public static getAccountExternalLoginCallback<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<
+      GetAccountExternalLoginCallbackData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).get<
+      GetAccountExternalLoginCallbackResponse,
+      GetAccountExternalLoginCallbackError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/Account/ExternalLoginCallback",
     });
   }
 
@@ -336,21 +353,6 @@ export class LearnAuthService {
   }
 }
 
-export class LoginInfoService {
-  public static getLoginInfo<ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>
-  ) {
-    return (options?.client ?? client).get<
-      GetLoginInfoResponse,
-      GetLoginInfoError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/LoginInfo",
-    });
-  }
-}
-
 export class RoleManagerService {
   public static postRoleManagerAddRoleForEmailByEmail<
     ThrowOnError extends boolean = false
@@ -532,19 +534,6 @@ export class UserManagerService {
     >({
       ...options,
       url: "/UserManager/sign-out",
-    });
-  }
-
-  public static postUserManagerMockAuthenticate<
-    ThrowOnError extends boolean = false
-  >(options?: OptionsLegacyParser<unknown, ThrowOnError>) {
-    return (options?.client ?? client).post<
-      PostUserManagerMockAuthenticateResponse,
-      PostUserManagerMockAuthenticateError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/UserManager/mock-authenticate",
     });
   }
 

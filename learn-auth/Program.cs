@@ -4,8 +4,6 @@ using Learn.InternalMigration;
 using Learn.Model;
 using Learn.Services;
 using Learn.StandardIdentity;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 
@@ -14,10 +12,6 @@ var configuration = builder.Configuration;
 
 var sqliteConnectionString = builder.Configuration.GetConnectionString("Sqlite");
 
-// builder.Services.AddHttpsRedirection(opts =>
-// {
-//     opts.HttpsPort = 5136;
-// });
 builder.Services.AddControllers();
 
 builder
@@ -43,26 +37,12 @@ builder
     .AddStandardCustomIdentityStores()
     .AddDefaultTokenProviders();
 
-// builder
-//     .Services.AddDefaultIdentity<IdentityUserIntKey>()
-//     .AddRoles<IdentityRoleIntKey>()
-//     .AddStandardCustomIdentityStores()
-//     .AddClaimsPrincipalFactory<CustomUserClaimsPrincipalFactory>();
-
-
-// builder.Services.ConfigureApplicationCookie(option =>
-// {
-//     option.LoginPath = "/signin-google";
-//     option.LogoutPath = "/Identity/SignOut";
-//     option.AccessDeniedPath = "/Identity/Forbidden";
-// });
-
 builder.Services.AddAuthorization(option =>
 {
     option.AddCustomPolicies();
 });
 
-builder.Services.AddFluentMigratorProvider(sqliteConnectionString);
+builder.Services.AddFluentMigratorProvider(sqliteConnectionString!);
 
 builder.Services.AddConfigurationProvider(builder.Configuration);
 builder.Services.AddServicesCollection();
@@ -85,6 +65,15 @@ builder.Services.AddSwaggerGen(option =>
     );
 });
 
+builder.Services.AddCors(option =>
+{
+    option.AddDefaultPolicy(policy =>
+    {
+        policy.AllowCredentials();
+        policy.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -102,12 +91,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseCors(option =>
-{
-    option.AllowAnyOrigin();
-    option.AllowAnyMethod();
-    option.AllowAnyHeader();
-});
+app.UseCors();
 
 app.UseCookiePolicy(new CookiePolicyOptions() { MinimumSameSitePolicy = SameSiteMode.None });
 

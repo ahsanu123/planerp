@@ -39,39 +39,6 @@ public class UserManagerController : Controller
         return Ok();
     }
 
-    [HttpPost]
-    [Route("mock-authenticate")]
-    [AllowAnonymous]
-    public async Task<ActionResult> MockAuthenticate()
-    {
-        var mockUser = new IdentityUserIntKey
-        {
-            Id = 1,
-            Email = "email@gmail.com",
-            EmailConfirmed = true,
-            SecurityStamp = Guid.NewGuid().ToString(),
-        };
-        // var mockUser = new IdentityUserIntKey
-        // {
-        //     Id = 1,
-        //     UserName = "Ahsanu_Amala",
-        //     Email = "ahsanuamala@gmail.com",
-        //     EmailConfirmed = true,
-        //     SecurityStamp = Guid.NewGuid().ToString(),
-        // };
-
-        IdentityUserIntKey? user = await _userManager.FindByEmailAsync(mockUser.Email);
-
-        if (user == null)
-        {
-            await _userManager.CreateAsync(mockUser);
-        }
-        // await _signinManager.SignInAsync(user, true);
-        await _signinManager.PasswordSignInAsync(user, "emailgmail", true, false);
-
-        return Ok();
-    }
-
     [HttpGet]
     [Route("who-am-i")]
     [AllowAnonymous]

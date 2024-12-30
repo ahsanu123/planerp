@@ -14,7 +14,7 @@ public class AuthorizedTestController : Controller
     [Authorize(Roles = RoleConstant.Baker)]
     public async Task<ActionResult> BakerSecret()
     {
-        return Ok("Its Baker Secret!!!");
+        return Ok(new { Value = 22, Info = "Baker Secret" });
     }
 
     [HttpGet]
