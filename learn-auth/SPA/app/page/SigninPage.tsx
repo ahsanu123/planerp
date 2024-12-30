@@ -3,7 +3,7 @@ import type { Route } from "../+types/root";
 import { simpleFormGenerator } from "../component/SimpleFormGenerator";
 import "./SigninPage.css"
 import { AccountService, AuthorizedTestService, UserManagerService } from "../api/generated";
-import { BASE_URL } from "../api/constant";
+import { BASE_URL, defaultClient, externalAuthenticationGoogleProviderUrl } from "../api/constant";
 import { createClient } from "@hey-api/client-fetch";
 
 export async function clientAction({
@@ -30,20 +30,8 @@ export default function SignupPage() {
 
   const fetcher = useFetcher()
 
-  const onGmailButtonClicked = async () => {
-    await AccountService.postAccountTryRedirect({
-      baseUrl: BASE_URL,
-      mode: 'no-cors',
-    })
-    // window.open("http://localhost:5136/Account/Login?returnUrl=%2Fsignin-google")
-    // const data = await AccountService.postAccountLogin({
-    //   baseUrl: BASE_URL,
-    //   mode: 'no-cors',
-    //   query: {
-    //     returnUrl: "/signin-google"
-    //   }
-    // })
-    // console.log("return data: ", data);
+  const handleGmailLogin = async () => {
+    window.location.href = externalAuthenticationGoogleProviderUrl
   }
 
   const internalSignin = (
@@ -73,7 +61,7 @@ export default function SignupPage() {
         or Signin With
       </p>
       <button
-        onClick={() => onGmailButtonClicked()}
+        onClick={() => handleGmailLogin()}
       >
         Gmail
       </button>

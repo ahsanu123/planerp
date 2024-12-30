@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Learn.Constant;
 using Learn.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -22,10 +23,42 @@ public class CustomUserClaimsPrincipalFactory
         _roleManager = roleManager;
     }
 
+    private bool _isSuperAdmin(string userEmail)
+    {
+        bool isSuperAdmin = false;
+        var superAdminEmail = Environment.GetEnvironmentVariable(
+            AuthorizationConstant.SuperAdminEmail
+        );
+
+        Console.WriteLine(
+            $"SuperAdminEmail: {superAdminEmail?.ToLower()}, userEmail: {userEmail.ToLower()}"
+        );
+        if (String.Equals(superAdminEmail?.ToLower(), userEmail.ToLower()))
+            isSuperAdmin = true;
+
+        return isSuperAdmin;
+    }
+
     public override async Task<ClaimsPrincipal> CreateAsync(IdentityUserIntKey user)
     {
         var principal = await base.CreateAsync(user);
         var identity = new ClaimsIdentity();
+
+        if (_isSuperAdmin(user.Email))
+        {
+            var superAdminRole = await _roleManager.FindByNameAsync(
+                AuthorizationConstant.SuperAdminClaim
+            );
+            if (superAdminRole != null)
+                await _userManager.AddToRoleAsync(user, superAdminRole.Name!);
+        }
+        if (
+            !_isSuperAdmin(user.Email)
+            && (await _userManager.IsInRoleAsync(user, AuthorizationConstant.SuperAdminClaim))
+        )
+        {
+            await _userManager.RemoveFromRoleAsync(user, AuthorizationConstant.SuperAdminClaim);
+        }
 
         var userRoles = await _userManager.GetRolesAsync(user);
 

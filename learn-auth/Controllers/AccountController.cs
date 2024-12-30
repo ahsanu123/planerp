@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Learn.Constant;
 using Learn.Model;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -80,14 +81,6 @@ public class AccountController : Controller
 
         await _signinManager.SignInAsync(user, isPersistent: true);
 
-        return Ok();
-    }
-
-    [HttpPost]
-    [Route("try-redirect")]
-    public async Task<ActionResult> TryRedirect()
-    {
-        // Response.Redirect("http://localhost:5173/page/signin-page");
-        return Redirect("http://localhost:5173/");
+        return Redirect(AuthorizationConstant.FrontendRedirectUrl);
     }
 }

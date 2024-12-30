@@ -6,9 +6,9 @@ export default function PageContainer() {
 
     <>
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => navigate("/")}
       >
-        👈 Back
+        🏡 Back Home
       </button>
 
       <Outlet />

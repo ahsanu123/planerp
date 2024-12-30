@@ -8,6 +8,9 @@ export enum AppRoutes {
   SigninPage = "signin-page",
   SignupPage = "signup-page",
   ListUserPage = "list-user-page",
+  SuperAdminPage = "super-admin-page",
+  CampaignManagerPage = "campaign-manager-page",
+  NotAllowedOrNotFound = "not-allowed-or-not-found",
 }
 
 export default [
@@ -20,5 +23,8 @@ export default [
     route(`${AppRoutes.PagePrefix}${AppRoutes.SignupPage}`, "./page/SignupPage.tsx"),
     route(`${AppRoutes.PagePrefix}${AppRoutes.SigninPage}`, "./page/SigninPage.tsx"),
     route(`${AppRoutes.PagePrefix}${AppRoutes.ListUserPage}`, "./page/ListUser.tsx"),
+    route(`${AppRoutes.PagePrefix}${AppRoutes.SuperAdminPage}`, "./page/SuperAdminPage.tsx"),
+    route(`${AppRoutes.PagePrefix}${AppRoutes.CampaignManagerPage}`, "./page/CampaignManagerPage.tsx"),
+    route(`${AppRoutes.PagePrefix}${AppRoutes.NotAllowedOrNotFound}`, "./page/NotAllowedOrNotFoundPage.tsx"),
   ])
 ] satisfies RouteConfig;

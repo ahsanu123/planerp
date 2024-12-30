@@ -13,15 +13,11 @@ public static class DefaultRolesBuilder
 
         var DefaultRoles = new List<string>()
         {
-            "Baker",
-            "Administrator",
-            "Seller",
-            "Waitress",
+            "SuperAdmin",
             "GeneralAdmin",
             "EuropeAdmin",
             "AsiaAdmin",
             "AmericanAdmin",
-            "AustralianAdmin",
         };
 
         foreach (var role in DefaultRoles)

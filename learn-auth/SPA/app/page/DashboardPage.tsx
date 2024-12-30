@@ -1,52 +1,103 @@
 import { AppRoutes } from "../routes"
-import { Link, Navigate, useNavigate } from "react-router"
+import { useNavigate } from "react-router"
 import './DashboardPage.css'
-import CampaignCardManager from "../component/CampaignCardManager";
-import { AuthorizedTestService, RoleManagerService, UserManagerService } from "../api/generated";
-import { BASE_URL, defaultClient } from "../api/constant";
+import type { Route } from "./+types/DashboardPage";
+import { UserClaimTypes, whoami } from "../model/authorization-model";
+import { roleButtons, type RoleButtonKeys } from "../model/role-button-model";
+import { UserManagerService } from "../api/generated";
+import { defaultClient } from "../api/constant";
 
-export default function DashboardPage() {
+export async function clientLoader() {
+  return await whoami()
+}
+
+export default function DashboardPage({
+  loaderData
+}: Route.ComponentProps) {
+
   const navigate = useNavigate();
-  const onBakerInfoClicked = async () => {
-    const res = await AuthorizedTestService.getAuthorizedTestBakerInfo({
-      client: defaultClient
-    })
 
-    console.log(res.data)
+  const handleSignOut = async () => {
+    await UserManagerService.getUserManagerSignOut({ client: defaultClient })
+    navigate("/")
   }
+
+  const roles = loaderData.filter((claim) => claim.type === UserClaimTypes.role).map((role) => role.value)
+
+  const renderButton = (role: RoleButtonKeys) => (
+    <>
+      {roleButtons[role].map((item, index) => (
+        <li
+          key={`key-${index}`}
+        >
+          <button
+            onClick={() => navigate(item.path)}
+          >
+            {item.displayName}
+          </button>
+        </li>
+      ))}
+    </>
+  )
+  const renderRoleButtons = () => (
+    <>
+      Accessible Route:
+      <ul>
+        {roles.map((item) => renderButton(item))}
+      </ul>
+    </>
+  )
+
   return (
     <>
       <h1>📣 Campaign Manager</h1>
-      <p>ASPNET Core Identity Basic POC</p>
+      <sub>ASPNET Core Identity Basic POC</sub>
 
-      <div
-        className="login-container"
-      >
-        <button
-          onClick={() => navigate(`${AppRoutes.PagePrefix}${AppRoutes.SigninPage}`)}
-        >
-          Signin
-        </button>
-
-        <button
-          onClick={() => navigate(`${AppRoutes.PagePrefix}${AppRoutes.SignupPage}`)}
-        >
-          Signup
-        </button>
-      </div>
       <hr />
 
-      <button
-        onClick={() => onBakerInfoClicked()}
-      >
-        Baker Info
-      </button>
+      {loaderData.length > 0 ? (
+        <>
+          <sub>
+            ♟️ {roles.map((role) => `${role}, `)}
+          </sub>
+          <h5
+            style={{ marginTop: 0 }}
+          >
+            Welcome {" "}
+            {loaderData.find((claim) => claim.type === UserClaimTypes.name)?.value}
+          </h5>
+          {renderRoleButtons()}
+        </>
+      )
+        : (
+          <div
+            className="login-container"
+          >
+            <button
+              onClick={() => navigate(`${AppRoutes.PagePrefix}${AppRoutes.SigninPage}`)}
+            >
+              Signin
+            </button>
 
-      <p>
-        if user already signin, remove those signup/signin button with signout button and display what user can access below
-      </p>
+            <button
+              onClick={() => navigate(`${AppRoutes.PagePrefix}${AppRoutes.SignupPage}`)}
+            >
+              Signup
+            </button>
+          </div>
+        )
+      }
 
-      <CampaignCardManager />
+      <hr />
+
+      {loaderData.length > 0 && (
+        <button
+          onClick={() => handleSignOut()}
+        >
+          Sign Out
+        </button>
+      )}
+
     </>
   )
 }
