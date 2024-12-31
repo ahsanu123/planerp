@@ -63,7 +63,12 @@ public class AccountController : Controller
 
         var email = loginInfo.Principal.FindFirstValue(ClaimTypes.Email);
         var username = loginInfo.Principal.FindFirstValue(ClaimTypes.Name);
+
         var user = await _userManager.FindByEmailAsync(email);
+        var isUserNameExists = await _userManager.FindByNameAsync(username) != null;
+
+        if (isUserNameExists && user == null)
+            username += new Random().Next(1000, 9999);
 
         if (user == null)
         {

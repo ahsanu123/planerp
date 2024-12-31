@@ -10,10 +10,9 @@ public static class ServiceCollections
     public static IServiceCollection AddServicesCollection(this IServiceCollection services)
     {
         services.AddSingleton<ISqliteConnectionProvider, SqliteConnectionProvider>();
+        services.AddSingleton<IAuthorizationHandler, SuperAdminAuthorizationHandler>();
 
         services.AddTransient<ICampaignRepository, CampaignRepository>();
-
-        services.AddSingleton<IAuthorizationHandler, SuperAdminAuthorizationHandler>();
 
         return services;
     }

@@ -1,14 +1,8 @@
 using Learn.Model;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Learn.StandardIdentity;
 
-/// <summary>
-/// TODO:
-/// Create static function that register all service
-/// to activate user store and user role class
-/// </summary>
 public static class StandardUserStoreExtensionBuilder
 {
     /// <summary>

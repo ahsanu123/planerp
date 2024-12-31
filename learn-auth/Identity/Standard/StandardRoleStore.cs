@@ -6,7 +6,6 @@ using Learn.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using SqlKata;
-using static Learn.Extension.UtilityExtension;
 
 namespace Learn.StandardIdentity;
 
