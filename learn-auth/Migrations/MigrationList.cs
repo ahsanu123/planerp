@@ -16,6 +16,7 @@ public class ModelMigrationList : MigrationBase
         typeof(IdentityUserLoginIntKey),
         typeof(IdentityUserRoleIntKey),
         typeof(IdentityUserTokenIntKey),
+        typeof(CampaignModel),
     };
 
     public static List<string> listExcludedType = new List<string> { nameof(System.Collections) };

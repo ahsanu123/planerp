@@ -1,4 +1,4 @@
-import { UserManagerService } from "../api/generated";
+import { UserInfoService, UserManagerService } from "../api/generated";
 import { AppRoutes } from "../routes";
 import { redirect } from "react-router";
 import { defaultClient } from "../api/constant";
@@ -27,7 +27,7 @@ export interface AuthenticationStatus {
 export type UserClaims = Array<UserClaim>
 
 export async function whoami() {
-  const whoami = await UserManagerService.getUserManagerWhoAmI({ client: defaultClient })
+  const whoami = await UserInfoService.getUserInfoWhoAmI({ client: defaultClient })
   return whoami.data as UserClaims
 }
 

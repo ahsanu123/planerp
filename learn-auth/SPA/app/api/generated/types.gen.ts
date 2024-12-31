@@ -7,6 +7,13 @@ export type AccessTokenResponse = {
   refreshToken: string | null;
 };
 
+export type CampaignModel = {
+  id?: number;
+  type?: string | null;
+  title?: string | null;
+  description?: string | null;
+};
+
 export type ForgotPasswordRequest = {
   email: string | null;
 };
@@ -122,21 +129,25 @@ export type GetAccountExternalLoginCallbackResponse = unknown;
 
 export type GetAccountExternalLoginCallbackError = unknown;
 
-export type PostAccountTryRedirectResponse = unknown;
+export type PostCampaignCreateCampaignData = {
+  body?: CampaignModel;
+};
 
-export type PostAccountTryRedirectError = unknown;
+export type PostCampaignCreateCampaignResponse = unknown;
 
-export type GetAuthorizedTestBakerInfoResponse = unknown;
+export type PostCampaignCreateCampaignError = unknown;
 
-export type GetAuthorizedTestBakerInfoError = unknown;
+export type PostCampaignUpdateCampaignData = {
+  body?: CampaignModel;
+};
 
-export type GetAuthorizedTestBakerAdministratorResponse = unknown;
+export type PostCampaignUpdateCampaignResponse = unknown;
 
-export type GetAuthorizedTestBakerAdministratorError = unknown;
+export type PostCampaignUpdateCampaignError = unknown;
 
-export type GetAuthorizedTestSuperAdminInfoResponse = unknown;
+export type GetCampaignCampaignsResponse = unknown;
 
-export type GetAuthorizedTestSuperAdminInfoError = unknown;
+export type GetCampaignCampaignsError = unknown;
 
 export type PostIdentityAccountRegisterData = {
   body?: RegisterRequest;
@@ -264,16 +275,6 @@ export type GetRoleManagerGetRolesResponse = unknown;
 
 export type GetRoleManagerGetRolesError = unknown;
 
-export type GetRoleManagerGetRoleData = {
-  query?: {
-    id?: number;
-  };
-};
-
-export type GetRoleManagerGetRoleResponse = unknown;
-
-export type GetRoleManagerGetRoleError = unknown;
-
 export type GetRoleManagerGetRoleForEmailByEmailData = {
   path: {
     email: string;
@@ -294,49 +295,40 @@ export type GetRoleManagerGetRoleForUserByUserNameResponse = unknown;
 
 export type GetRoleManagerGetRoleForUserByUserNameError = unknown;
 
-export type GetRoleManagerIsUserInRoleByUserNameData = {
-  path: {
-    userName: string;
+export type GetRoleManagerIsUserInRoleData = {
+  query?: {
+    roleName?: string;
+    userName?: string;
   };
 };
 
-export type GetRoleManagerIsUserInRoleByUserNameResponse = unknown;
+export type GetRoleManagerIsUserInRoleResponse = unknown;
 
-export type GetRoleManagerIsUserInRoleByUserNameError = unknown;
+export type GetRoleManagerIsUserInRoleError = unknown;
+
+export type GetRoleManagerGetUserForRoleData = {
+  query?: {
+    roleName?: string;
+  };
+};
 
 export type GetRoleManagerGetUserForRoleResponse = unknown;
 
 export type GetRoleManagerGetUserForRoleError = unknown;
 
-export type PostRoleManagerUpdateRoleResponse = unknown;
+export type GetUserInfoWhoAmIResponse = unknown;
 
-export type PostRoleManagerUpdateRoleError = unknown;
+export type GetUserInfoWhoAmIError = unknown;
 
-export type DeleteRoleManagerDeleteRoleResponse = unknown;
-
-export type DeleteRoleManagerDeleteRoleError = unknown;
-
-export type GetUserManagerSignOutResponse = unknown;
-
-export type GetUserManagerSignOutError = unknown;
-
-export type GetUserManagerWhoAmIResponse = unknown;
-
-export type GetUserManagerWhoAmIError = unknown;
-
-export type PostUserManagerRefreshResponse = unknown;
-
-export type PostUserManagerRefreshError = unknown;
-
-export type PostUserManagerUserInfoData = {
+export type PostUserManagerUserDetailData = {
   query?: {
     id?: string;
   };
 };
 
-export type PostUserManagerUserInfoResponse = unknown;
+export type PostUserManagerUserDetailResponse = unknown;
 
-export type PostUserManagerUserInfoError = unknown;
+export type PostUserManagerUserDetailError = unknown;
 
 export type PostUserManagerCreateUserData = {
   body?: IdentityUserIntKey;
@@ -346,14 +338,26 @@ export type PostUserManagerCreateUserResponse = unknown;
 
 export type PostUserManagerCreateUserError = unknown;
 
-export type GetUserManagerGetUsersResponse = unknown;
+export type GetUserManagerListUsersResponse = unknown;
 
-export type GetUserManagerGetUsersError = unknown;
+export type GetUserManagerListUsersError = unknown;
+
+export type PostUserManagerUpdateUserData = {
+  body?: IdentityUserIntKey;
+};
 
 export type PostUserManagerUpdateUserResponse = unknown;
 
 export type PostUserManagerUpdateUserError = unknown;
 
+export type DeleteUserManagerDeleteUserData = {
+  body?: IdentityUserIntKey;
+};
+
 export type DeleteUserManagerDeleteUserResponse = unknown;
 
 export type DeleteUserManagerDeleteUserError = unknown;
+
+export type GetUserManagerSignOutResponse = unknown;
+
+export type GetUserManagerSignOutError = unknown;

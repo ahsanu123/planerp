@@ -1,8 +1,6 @@
 using System.Security.Claims;
 using Learn.Constant;
 using Learn.Model;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -68,7 +66,8 @@ public class AccountController : Controller
         var user = await _userManager.FindByEmailAsync(email);
 
         if (user == null)
-            await _userManager.CreateAsync(
+        {
+            var createResult = await _userManager.CreateAsync(
                 new IdentityUserIntKey
                 {
                     UserName = username,
@@ -76,6 +75,9 @@ public class AccountController : Controller
                     EmailConfirmed = true,
                 }
             );
+            if (!createResult.Succeeded)
+                return BadRequest(createResult.Errors);
+        }
 
         user = await _userManager.FindByEmailAsync(email);
 

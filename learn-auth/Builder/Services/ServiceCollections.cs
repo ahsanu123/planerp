@@ -17,6 +17,7 @@ public static class ServiceCollections
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<IRoleRepository, RoleRepository>();
         services.AddTransient<IUserClaimRepository, UserClaimRepository>();
+        services.AddTransient<ICampaignRepository, CampaignRepository>();
 
         services.AddSingleton<IAuthorizationHandler, SuperAdminAuthorizationHandler>();
 

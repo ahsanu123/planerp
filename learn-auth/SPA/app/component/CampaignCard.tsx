@@ -1,13 +1,23 @@
-import { Link, Navigate, useNavigate } from "react-router"
 import "./CampaignCard.css"
+import type { CampaignModel } from "../api/generated"
 
-export default function CampaignCard() {
-  const campaignDescription = "if user already signin, remove those signup/signin button and display what user can access here"
+interface CampaignCardProps {
+  data: CampaignModel
+  onChange: (description: string, data: CampaignModel) => void
+  onSave: (data: CampaignModel) => void
+}
+
+export default function CampaignCard(props: CampaignCardProps) {
+  const {
+    data,
+    onChange,
+    onSave
+  } = props;
   return (
     <div
       className="campaign-card"
     >
-      <h4> 🌏  Asia Campaign Card</h4>
+      <h4> 🌏 {data.title}</h4>
       <sub>
         Short Description 🌎 🌏 🌍
       </sub>
@@ -15,13 +25,15 @@ export default function CampaignCard() {
       <hr />
 
       <textarea
-        onChange={() => undefined}
+        onChange={(target) => onChange(target.target.value, data)}
         id="textarea"
         rows={8}
-        value={campaignDescription}
+        value={data.description ?? ""}
       />
 
-      <button>
+      <button
+        onClick={() => onSave(data)}
+      >
         Save
       </button>
 

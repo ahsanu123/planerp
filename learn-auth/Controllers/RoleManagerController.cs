@@ -1,3 +1,4 @@
+using Learn.Constant;
 using Learn.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -7,33 +8,19 @@ namespace Learn.LearnController;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize(Policy = AuthorizationConstant.SuperAdminClaim)]
 public class RoleManagerController : Controller
 {
-    // TODO: Implement This Endpoint
-    // - addRoleForUser
-    // - createRole
-    // - getRole
-    // - getRoleForUser
-    // - getUserForRole
-    // - updateRole
-    // - deleteRole
-
     private RoleManager<IdentityRoleIntKey> _roleManager;
     private UserManager<IdentityUserIntKey> _userManager;
-    private IRoleStore<IdentityRoleIntKey> _roleStore;
-    private IUserStore<IdentityUserIntKey> _userStore;
 
     public RoleManagerController(
         RoleManager<IdentityRoleIntKey> roleManager,
-        UserManager<IdentityUserIntKey> userManager,
-        IRoleStore<IdentityRoleIntKey> roleStore,
-        IUserStore<IdentityUserIntKey> userStore
+        UserManager<IdentityUserIntKey> userManager
     )
     {
         _roleManager = roleManager;
         _userManager = userManager;
-        _roleStore = roleStore;
-        _userStore = userStore;
     }
 
     [HttpPost]
@@ -89,13 +76,6 @@ public class RoleManagerController : Controller
     }
 
     [HttpGet]
-    [Route("get-role")]
-    public async Task<ActionResult> GetRole([FromQuery] int id)
-    {
-        return Ok();
-    }
-
-    [HttpGet]
     [Route("get-role-for-email/{email}")]
     public async Task<ActionResult> GetRoleForEmail([FromRoute] string email)
     {
@@ -124,13 +104,20 @@ public class RoleManagerController : Controller
     }
 
     [HttpGet]
-    [Route("is-user-in-role/{userName}")]
-    public async Task<ActionResult> IsUserInRole([FromRoute] string userName)
+    [Route("is-user-in-role")]
+    public async Task<ActionResult> IsUserInRole(
+        [FromQuery] string userName,
+        [FromQuery] string roleName
+    )
     {
+        var role = await _roleManager.FindByNameAsync(roleName);
+        if (role == null)
+            return NotFound();
+
         var user = await _userManager.FindByNameAsync(userName);
         if (user != null)
         {
-            var result = await _userManager.IsInRoleAsync(user, "Baker");
+            var result = await _userManager.IsInRoleAsync(user, role.Name!);
             return Ok(result);
         }
         return NotFound();
@@ -138,23 +125,13 @@ public class RoleManagerController : Controller
 
     [HttpGet]
     [Route("get-user-for-role")]
-    public async Task<ActionResult> GetUserForRole()
+    public async Task<ActionResult> GetUserForRole([FromQuery] string roleName)
     {
-        return Ok();
-    }
+        var role = await _roleManager.FindByNameAsync(roleName);
+        if (role == null)
+            return NotFound();
 
-    [HttpPost]
-    [Route("update-role")]
-    public async Task<ActionResult> UpdateRole()
-    {
-        return Ok();
-    }
-
-    [HttpDelete]
-    [Route("delete-role")]
-    [Authorize(Roles = "Administrator")]
-    public async Task<ActionResult> DeleteRole()
-    {
-        return Ok();
+        var users = await _userManager.GetUsersInRoleAsync(role.Name);
+        return Ok(users);
     }
 }

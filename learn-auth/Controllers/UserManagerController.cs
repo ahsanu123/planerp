@@ -1,3 +1,4 @@
+using Learn.Constant;
 using Learn.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -8,17 +9,9 @@ namespace Learn.LearnController;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize]
+[Authorize(Policy = AuthorizationConstant.SuperAdminClaim)]
 public class UserManagerController : Controller
 {
-    // TODO: Implement This Endpoint
-    // - refresh
-    // - info
-    // - createUser
-    // - getUsers
-    // - updateUser
-    // - deleteUser
-
     private UserManager<IdentityUserIntKey> _userManager;
     private SignInManager<IdentityUserIntKey> _signinManager;
 
@@ -31,34 +24,9 @@ public class UserManagerController : Controller
         _signinManager = signInManager;
     }
 
-    [HttpGet]
-    [Route("sign-out")]
-    public async Task<ActionResult> SignOutUser()
-    {
-        await _signinManager.SignOutAsync();
-        return Ok();
-    }
-
-    [HttpGet]
-    [Route("who-am-i")]
-    [AllowAnonymous]
-    public async Task<ActionResult> GetUserInformation()
-    {
-        return Ok(
-            User.Claims.Select(claim => new { Type = claim.Type, Value = claim.Value }).ToList()
-        );
-    }
-
     [HttpPost]
-    [Route("refresh")]
-    public async Task<ActionResult> RefreshToken()
-    {
-        return Ok();
-    }
-
-    [HttpPost]
-    [Route("user-info")]
-    public async Task<ActionResult> GetUserInfo([FromQuery] string id)
+    [Route("user-detail")]
+    public async Task<ActionResult> GetUserDetail([FromQuery] string id)
     {
         var user = _userManager.FindByIdAsync(id);
         return Ok(user);
@@ -73,7 +41,7 @@ public class UserManagerController : Controller
     }
 
     [HttpGet]
-    [Route("get-users")]
+    [Route("list-users")]
     public async Task<ActionResult> GetAllUser()
     {
         var users = _userManager.Users;
@@ -82,15 +50,26 @@ public class UserManagerController : Controller
 
     [HttpPost]
     [Route("update-user")]
-    public async Task<ActionResult> UpdateUser()
+    public async Task<ActionResult> UpdateUser([FromBody] IdentityUserIntKey user)
     {
-        return Ok();
+        var result = await _userManager.UpdateAsync(user);
+        return Ok(result);
     }
 
     [HttpDelete]
     [Route("delete-user")]
-    public async Task<ActionResult> DeleteUser()
+    public async Task<ActionResult> DeleteUser([FromBody] IdentityUserIntKey user)
     {
+        var result = await _userManager.DeleteAsync(user);
+        return Ok(result);
+    }
+
+    [HttpGet]
+    [Route("sign-out")]
+    [AllowAnonymous]
+    public async Task<ActionResult> SignOutUser()
+    {
+        await _signinManager.SignOutAsync();
         return Ok();
     }
 }

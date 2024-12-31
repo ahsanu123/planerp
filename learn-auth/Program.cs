@@ -26,6 +26,8 @@ builder
 builder
     .Services.AddIdentity<IdentityUserIntKey, IdentityRoleIntKey>(option =>
     {
+        option.User.AllowedUserNameCharacters =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ ";
         option.Password.RequireDigit = false;
         option.Password.RequireLowercase = false;
         option.Password.RequireUppercase = false;
@@ -70,6 +72,8 @@ builder.Services.AddCors(option =>
     option.AddDefaultPolicy(policy =>
     {
         policy.AllowCredentials();
+        policy.AllowAnyMethod();
+        policy.AllowAnyHeader();
         policy.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
     });
 });

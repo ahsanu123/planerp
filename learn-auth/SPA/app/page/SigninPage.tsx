@@ -2,7 +2,7 @@ import { useFetcher } from "react-router";
 import type { Route } from "../+types/root";
 import { simpleFormGenerator } from "../component/SimpleFormGenerator";
 import "./SigninPage.css"
-import { AccountService, AuthorizedTestService, UserManagerService } from "../api/generated";
+import { AccountService, UserManagerService } from "../api/generated";
 import { BASE_URL, defaultClient, externalAuthenticationGoogleProviderUrl } from "../api/constant";
 import { createClient } from "@hey-api/client-fetch";
 
@@ -14,12 +14,6 @@ export async function clientAction({
   // formData.forEach((item, key) => console.log(`key: ${key}, value: ${item}`))
   // console.log("form data: ", formData)
   // console.log("params: ", params)
-
-  const res = await AuthorizedTestService.getAuthorizedTestBakerInfo({ method: 'GET' });
-  console.log("response: ", res)
-  console.log(res.response.status)
-  const data = await res.response.json()
-
 }
 
 const signinModel = {
