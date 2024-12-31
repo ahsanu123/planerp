@@ -22,6 +22,7 @@ export default function DashboardPage({
     navigate("/")
   }
 
+  const emails = loaderData.filter((claim) => claim.type === UserClaimTypes.email).map((role) => role.value as string)
   const roles = loaderData.filter((claim) => claim.type === UserClaimTypes.role).map((role) => role.value)
 
   const renderButton = (role: RoleButtonKeys) => (
@@ -58,6 +59,7 @@ export default function DashboardPage({
       {loaderData.length > 0 ? (
         <>
           <sub>
+            📧 {emails.map((email) => `${email}, `)}
             ♟️ {roles.map((role) => `${role}, `)}
           </sub>
           <h5

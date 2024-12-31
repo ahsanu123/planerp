@@ -72,6 +72,9 @@ import type {
   GetRoleManagerGetUserForRoleData,
   GetRoleManagerGetUserForRoleError,
   GetRoleManagerGetUserForRoleResponse,
+  PostRoleManagerRemoveRoleForUserByUserNameData,
+  PostRoleManagerRemoveRoleForUserByUserNameError,
+  PostRoleManagerRemoveRoleForUserByUserNameResponse,
   GetUserInfoWhoAmIError,
   GetUserInfoWhoAmIResponse,
   PostUserManagerUserDetailData,
@@ -467,6 +470,24 @@ export class RoleManagerService {
     >({
       ...options,
       url: "/RoleManager/get-user-for-role",
+    });
+  }
+
+  public static postRoleManagerRemoveRoleForUserByUserName<
+    ThrowOnError extends boolean = false
+  >(
+    options: OptionsLegacyParser<
+      PostRoleManagerRemoveRoleForUserByUserNameData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).post<
+      PostRoleManagerRemoveRoleForUserByUserNameResponse,
+      PostRoleManagerRemoveRoleForUserByUserNameError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/RoleManager/remove-role-for-user/{userName}",
     });
   }
 }

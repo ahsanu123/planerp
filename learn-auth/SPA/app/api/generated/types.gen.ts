@@ -316,6 +316,17 @@ export type GetRoleManagerGetUserForRoleResponse = unknown;
 
 export type GetRoleManagerGetUserForRoleError = unknown;
 
+export type PostRoleManagerRemoveRoleForUserByUserNameData = {
+  body?: string;
+  path: {
+    userName: string;
+  };
+};
+
+export type PostRoleManagerRemoveRoleForUserByUserNameResponse = unknown;
+
+export type PostRoleManagerRemoveRoleForUserByUserNameError = unknown;
+
 export type GetUserInfoWhoAmIResponse = unknown;
 
 export type GetUserInfoWhoAmIError = unknown;

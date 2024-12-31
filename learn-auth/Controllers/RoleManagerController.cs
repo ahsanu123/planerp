@@ -42,6 +42,24 @@ public class RoleManagerController : Controller
     }
 
     [HttpPost]
+    [Route("remove-role-for-user/{userName}")]
+    public async Task<ActionResult> RemoveRoleForUser(
+        [FromRoute] string userName,
+        [FromBody] string roleName
+    )
+    {
+        var role = await _roleManager.FindByNameAsync(roleName);
+        var user = await _userManager.FindByNameAsync(userName);
+        if (role != null && user != null)
+        {
+            var result = await _userManager.RemoveFromRoleAsync(user, role.Name);
+            return Ok(result);
+        }
+
+        return NotFound();
+    }
+
+    [HttpPost]
     [Route("add-role-for-user/{userName}")]
     public async Task<ActionResult> AddRoleForUser(
         [FromRoute] string userName,
