@@ -10,7 +10,7 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
-var sqliteConnectionString = builder.Configuration.GetConnectionString("Sqlite");
+var sqliteConnectionString = configuration.GetConnectionString("Sqlite");
 
 builder.Services.AddControllers();
 
@@ -46,13 +46,14 @@ builder.Services.AddAuthorization(option =>
 
 builder.Services.AddFluentMigratorProvider(sqliteConnectionString!);
 
-builder.Services.AddConfigurationProvider(builder.Configuration);
+builder.Services.AddConfigurationProvider(configuration);
 builder.Services.AddServicesCollection();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
-    // look at this https://github.com/domaindrivendev/Swashbuckle.AspNetCore?tab=readme-ov-file#add-security-definitions-and-requirements
+    // look at this
+    // https://github.com/domaindrivendev/Swashbuckle.AspNetCore?tab=readme-ov-file#add-security-definitions-and-requirements
     option.AddSecurityDefinition(
         "Bearer",
         new OpenApiSecurityScheme
@@ -102,7 +103,6 @@ app.UseCookiePolicy(new CookiePolicyOptions() { MinimumSameSitePolicy = SameSite
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGroup("IdentityAccount").MapIdentityApi<IdentityUserIntKey>();
 app.MapControllers();
 
 app.UseFluentMigrator();

@@ -67,8 +67,6 @@ public class CampaignRepository : ICampaignRepository
 
         var getAllCampaign_Query = new Query(nameof(CampaignModel));
 
-        claims.ForEach(claim => Console.WriteLine(claim.Value));
-
         if (claims.Any(claim => claim.Value == RoleConstant.GeneralAdmin))
         {
             await CreateConnection(async conn =>
@@ -82,7 +80,6 @@ public class CampaignRepository : ICampaignRepository
             {
                 foreach (var role in claims)
                 {
-                    Console.WriteLine($"NOT GENERAL ADMIN: {role.Value}");
                     var GetCampaignByType_Query = new Query(nameof(CampaignModel)).Where(
                         nameof(CampaignModel.Type),
                         role.Value
