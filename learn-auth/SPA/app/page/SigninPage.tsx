@@ -2,18 +2,12 @@ import { useFetcher } from "react-router";
 import type { Route } from "../+types/root";
 import { simpleFormGenerator } from "../component/SimpleFormGenerator";
 import "./SigninPage.css"
-import { AccountService, UserManagerService } from "../api/generated";
-import { BASE_URL, defaultClient, externalAuthenticationGoogleProviderUrl } from "../api/constant";
-import { createClient } from "@hey-api/client-fetch";
+import { externalAuthenticationUrlBuilder, ExternalLoginProvider } from "../api/constant";
 
 export async function clientAction({
   params,
   request
 }: Route.ActionArgs) {
-  // const formData = await request.formData()
-  // formData.forEach((item, key) => console.log(`key: ${key}, value: ${item}`))
-  // console.log("form data: ", formData)
-  // console.log("params: ", params)
 }
 
 const signinModel = {
@@ -24,9 +18,10 @@ export default function SignupPage() {
 
   const fetcher = useFetcher()
 
-  const handleGmailLogin = async () => {
-    window.location.href = externalAuthenticationGoogleProviderUrl
+  const handleLogin = async (provider: ExternalLoginProvider) => {
+    window.location.href = externalAuthenticationUrlBuilder(provider)
   }
+
 
   const internalSignin = (
     <fetcher.Form
@@ -51,21 +46,20 @@ export default function SignupPage() {
 
   const externalSignin = (
     <>
-      <p>
-        or Signin With
-      </p>
       <button
-        onClick={() => handleGmailLogin()}
+        onClick={() => handleLogin(ExternalLoginProvider.Google)}
       >
         Gmail
       </button>
 
-      <button>
+      <button
+        onClick={() => handleLogin(ExternalLoginProvider.Github)}
+      >
         Github
       </button>
 
       <button>
-        Microsoft
+        ✏️ Microsoft (TODO)
       </button>
     </>
   );
@@ -77,9 +71,9 @@ export default function SignupPage() {
       <div
         className="signin-container"
       >
-        <div>
-          {internalSignin}
-        </div>
+        {/* <div> */}
+        {/*   {internalSignin} */}
+        {/* </div> */}
 
         <div
           className="external-signin"

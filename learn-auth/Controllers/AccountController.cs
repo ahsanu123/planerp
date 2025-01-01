@@ -4,6 +4,7 @@ using Learn.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Learn.LearnController;
 
@@ -89,5 +90,16 @@ public class AccountController : Controller
         await _signinManager.SignInAsync(user, isPersistent: true);
 
         return Redirect(AuthorizationConstant.FrontendRedirectUrl);
+    }
+
+    [HttpGet]
+    [Route("external-authentication-provider-info")]
+    [Authorize(Policy = AuthorizationConstant.SuperAdminClaim)]
+    public async Task<ActionResult> GetExternalAuthenticationProviderInfo()
+    {
+        var schemes = await _signinManager.GetExternalAuthenticationSchemesAsync();
+        var providers = schemes.Select(scheme => scheme.DisplayName).ToList();
+
+        return Ok(providers);
     }
 }

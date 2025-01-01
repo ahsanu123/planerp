@@ -17,11 +17,7 @@ builder.Services.AddControllers();
 builder
     .Services.AddAuthentication()
     .AddCookie(IdentityConstants.BearerScheme)
-    .AddGoogle(option =>
-    {
-        option.ClientId = configuration[GoogleConstant.ClientId]!;
-        option.ClientSecret = configuration[GoogleConstant.ClientSecret]!;
-    });
+    .AddExternalAuthenticationProvider(configuration);
 
 builder
     .Services.AddIdentity<IdentityUserIntKey, IdentityRoleIntKey>(option =>

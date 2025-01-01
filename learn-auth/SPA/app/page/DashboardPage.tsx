@@ -81,11 +81,6 @@ export default function DashboardPage({
               Signin
             </button>
 
-            <button
-              onClick={() => navigate(`${AppRoutes.PagePrefix}${AppRoutes.SignupPage}`)}
-            >
-              Signup
-            </button>
           </div>
         )
       }
