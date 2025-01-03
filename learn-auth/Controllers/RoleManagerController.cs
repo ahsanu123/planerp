@@ -9,13 +9,10 @@ namespace AMS.AmpasController;
 // [Authorize(Policy = AuthorizationConstant.SuperAdminClaim)]
 public class RoleManagerController : Controller
 {
-    private RoleManager<IdentityRoleIntKey> _roleManager;
-    private UserManager<IdentityUserIntKey> _userManager;
+    private RoleManager<Role> _roleManager;
+    private UserManager<User> _userManager;
 
-    public RoleManagerController(
-        RoleManager<IdentityRoleIntKey> roleManager,
-        UserManager<IdentityUserIntKey> userManager
-    )
+    public RoleManagerController(RoleManager<Role> roleManager, UserManager<User> userManager)
     {
         _roleManager = roleManager;
         _userManager = userManager;
@@ -77,7 +74,7 @@ public class RoleManagerController : Controller
 
     [HttpPost]
     [Route("create-role")]
-    public async Task<ActionResult> CreateRole([FromBody] IdentityRoleIntKey role)
+    public async Task<ActionResult> CreateRole([FromBody] Role role)
     {
         var result = await _roleManager.CreateAsync(role);
         return Ok(result);
@@ -85,7 +82,7 @@ public class RoleManagerController : Controller
 
     [HttpGet]
     [Route("get-roles")]
-    public async Task<ActionResult> GetRoles()
+    public ActionResult GetRoles()
     {
         var roles = _roleManager.Roles;
         return Ok(roles);

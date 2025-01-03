@@ -10,7 +10,7 @@ public static class DefaultRolesBuilder
     {
         using var scope = builder.ApplicationServices.CreateScope();
 
-        var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRoleIntKey>>();
+        var roleManager = scope.ServiceProvider.GetService<RoleManager<Role>>();
 
         var DefaultRoles = new List<string>()
         {
@@ -21,7 +21,7 @@ public static class DefaultRolesBuilder
 
         foreach (var role in DefaultRoles)
         {
-            var roleEntity = new IdentityRoleIntKey() { Name = role };
+            var roleEntity = new Role() { Name = role };
 
             var isExist = await roleManager.FindByNameAsync(role);
             if (isExist == null)

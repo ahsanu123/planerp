@@ -6,15 +6,14 @@ using Microsoft.Extensions.Options;
 
 namespace AMS.StandardIdentity;
 
-public class CustomUserClaimsPrincipalFactory
-    : UserClaimsPrincipalFactory<IdentityUserIntKey, IdentityRoleIntKey>
+public class CustomUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<User, Role>
 {
-    private UserManager<IdentityUserIntKey> _userManager;
-    private RoleManager<IdentityRoleIntKey> _roleManager;
+    private UserManager<User> _userManager;
+    private RoleManager<Role> _roleManager;
 
     public CustomUserClaimsPrincipalFactory(
-        UserManager<IdentityUserIntKey> userManager,
-        RoleManager<IdentityRoleIntKey> roleManager,
+        UserManager<User> userManager,
+        RoleManager<Role> roleManager,
         IOptions<IdentityOptions> options
     )
         : base(userManager, roleManager, options)
@@ -39,7 +38,7 @@ public class CustomUserClaimsPrincipalFactory
         return isSuperAdmin;
     }
 
-    public override async Task<ClaimsPrincipal> CreateAsync(IdentityUserIntKey user)
+    public override async Task<ClaimsPrincipal> CreateAsync(User user)
     {
         var principal = await base.CreateAsync(user);
         var identity = new ClaimsIdentity();

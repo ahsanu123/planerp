@@ -12,13 +12,10 @@ namespace AMS.AmpasController;
 [Route("[controller]")]
 public class AccountController : Controller
 {
-    private SignInManager<IdentityUserIntKey> _signinManager;
-    private UserManager<IdentityUserIntKey> _userManager;
+    private SignInManager<User> _signinManager;
+    private UserManager<User> _userManager;
 
-    public AccountController(
-        SignInManager<IdentityUserIntKey> signinManager,
-        UserManager<IdentityUserIntKey> userManager
-    )
+    public AccountController(SignInManager<User> signinManager, UserManager<User> userManager)
     {
         _signinManager = signinManager;
         _userManager = userManager;
@@ -74,7 +71,7 @@ public class AccountController : Controller
         if (user == null)
         {
             var createResult = await _userManager.CreateAsync(
-                new IdentityUserIntKey
+                new User
                 {
                     UserName = username,
                     Email = email,

@@ -12,14 +12,8 @@ public static class StandardUserStoreExtensionBuilder
     /// <returns></returns>
     public static IdentityBuilder AddStandardCustomIdentityStores(this IdentityBuilder builder)
     {
-        builder.Services.AddScoped<
-            IUserStore<IdentityUserIntKey>,
-            StandardUserStore<IdentityUserIntKey, IdentityRoleIntKey>
-        >();
-        builder.Services.AddScoped<
-            IRoleStore<IdentityRoleIntKey>,
-            StandardRoleStore<IdentityRoleIntKey>
-        >();
+        builder.Services.AddScoped<IUserStore<User>, StandardUserStore<User, Role>>();
+        builder.Services.AddScoped<IRoleStore<Role>, StandardRoleStore<Role>>();
         return builder;
     }
 }

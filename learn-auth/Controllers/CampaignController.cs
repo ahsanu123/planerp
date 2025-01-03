@@ -1,8 +1,6 @@
 using System.Security.Claims;
-using AMS.Constant;
 using AMS.Model;
 using AMS.Repository;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,12 +14,9 @@ namespace AMS.AmpasController;
 public class CampaignController : Controller
 {
     private ICampaignRepository _campaignRepo;
-    private UserManager<IdentityUserIntKey> _userManager;
+    private UserManager<User> _userManager;
 
-    public CampaignController(
-        ICampaignRepository campaignRepository,
-        UserManager<IdentityUserIntKey> userManager
-    )
+    public CampaignController(ICampaignRepository campaignRepository, UserManager<User> userManager)
     {
         _campaignRepo = campaignRepository;
         _userManager = userManager;

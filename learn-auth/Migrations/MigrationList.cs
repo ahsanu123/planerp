@@ -9,13 +9,13 @@ public class ModelMigrationList : MigrationBase
 {
     private List<Type> listModel = new List<Type>
     {
-        typeof(IdentityRoleIntKey),
-        typeof(IdentityUserIntKey),
-        typeof(IdentityRoleClaimIntKey),
-        typeof(IdentityUserClaimIntKey),
-        typeof(IdentityUserLoginIntKey),
-        typeof(IdentityUserRoleIntKey),
-        typeof(IdentityUserTokenIntKey),
+        typeof(Role),
+        typeof(User),
+        typeof(RoleClaim),
+        typeof(Model.UserClaim),
+        typeof(UserLogin),
+        typeof(UserRole),
+        typeof(UserToken),
         typeof(CampaignModel),
     };
 

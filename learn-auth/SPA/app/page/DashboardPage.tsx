@@ -1,4 +1,3 @@
-import { AppRoutes } from "../routes"
 import { useNavigate } from "react-router"
 import type { Route } from "./+types/DashboardPage";
 import { UserClaimTypes, whoami } from "../model/authorization-model";
@@ -73,6 +72,9 @@ export default function DashboardPage({
     </>
   )
 
+  const refreshPage = () => {
+    window.location.reload()
+  }
 
   return (
     <div
@@ -87,6 +89,17 @@ export default function DashboardPage({
 
         <div>
           <Clock />
+          <button
+            onClick={() => refreshPage()}
+            style={{
+              border: "0px",
+              backgroundColor: "transparent",
+              top: "10px",
+              float: "right"
+            }}
+          >
+            ⚡
+          </button>
         </div>
 
       </header>

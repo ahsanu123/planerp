@@ -13,13 +13,10 @@ public class LocalAccountController : Controller
     // Login
     // Logout
 
-    private SignInManager<IdentityUserIntKey> _signinManager;
-    private UserManager<IdentityUserIntKey> _userManager;
+    private SignInManager<User> _signinManager;
+    private UserManager<User> _userManager;
 
-    public LocalAccountController(
-        SignInManager<IdentityUserIntKey> signInManager,
-        UserManager<IdentityUserIntKey> userManager
-    )
+    public LocalAccountController(SignInManager<User> signInManager, UserManager<User> userManager)
     {
         _signinManager = signInManager;
         _userManager = userManager;
@@ -27,10 +24,7 @@ public class LocalAccountController : Controller
 
     [HttpPost]
     [Route("register")]
-    public async Task<ActionResult> Register(
-        [FromBody] IdentityUserIntKey user,
-        [FromQuery] string password
-    )
+    public async Task<ActionResult> Register([FromBody] User user, [FromQuery] string password)
     {
         var result = await _userManager.CreateAsync(user, password);
         return Ok(result);

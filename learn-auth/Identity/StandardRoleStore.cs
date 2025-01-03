@@ -38,14 +38,12 @@ public class StandardRoleStore<TRole>
 
     private async Task<IEnumerable<TRole>> ListRole()
     {
-        var GetRoles_Query = new Query(nameof(IdentityRoleIntKey));
+        var GetRoles_Query = new Query(nameof(Role));
 
         IEnumerable<TRole>? roles = null;
         await CreateConnection(async conn =>
         {
-            roles =
-                (await conn.QuerySqlKataAsync<IdentityRoleIntKey>(GetRoles_Query))
-                as IEnumerable<TRole>;
+            roles = (await conn.QuerySqlKataAsync<Role>(GetRoles_Query)) as IEnumerable<TRole>;
         });
 
         return roles;
@@ -64,22 +62,20 @@ public class StandardRoleStore<TRole>
 
         var constraint = new Dictionary<string, string>
         {
-            { nameof(IdentityRoleClaimIntKey.ClaimType), roleClaim.ClaimType },
-            { nameof(IdentityRoleClaimIntKey.ClaimValue), roleClaim.ClaimValue },
-            { nameof(IdentityRoleClaimIntKey.RoleId), role.Id.ToString() },
+            { nameof(RoleClaim.ClaimType), roleClaim.ClaimType },
+            { nameof(RoleClaim.ClaimValue), roleClaim.ClaimValue },
+            { nameof(RoleClaim.RoleId), role.Id.ToString() },
         };
-        var CheckIfClaimAlreadyExists_Query = new Query(nameof(IdentityRoleClaimIntKey)).Where(
-            constraint
-        );
+        var CheckIfClaimAlreadyExists_Query = new Query(nameof(RoleClaim)).Where(constraint);
 
         await CreateConnection(async conn =>
         {
-            var roleClaimInDb = await conn.QuerySingleSqlKataAsync<IdentityRoleClaimIntKey>(
+            var roleClaimInDb = await conn.QuerySingleSqlKataAsync<RoleClaim>(
                 CheckIfClaimAlreadyExists_Query
             );
             if (roleClaimInDb == null)
             {
-                await conn.InsertToDatabase(roleClaim, true, typeof(IdentityRoleClaimIntKey));
+                await conn.InsertToDatabase(roleClaim, true, typeof(RoleClaim));
             }
         });
     }
@@ -101,21 +97,17 @@ public class StandardRoleStore<TRole>
     {
         TRole? roleInDb = null;
 
-        var CheckIfRoleAlreadyExist_Query = new Query(nameof(IdentityRoleIntKey)).Where(
-            nameof(IdentityRoleIntKey.NormalizedName),
+        var CheckIfRoleAlreadyExist_Query = new Query(nameof(Role)).Where(
+            nameof(Role.NormalizedName),
             role.NormalizedName
         );
         await CreateConnection(async conn =>
         {
             roleInDb =
-                (
-                    await conn.QuerySingleSqlKataAsync<IdentityRoleIntKey>(
-                        CheckIfRoleAlreadyExist_Query
-                    )
-                ) as TRole;
+                (await conn.QuerySingleSqlKataAsync<Role>(CheckIfRoleAlreadyExist_Query)) as TRole;
             if (roleInDb == null)
             {
-                await conn.InsertToDatabase(role, true, typeof(IdentityRoleIntKey));
+                await conn.InsertToDatabase(role, true, typeof(Role));
             }
         });
 
@@ -127,9 +119,7 @@ public class StandardRoleStore<TRole>
         CancellationToken cancellationToken = default
     )
     {
-        var DeleteRole_Query = new Query(nameof(IdentityRoleIntKey))
-            .Where(nameof(IdentityRoleIntKey.Id), role.Id)
-            .AsDelete();
+        var DeleteRole_Query = new Query(nameof(Role)).Where(nameof(Role.Id), role.Id).AsDelete();
 
         await CreateConnection(async conn =>
         {
@@ -150,15 +140,10 @@ public class StandardRoleStore<TRole>
     )
     {
         TRole? role = null;
-        var GetRoleById_Query = new Query(nameof(IdentityRoleIntKey)).Where(
-            nameof(IdentityRoleIntKey.Id),
-            id
-        );
+        var GetRoleById_Query = new Query(nameof(Role)).Where(nameof(Role.Id), id);
         await CreateConnection(async conn =>
         {
-            role =
-                (await conn.QuerySingleSqlKataAsync<IdentityRoleIntKey>(GetRoleById_Query))
-                as TRole;
+            role = (await conn.QuerySingleSqlKataAsync<Role>(GetRoleById_Query)) as TRole;
         });
         return role;
     }
@@ -169,18 +154,14 @@ public class StandardRoleStore<TRole>
     )
     {
         TRole? role = null;
-        var GetRoleByNormalizedName_Query = new Query(nameof(IdentityRoleIntKey)).Where(
-            nameof(IdentityRoleIntKey.NormalizedName),
+        var GetRoleByNormalizedName_Query = new Query(nameof(Role)).Where(
+            nameof(Role.NormalizedName),
             normalizedName
         );
         await CreateConnection(async conn =>
         {
             role =
-                (
-                    await conn.QuerySingleSqlKataAsync<IdentityRoleIntKey>(
-                        GetRoleByNormalizedName_Query
-                    )
-                ) as TRole;
+                (await conn.QuerySingleSqlKataAsync<Role>(GetRoleByNormalizedName_Query)) as TRole;
         });
         return role;
     }
@@ -191,14 +172,14 @@ public class StandardRoleStore<TRole>
     )
     {
         var claims = new List<Claim>();
-        var GetClaimsForRole_Query = new Query(nameof(IdentityRoleClaimIntKey)).Where(
-            nameof(IdentityRoleClaimIntKey.RoleId),
+        var GetClaimsForRole_Query = new Query(nameof(RoleClaim)).Where(
+            nameof(RoleClaim.RoleId),
             role.Id
         );
 
         await CreateConnection(async conn =>
         {
-            claims = (await conn.QuerySqlKataAsync<IdentityRoleClaimIntKey>(GetClaimsForRole_Query))
+            claims = (await conn.QuerySqlKataAsync<RoleClaim>(GetClaimsForRole_Query))
                 .Select(claim => claim.ToClaim())
                 .ToList();
         });
@@ -244,13 +225,11 @@ public class StandardRoleStore<TRole>
 
         var constraint = new Dictionary<string, string>
         {
-            { nameof(IdentityRoleClaimIntKey.RoleId), roleClaim.RoleId.ToString() },
-            { nameof(IdentityRoleClaimIntKey.ClaimValue), roleClaim.ClaimValue },
-            { nameof(IdentityRoleClaimIntKey.ClaimType), roleClaim.ClaimType },
+            { nameof(RoleClaim.RoleId), roleClaim.RoleId.ToString() },
+            { nameof(RoleClaim.ClaimValue), roleClaim.ClaimValue },
+            { nameof(RoleClaim.ClaimType), roleClaim.ClaimType },
         };
-        var RemoveClaim_Query = new Query(nameof(IdentityRoleClaimIntKey))
-            .Where(constraint)
-            .AsDelete();
+        var RemoveClaim_Query = new Query(nameof(RoleClaim)).Where(constraint).AsDelete();
 
         await CreateConnection(async conn =>
         {
@@ -286,8 +265,8 @@ public class StandardRoleStore<TRole>
         CancellationToken cancellationToken = default
     )
     {
-        var UpdateRole_Query = new Query(nameof(IdentityRoleIntKey))
-            .Where(nameof(IdentityRoleIntKey.Id), role.Id)
+        var UpdateRole_Query = new Query(nameof(Role))
+            .Where(nameof(Role.Id), role.Id)
             .AsUpdate(role);
 
         await CreateConnection(async conn =>

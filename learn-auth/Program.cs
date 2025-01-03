@@ -20,7 +20,7 @@ builder
     .AddExternalAuthenticationProvider(configuration);
 
 builder
-    .Services.AddIdentity<IdentityUserIntKey, IdentityRoleIntKey>(option =>
+    .Services.AddIdentity<User, Role>(option =>
     {
         option.User.AllowedUserNameCharacters =
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ ";
@@ -30,7 +30,7 @@ builder
         option.Password.RequireNonAlphanumeric = false;
         option.SignIn.RequireConfirmedAccount = false;
     })
-    .AddRoles<IdentityRoleIntKey>()
+    .AddRoles<Role>()
     .AddClaimsPrincipalFactory<CustomUserClaimsPrincipalFactory>()
     .AddStandardCustomIdentityStores()
     .AddDefaultTokenProviders();

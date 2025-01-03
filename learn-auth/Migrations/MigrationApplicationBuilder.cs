@@ -5,7 +5,7 @@ namespace AMS.InternalMigration;
 
 public static class MigrationApplicationBuilder
 {
-    public const int MIGRATION_VERSION = 51;
+    public const int MIGRATION_VERSION = 53;
 
     public const string MIGRATION_DESCRIPTION =
         $"Learning Authentication and Authorization From stratch";

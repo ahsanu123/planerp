@@ -5,7 +5,6 @@ using AMS.Extension;
 using AMS.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
-using Newtonsoft.Json;
 using SqlKata;
 using static AMS.Extension.UtilityExtension;
 
@@ -44,12 +43,10 @@ public class StandardUserStore<TUser, TRole>
     private async Task<IEnumerable<TUser>> ListUser()
     {
         IEnumerable<TUser>? users = null;
-        var GetUsers_Query = new Query(nameof(IdentityUserIntKey));
+        var GetUsers_Query = new Query(nameof(User));
         await CreateConnection(async conn =>
         {
-            users =
-                (await conn.QuerySqlKataAsync<IdentityUserIntKey>(GetUsers_Query))
-                as IEnumerable<TUser>;
+            users = (await conn.QuerySqlKataAsync<User>(GetUsers_Query)) as IEnumerable<TUser>;
         });
 
         return users;
@@ -81,7 +78,7 @@ public class StandardUserStore<TUser, TRole>
         // );
         await CreateConnection(async conn =>
         {
-            await conn.InsertToDatabase<IdentityUserIntKey>(user as IdentityUserIntKey, true);
+            await conn.InsertToDatabase<User>(user as User, true);
             result = IdentityResult.Success;
         });
 
@@ -95,19 +92,17 @@ public class StandardUserStore<TUser, TRole>
     {
         var result = IdentityResult.Failed();
 
-        var CheckIfUserExist_Query = new Query(nameof(IdentityUserIntKey)).Where(
-            FullNameof(nameof(IdentityUserIntKey.Id)),
+        var CheckIfUserExist_Query = new Query(nameof(User)).Where(
+            FullNameof(nameof(User.Id)),
             user.Id
         );
-        var DeleteUser_Query = new Query(nameof(IdentityUserIntKey))
-            .Where(FullNameof(nameof(IdentityUserIntKey.Id)), user.Id)
+        var DeleteUser_Query = new Query(nameof(User))
+            .Where(FullNameof(nameof(User.Id)), user.Id)
             .AsDelete();
 
         await CreateConnection(async conn =>
         {
-            var userExists = await conn.QuerySingleSqlKataAsync<IdentityUserIntKey>(
-                CheckIfUserExist_Query
-            );
+            var userExists = await conn.QuerySingleSqlKataAsync<User>(CheckIfUserExist_Query);
             if (userExists != null)
             {
                 await conn.ExecuteSqlKataAsync(DeleteUser_Query);
@@ -124,16 +119,14 @@ public class StandardUserStore<TUser, TRole>
     )
     {
         TUser? user = null;
-        var FindByEmail_Query = new Query(nameof(IdentityUserIntKey)).Where(
-            nameof(IdentityUserIntKey.NormalizedEmail),
+        var FindByEmail_Query = new Query(nameof(User)).Where(
+            nameof(User.NormalizedEmail),
             normalizedEmail
         );
 
         await CreateConnection(async conn =>
         {
-            user =
-                (await conn.QuerySingleSqlKataAsync<IdentityUserIntKey>(FindByEmail_Query))
-                as TUser;
+            user = (await conn.QuerySingleSqlKataAsync<User>(FindByEmail_Query)) as TUser;
         });
         return user;
     }
@@ -144,15 +137,11 @@ public class StandardUserStore<TUser, TRole>
     )
     {
         TUser? user = null;
-        var FindById_Query = new Query(nameof(IdentityUserIntKey)).Where(
-            nameof(IdentityUserIntKey.Id),
-            userId
-        );
+        var FindById_Query = new Query(nameof(User)).Where(nameof(User.Id), userId);
 
         await CreateConnection(async conn =>
         {
-            user =
-                (await conn.QuerySingleSqlKataAsync<IdentityUserIntKey>(FindById_Query)) as TUser;
+            user = (await conn.QuerySingleSqlKataAsync<User>(FindById_Query)) as TUser;
         });
         return user;
     }
@@ -163,15 +152,14 @@ public class StandardUserStore<TUser, TRole>
     )
     {
         TUser? user = null;
-        var FindById_Query = new Query(nameof(IdentityUserIntKey)).Where(
-            nameof(IdentityUserIntKey.NormalizedUserName),
+        var FindById_Query = new Query(nameof(User)).Where(
+            nameof(User.NormalizedUserName),
             normalizedUserName
         );
 
         await CreateConnection(async conn =>
         {
-            user =
-                (await conn.QuerySingleSqlKataAsync<IdentityUserIntKey>(FindById_Query)) as TUser;
+            user = (await conn.QuerySingleSqlKataAsync<User>(FindById_Query)) as TUser;
         });
         return user;
     }
@@ -182,17 +170,15 @@ public class StandardUserStore<TUser, TRole>
         CancellationToken cancellationToken = default
     )
     {
-        var GetClaimsByUserId_Query = new Query(nameof(IdentityUserClaimIntKey)).Where(
-            nameof(IdentityUserClaimIntKey.UserId),
+        var GetClaimsByUserId_Query = new Query(nameof(UserClaim)).Where(
+            nameof(UserClaim.UserId),
             user.Id
         );
 
         var listClaims = new List<Claim>();
         await CreateConnection(async conn =>
         {
-            var claims = await conn.QuerySqlKataAsync<IdentityUserClaimIntKey>(
-                GetClaimsByUserId_Query
-            );
+            var claims = await conn.QuerySqlKataAsync<UserClaim>(GetClaimsByUserId_Query);
             listClaims = claims.Select(claim => claim.ToClaim()).ToList();
         });
 
@@ -205,17 +191,17 @@ public class StandardUserStore<TUser, TRole>
         CancellationToken cancellationToken = default
     )
     {
-        var CheckIfClaimExist_Query = new Query(nameof(IdentityUserClaimIntKey));
+        var CheckIfClaimExist_Query = new Query(nameof(UserClaim));
 
         await CreateConnection(async conn =>
         {
             foreach (var claim in claims)
             {
                 var userClaim = CreateUserClaim(user, claim);
-                var claimExist = await conn.QuerySingleSqlKataAsync<IdentityUserClaimIntKey>(
+                var claimExist = await conn.QuerySingleSqlKataAsync<UserClaim>(
                     CheckIfClaimExist_Query
-                        .Where(nameof(IdentityUserClaimIntKey.ClaimType), userClaim.ClaimType)
-                        .Where(nameof(IdentityUserClaimIntKey.UserId), user.Id)
+                        .Where(nameof(UserClaim.ClaimType), userClaim.ClaimType)
+                        .Where(nameof(Model.UserClaim.UserId), user.Id)
                 );
 
                 if (claimExist == null)
@@ -235,27 +221,25 @@ public class StandardUserStore<TUser, TRole>
     {
         var constraint = new Dictionary<string, string>
         {
-            { nameof(IdentityUserClaimIntKey.ClaimType), newClaim.Type },
-            { nameof(IdentityUserClaimIntKey.UserId), user.Id.ToString() },
+            { nameof(UserClaim.ClaimType), newClaim.Type },
+            { nameof(UserClaim.UserId), user.Id.ToString() },
         };
 
-        var IsClaimExist_Query = new Query(nameof(IdentityUserClaimIntKey)).Where(constraint);
+        var IsClaimExist_Query = new Query(nameof(UserClaim)).Where(constraint);
 
         await CreateConnection(async conn =>
         {
-            var claimInDb = await conn.QuerySingleSqlKataAsync<IdentityUserClaimIntKey>(
-                IsClaimExist_Query
-            );
+            var claimInDb = await conn.QuerySingleSqlKataAsync<UserClaim>(IsClaimExist_Query);
             if (claimInDb != null)
             {
                 await conn.UpdateByCondition(
-                    CreateUserClaim(user, newClaim),
+                    base.CreateUserClaim(user, newClaim),
                     query =>
                     {
                         query.Where(constraint);
                     },
                     false,
-                    typeof(IdentityUserClaimIntKey)
+                    typeof(UserClaim)
                 );
             }
         });
@@ -267,9 +251,9 @@ public class StandardUserStore<TUser, TRole>
         CancellationToken cancellationToken = default
     )
     {
-        var RemoveClaim_Query = new Query(nameof(IdentityUserClaimIntKey))
-            .Where(nameof(IdentityUserClaimIntKey.UserId), user.Id)
-            .WhereIn(nameof(IdentityUserClaimIntKey.ClaimType), claims.Select(claim => claim.Type));
+        var RemoveClaim_Query = new Query(nameof(UserClaim))
+            .Where(nameof(UserClaim.UserId), user.Id)
+            .WhereIn(nameof(UserClaim.ClaimType), claims.Select(claim => claim.Type));
 
         await CreateConnection(async conn =>
         {
@@ -284,13 +268,13 @@ public class StandardUserStore<TUser, TRole>
         CancellationToken cancellationToken = default
     )
     {
-        var CheckIfUserLoginExists_Query = new Query(nameof(IdentityUserLoginIntKey)).Where(
-            nameof(IdentityUserLoginIntKey.UserId),
+        var CheckIfUserLoginExists_Query = new Query(nameof(UserLogin)).Where(
+            nameof(UserLogin.UserId),
             user.Id
         );
         await CreateConnection(async conn =>
         {
-            var userLoginExists = await conn.QuerySingleSqlKataAsync<IdentityUserLoginIntKey>(
+            var userLoginExists = await conn.QuerySingleSqlKataAsync<UserLogin>(
                 CheckIfUserLoginExists_Query
             );
             if (userLoginExists == null)
@@ -309,14 +293,12 @@ public class StandardUserStore<TUser, TRole>
     {
         var constraint = new Dictionary<string, string>
         {
-            { nameof(IdentityUserLoginIntKey.UserId), user.Id.ToString() },
-            { nameof(IdentityUserLoginIntKey.LoginProvider), loginProvider },
-            { nameof(IdentityUserLoginIntKey.ProviderKey), providerKey },
+            { nameof(UserLogin.UserId), user.Id.ToString() },
+            { nameof(UserLogin.LoginProvider), loginProvider },
+            { nameof(UserLogin.ProviderKey), providerKey },
         };
 
-        var DeleteUserLogin_Query = new Query(nameof(IdentityUserLoginIntKey))
-            .Where(constraint)
-            .AsDelete();
+        var DeleteUserLogin_Query = new Query(nameof(UserLogin)).Where(constraint).AsDelete();
 
         await CreateConnection(async conn =>
         {
@@ -329,17 +311,15 @@ public class StandardUserStore<TUser, TRole>
         CancellationToken cancellationToken = default
     )
     {
-        var GetLoginForUser_Query = new Query(nameof(IdentityUserLoginIntKey)).Where(
-            nameof(IdentityUserLoginIntKey.UserId),
+        var GetLoginForUser_Query = new Query(nameof(UserLogin)).Where(
+            nameof(UserLogin.UserId),
             user.Id
         );
         var listUserLoginInfo = new List<UserLoginInfo>();
 
         await CreateConnection(async conn =>
         {
-            listUserLoginInfo = (
-                await conn.QuerySqlKataAsync<IdentityUserLoginIntKey>(GetLoginForUser_Query)
-            )
+            listUserLoginInfo = (await conn.QuerySqlKataAsync<UserLogin>(GetLoginForUser_Query))
                 .Select(loginInfo => new UserLoginInfo(
                     loginInfo.LoginProvider,
                     loginInfo.ProviderKey,
@@ -359,18 +339,18 @@ public class StandardUserStore<TUser, TRole>
     {
         var constraint = new Dictionary<string, string>
         {
-            { nameof(IdentityUserLoginIntKey.LoginProvider), loginProvider },
-            { nameof(IdentityUserLoginIntKey.ProviderKey), providerKey },
-            { nameof(IdentityUserLoginIntKey.UserId), userId.ToString() },
+            { nameof(UserLogin.LoginProvider), loginProvider },
+            { nameof(UserLogin.ProviderKey), providerKey },
+            { nameof(UserLogin.UserId), userId.ToString() },
         };
-        var GetUserLogin_Query = new Query(nameof(IdentityUserLoginIntKey)).Where(constraint);
+        var GetUserLogin_Query = new Query(nameof(UserLogin)).Where(constraint);
 
         IdentityUserLogin<int>? userLogin = null;
 
         await CreateConnection(async conn =>
         {
             userLogin =
-                (await conn.QuerySingleSqlKataAsync<IdentityUserLoginIntKey>(GetUserLogin_Query))
+                (await conn.QuerySingleSqlKataAsync<UserLogin>(GetUserLogin_Query))
                 as IdentityUserLogin<int>;
         });
 
@@ -383,16 +363,16 @@ public class StandardUserStore<TUser, TRole>
         CancellationToken cancellationToken
     )
     {
-        var GetUserLogin_Query = new Query(nameof(IdentityUserLoginIntKey))
-            .Where(nameof(IdentityUserLoginIntKey.LoginProvider), loginProvider)
-            .Where(nameof(IdentityUserLoginIntKey.ProviderKey), providerKey);
+        var GetUserLogin_Query = new Query(nameof(UserLogin))
+            .Where(nameof(UserLogin.LoginProvider), loginProvider)
+            .Where(nameof(UserLogin.ProviderKey), providerKey);
 
         IdentityUserLogin<int>? userLogin = null;
 
         await CreateConnection(async conn =>
         {
             userLogin =
-                (await conn.QuerySingleSqlKataAsync<IdentityUserLoginIntKey>(GetUserLogin_Query))
+                (await conn.QuerySingleSqlKataAsync<UserLogin>(GetUserLogin_Query))
                 as IdentityUserLogin<int>;
         });
 
@@ -407,7 +387,7 @@ public class StandardUserStore<TUser, TRole>
         CancellationToken cancellationToken = default
     )
     {
-        var GetUserRole_Query = new Query(nameof(IdentityRoleIntKey)).Where(
+        var GetUserRole_Query = new Query(nameof(Role)).Where(
             nameof(IdentityRole.NormalizedName),
             normalizedRoleName
         );
@@ -426,11 +406,7 @@ public class StandardUserStore<TUser, TRole>
                 );
             }
 
-            await conn.InsertToDatabase(
-                CreateUserRole(user, roleEntity),
-                true,
-                typeof(IdentityUserRoleIntKey)
-            );
+            await conn.InsertToDatabase(CreateUserRole(user, roleEntity), true, typeof(UserRole));
         });
     }
 
@@ -440,23 +416,21 @@ public class StandardUserStore<TUser, TRole>
         CancellationToken cancellationToken = default
     )
     {
-        var GetRoleForNormalizedRoleName_Query = new Query(nameof(IdentityRoleIntKey)).Where(
-            nameof(IdentityRoleIntKey.NormalizedName),
+        var GetRoleForNormalizedRoleName_Query = new Query(nameof(Role)).Where(
+            nameof(Role.NormalizedName),
             normalizedRoleName
         );
 
         await CreateConnection(async conn =>
         {
-            var role = await conn.QuerySingleSqlKataAsync<IdentityRoleIntKey>(
-                GetRoleForNormalizedRoleName_Query
-            );
+            var role = await conn.QuerySingleSqlKataAsync<Role>(GetRoleForNormalizedRoleName_Query);
             if (role != null)
             {
-                var IsRoleExistForUser_Query = new Query(nameof(IdentityUserRoleIntKey))
-                    .Where(nameof(IdentityUserRoleIntKey.UserId), user.Id)
-                    .Where(nameof(IdentityUserRoleIntKey.RoleId), role.Id);
+                var IsRoleExistForUser_Query = new Query(nameof(UserRole))
+                    .Where(nameof(UserRole.UserId), user.Id)
+                    .Where(nameof(UserRole.RoleId), role.Id);
 
-                var userRole = await conn.QuerySingleSqlKataAsync<IdentityUserRoleIntKey>(
+                var userRole = await conn.QuerySingleSqlKataAsync<UserRole>(
                     IsRoleExistForUser_Query
                 );
 
@@ -475,18 +449,14 @@ public class StandardUserStore<TUser, TRole>
     {
         var roles = new List<string>();
 
-        var GetRoles_Query = new Query(nameof(IdentityUserRoleIntKey))
-            .Join(
-                nameof(IdentityRoleIntKey),
-                FullNameof(nameof(IdentityRoleIntKey.Id)),
-                FullNameof(nameof(IdentityUserRoleIntKey.RoleId))
-            )
-            .Where(FullNameof(nameof(IdentityUserRoleIntKey.UserId)), user.Id.ToString())
-            .SelectAllClassProperties(typeof(IdentityRoleIntKey));
+        var GetRoles_Query = new Query(nameof(UserRole))
+            .Join(nameof(Role), FullNameof(nameof(Role.Id)), FullNameof(nameof(UserRole.RoleId)))
+            .Where(FullNameof(nameof(UserRole.UserId)), user.Id.ToString())
+            .SelectAllClassProperties(typeof(Role));
 
         await CreateConnection(async conn =>
         {
-            roles = (await conn.QuerySqlKataAsync<IdentityRoleIntKey>(GetRoles_Query))
+            roles = (await conn.QuerySqlKataAsync<Role>(GetRoles_Query))
                 .Select(role => role.NormalizedName)
                 .ToList();
         });
@@ -500,21 +470,21 @@ public class StandardUserStore<TUser, TRole>
     )
     {
         bool userInRole = false;
-        var GetRoles_Query = new Query(nameof(IdentityRoleIntKey)).Where(
-            nameof(IdentityRoleIntKey.NormalizedName),
+        var GetRoles_Query = new Query(nameof(Role)).Where(
+            nameof(Role.NormalizedName),
             normalizedRoleName
         );
 
         await CreateConnection(async conn =>
         {
-            var role = await conn.QuerySingleSqlKataAsync<IdentityRoleIntKey>(GetRoles_Query);
+            var role = await conn.QuerySingleSqlKataAsync<Role>(GetRoles_Query);
             if (role != null)
             {
-                var DoesUserAlreadyOnRole_Query = new Query(nameof(IdentityUserRoleIntKey))
-                    .Where(nameof(IdentityUserRoleIntKey.RoleId), role.Id)
-                    .Where(nameof(IdentityUserRoleIntKey.UserId), user.Id);
+                var DoesUserAlreadyOnRole_Query = new Query(nameof(UserRole))
+                    .Where(nameof(UserRole.RoleId), role.Id)
+                    .Where(nameof(UserRole.UserId), user.Id);
 
-                var userRole = await conn.QuerySingleSqlKataAsync<IdentityUserRoleIntKey>(
+                var userRole = await conn.QuerySingleSqlKataAsync<UserRole>(
                     DoesUserAlreadyOnRole_Query,
                     false
                 );
@@ -530,26 +500,24 @@ public class StandardUserStore<TUser, TRole>
         CancellationToken cancellationToken = default
     )
     {
-        var users = new List<IdentityUserIntKey>();
+        var users = new List<User>();
         var constraint = new Dictionary<string, string>
         {
-            { FullNameof(nameof(IdentityUserClaimIntKey.ClaimType)), claim.Type },
-            { FullNameof(nameof(IdentityUserClaimIntKey.ClaimValue)), claim.Value },
+            { FullNameof(nameof(UserClaim.ClaimType)), claim.Type },
+            { FullNameof(nameof(UserClaim.ClaimValue)), claim.Value },
         };
-        var GetUserForClaim_Query = new Query(nameof(IdentityUserIntKey))
+        var GetUserForClaim_Query = new Query(nameof(User))
             .Join(
-                nameof(IdentityUserClaimIntKey),
-                FullNameof(nameof(IdentityUserClaimIntKey.UserId)),
-                FullNameof(nameof(IdentityUserIntKey.Id))
+                nameof(UserClaim),
+                FullNameof(nameof(UserClaim.UserId)),
+                FullNameof(nameof(User.Id))
             )
             .Where(constraint)
-            .SelectAllClassProperties(typeof(IdentityUserIntKey));
+            .SelectAllClassProperties(typeof(User));
 
         await CreateConnection(async conn =>
         {
-            users = (
-                await conn.QuerySqlKataAsync<IdentityUserIntKey>(GetUserForClaim_Query)
-            ).ToList();
+            users = (await conn.QuerySqlKataAsync<User>(GetUserForClaim_Query)).ToList();
         });
 
         return users as List<TUser>;
@@ -560,26 +528,20 @@ public class StandardUserStore<TUser, TRole>
         CancellationToken cancellationToken = default
     )
     {
-        var users = new List<IdentityUserIntKey>();
-        var GetUserInRole_Query = new Query(nameof(IdentityUserIntKey))
+        var users = new List<User>();
+        var GetUserInRole_Query = new Query(nameof(User))
             .Join(
-                nameof(IdentityUserRoleIntKey),
-                FullNameof(nameof(IdentityUserRoleIntKey.UserId)),
-                FullNameof(nameof(IdentityUserIntKey.Id))
+                nameof(UserRole),
+                FullNameof(nameof(UserRole.UserId)),
+                FullNameof(nameof(User.Id))
             )
-            .Join(
-                nameof(IdentityRoleIntKey),
-                FullNameof(nameof(IdentityUserRoleIntKey.RoleId)),
-                FullNameof(nameof(IdentityRoleIntKey.Id))
-            )
-            .Where(FullNameof(nameof(IdentityRoleIntKey.NormalizedName), normalizedRoleName))
-            .SelectAllClassProperties(typeof(IdentityUserIntKey));
+            .Join(nameof(Role), FullNameof(nameof(UserRole.RoleId)), FullNameof(nameof(Role.Id)))
+            .Where(FullNameof(nameof(Role.NormalizedName), normalizedRoleName))
+            .SelectAllClassProperties(typeof(User));
 
         await CreateConnection(async conn =>
         {
-            users = (
-                await conn.QuerySqlKataAsync<IdentityUserIntKey>(GetUserInRole_Query)
-            ).ToList();
+            users = (await conn.QuerySqlKataAsync<User>(GetUserInRole_Query)).ToList();
         });
 
         return users as List<TUser>;
@@ -596,10 +558,10 @@ public class StandardUserStore<TUser, TRole>
                 user,
                 query =>
                 {
-                    query.Where(nameof(IdentityUserIntKey.Id), user.Id);
+                    query.Where(nameof(User.Id), user.Id);
                 },
                 false,
-                typeof(IdentityUserIntKey)
+                typeof(User)
             );
         });
         return IdentityResult.Success;
@@ -609,7 +571,7 @@ public class StandardUserStore<TUser, TRole>
     {
         await CreateConnection(async conn =>
         {
-            await conn.InsertToDatabase(token, true, typeof(IdentityUserTokenIntKey));
+            await conn.InsertToDatabase(token, true, typeof(UserToken));
         });
     }
 
@@ -619,14 +581,13 @@ public class StandardUserStore<TUser, TRole>
     )
     {
         TRole? role = null;
-        var FindRole_Query = new Query(nameof(IdentityRoleIntKey)).Where(
-            nameof(IdentityRoleIntKey.NormalizedName),
+        var FindRole_Query = new Query(nameof(Role)).Where(
+            nameof(Role.NormalizedName),
             normalizedRoleName
         );
         await CreateConnection(async conn =>
         {
-            role =
-                (await conn.QuerySingleSqlKataAsync<IdentityRoleIntKey>(FindRole_Query)) as TRole;
+            role = (await conn.QuerySingleSqlKataAsync<Role>(FindRole_Query)) as TRole;
         });
         return role;
     }
@@ -638,20 +599,18 @@ public class StandardUserStore<TUser, TRole>
         CancellationToken cancellationToken
     )
     {
-        IdentityUserTokenIntKey? userToken = null;
+        UserToken? userToken = null;
         var constraint = new Dictionary<string, string>
         {
-            { nameof(IdentityUserTokenIntKey.UserId), user.Id.ToString() },
-            { nameof(IdentityUserTokenIntKey.LoginProvider), loginProvider },
-            { nameof(IdentityUserTokenIntKey.Name), name },
+            { nameof(UserToken.UserId), user.Id.ToString() },
+            { nameof(UserToken.LoginProvider), loginProvider },
+            { nameof(UserToken.Name), name },
         };
-        var FindToken_Query = new Query(nameof(IdentityUserTokenIntKey)).Where(constraint);
+        var FindToken_Query = new Query(nameof(UserToken)).Where(constraint);
 
         await CreateConnection(async conn =>
         {
-            userToken = await conn.QuerySingleSqlKataAsync<IdentityUserTokenIntKey>(
-                FindToken_Query
-            );
+            userToken = await conn.QuerySingleSqlKataAsync<UserToken>(FindToken_Query);
         });
 
         return userToken;
@@ -663,15 +622,11 @@ public class StandardUserStore<TUser, TRole>
     )
     {
         TUser? user = null;
-        var FindUser_Query = new Query(nameof(IdentityUserIntKey)).Where(
-            nameof(IdentityUserIntKey.Id),
-            userId
-        );
+        var FindUser_Query = new Query(nameof(User)).Where(nameof(User.Id), userId);
 
         await CreateConnection(async conn =>
         {
-            user =
-                (await conn.QuerySingleSqlKataAsync<IdentityUserIntKey>(FindUser_Query)) as TUser;
+            user = (await conn.QuerySingleSqlKataAsync<User>(FindUser_Query)) as TUser;
         });
         return user;
     }
@@ -685,15 +640,15 @@ public class StandardUserStore<TUser, TRole>
         IdentityUserRole<int>? role = null;
         var constraint = new Dictionary<string, string>
         {
-            { nameof(IdentityUserRoleIntKey.UserId), userId.ToString() },
-            { nameof(IdentityUserRoleIntKey.RoleId), roleId.ToString() },
+            { nameof(UserRole.UserId), userId.ToString() },
+            { nameof(UserRole.RoleId), roleId.ToString() },
         };
-        var FindUserRole_Query = new Query(nameof(IdentityUserRoleIntKey)).Where(constraint);
+        var FindUserRole_Query = new Query(nameof(UserRole)).Where(constraint);
 
         await CreateConnection(async conn =>
         {
             role =
-                (await conn.QuerySingleSqlKataAsync<IdentityUserRoleIntKey>(FindUserRole_Query))
+                (await conn.QuerySingleSqlKataAsync<UserRole>(FindUserRole_Query))
                 as IdentityUserRole<int>;
         });
         return role;
@@ -701,7 +656,7 @@ public class StandardUserStore<TUser, TRole>
 
     protected override async Task RemoveUserTokenAsync(IdentityUserToken<int> token)
     {
-        var RemoveUserToken_Query = new Query(nameof(IdentityUserTokenIntKey)).Where(token);
+        var RemoveUserToken_Query = new Query(nameof(UserToken)).Where(token);
 
         await CreateConnection(async conn =>
         {
