@@ -75,20 +75,14 @@ public class StandardUserStore<TUser, TRole>
         var result = IdentityResult.Failed(
             new[] { new IdentityError { Description = "Email Already Exists!!" } }
         );
-        var CheckIfEmailExists_Query = new Query(nameof(IdentityUserIntKey)).Where(
-            nameof(IdentityUserIntKey.NormalizedEmail),
-            user.NormalizedEmail
-        );
+        // var CheckIfEmailExists_Query = new Query(nameof(IdentityUserIntKey)).Where(
+        //     nameof(IdentityUserIntKey.NormalizedEmail),
+        //     user.NormalizedEmail
+        // );
         await CreateConnection(async conn =>
         {
-            var userInDb = (
-                await conn.QuerySingleSqlKataAsync<IdentityUserIntKey>(CheckIfEmailExists_Query)
-            );
-            if (userInDb == null)
-            {
-                await conn.InsertToDatabase<IdentityUserIntKey>(user as IdentityUserIntKey, true);
-                result = IdentityResult.Success;
-            }
+            await conn.InsertToDatabase<IdentityUserIntKey>(user as IdentityUserIntKey, true);
+            result = IdentityResult.Success;
         });
 
         return result;

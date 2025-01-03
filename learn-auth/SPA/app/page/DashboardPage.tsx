@@ -1,21 +1,44 @@
 import { AppRoutes } from "../routes"
 import { useNavigate } from "react-router"
-import './DashboardPage.css'
 import type { Route } from "./+types/DashboardPage";
 import { UserClaimTypes, whoami } from "../model/authorization-model";
 import { roleButtons, type RoleButtonKeys } from "../model/role-button-model";
 import { UserManagerService } from "../api/generated";
 import { defaultClient } from "../api/constant";
+import './DashboardPage.css'
+import GridButton from "../component/GridButton";
+import Calendar from "../component/Calendar";
+import Clock from "../component/Clock";
+import VirtualKeyboard from "../component/VirtualKeyboard";
+import { useState } from "react";
 
 export async function clientLoader() {
   return await whoami()
 }
 
+type DisplayStateType = "InputNumber" | "Date"
+
 export default function DashboardPage({
   loaderData
 }: Route.ComponentProps) {
 
+  const [display, setDisplay] = useState<DisplayStateType>("Date")
+
+  const buttons: string[] = []
+  for (let i = 0; i < 6; i++) {
+    buttons.push(`User ${i + 1}`)
+  }
   const navigate = useNavigate();
+
+  const handleOnVirtualKeyBoardOk = (amount: number) => {
+    console.log(amount)
+    setDisplay("Date")
+  }
+
+  const handleOnUserSelected = (username: string) => {
+    console.log(username)
+    setDisplay("InputNumber")
+  }
 
   const handleSignOut = async () => {
     await UserManagerService.getUserManagerSignOut({ client: defaultClient })
@@ -29,9 +52,10 @@ export default function DashboardPage({
     <>
       {roleButtons[role].map((item, index) => (
         <li
-          key={`key-${index}`}
+          key={`dasboard-li-key-${index}`}
         >
           <button
+            key={`dasboard-btn-${index}`}
             onClick={() => navigate(item.path)}
           >
             {item.displayName}
@@ -49,52 +73,51 @@ export default function DashboardPage({
     </>
   )
 
+
   return (
-    <>
-      <h1>📣 Campaign Manager</h1>
-      <sub>ASPNET Core Identity Basic POC</sub>
+    <div
+      className="dashboard-page"
+    >
+      <header>
 
+        <div>
+          <h1> 💾 AMS</h1>
+          <sub>Ampas Management System</sub>
+        </div>
+
+        <div>
+          <Clock />
+        </div>
+
+      </header>
       <hr />
 
-      {loaderData.length > 0 ? (
-        <>
-          <sub>
-            📧 {emails.map((email) => `${email}, `)}
-            ♟️ {roles.map((role) => `${role}, `)}
-          </sub>
-          <h5
-            style={{ marginTop: 0 }}
-          >
-            Welcome {" "}
-            {loaderData.find((claim) => claim.type === UserClaimTypes.name)?.value}
-          </h5>
-          {renderRoleButtons()}
-        </>
-      )
-        : (
-          <div
-            className="login-container"
-          >
-            <button
-              onClick={() => navigate(`${AppRoutes.PagePrefix}${AppRoutes.SigninPage}`)}
-            >
-              Signin
-            </button>
+      <main>
+        <sub> 💸 sejumlah: Rp.1,2500,000</sub>
+        <h2>Tukijo - Total 99 Ampas</h2>
+        <hr />
 
-          </div>
-        )
-      }
+        {
+          (display === "Date")
+            ? (
+              <>
+                <Calendar />
+                <GridButton
+                  buttons={buttons}
+                  onClick={handleOnUserSelected}
+                />
+              </>
+            )
+            : (
+              <VirtualKeyboard
+                title="Masukan Jumlah Ampas"
+                description="Tekan Jumlah Pada Keyboard Lalu Klik OK"
+                onOk={handleOnVirtualKeyBoardOk}
+              />
+            )
+        }
+      </main>
 
-      <hr />
-
-      {loaderData.length > 0 && (
-        <button
-          onClick={() => handleSignOut()}
-        >
-          Sign Out
-        </button>
-      )}
-
-    </>
+    </div>
   )
 }

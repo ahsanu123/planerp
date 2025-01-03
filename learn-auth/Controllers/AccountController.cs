@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace AMS.LearnController;
+namespace AMS.AmpasController;
 
 [ApiController]
 [Route("[controller]")]

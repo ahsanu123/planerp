@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AMS.LearnController;
+namespace AMS.AmpasController;
 
 [ApiController]
 [Route("[controller]")]

@@ -44,7 +44,7 @@ public class CustomUserClaimsPrincipalFactory
         var principal = await base.CreateAsync(user);
         var identity = new ClaimsIdentity();
 
-        if (_isSuperAdmin(user.Email))
+        if (_isSuperAdmin(user.Email ?? ""))
         {
             var superAdminRole = await _roleManager.FindByNameAsync(
                 AuthorizationConstant.SuperAdminClaim
@@ -53,7 +53,7 @@ public class CustomUserClaimsPrincipalFactory
                 await _userManager.AddToRoleAsync(user, superAdminRole.Name!);
         }
         if (
-            !_isSuperAdmin(user.Email)
+            !_isSuperAdmin(user.Email ?? "")
             && (await _userManager.IsInRoleAsync(user, AuthorizationConstant.SuperAdminClaim))
         )
         {

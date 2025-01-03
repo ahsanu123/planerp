@@ -1,14 +1,12 @@
-using AMS.Constant;
 using AMS.Model;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AMS.LearnController;
+namespace AMS.AmpasController;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(Policy = AuthorizationConstant.SuperAdminClaim)]
+// [Authorize(Policy = AuthorizationConstant.SuperAdminClaim)]
 public class RoleManagerController : Controller
 {
     private RoleManager<IdentityRoleIntKey> _roleManager;
