@@ -1,6 +1,6 @@
 using FluentMigrator;
 
-namespace Learn.InternalMigration;
+namespace AMS.InternalMigration;
 
 public interface MigrationBase
 {

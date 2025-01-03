@@ -1,7 +1,7 @@
-using Learn.Constant;
+using AMS.Constant;
 using Microsoft.AspNetCore.Authentication;
 
-namespace Learn.Services;
+namespace AMS.Services;
 
 public static class AddExternalAuthenticationProviderBuilder
 {

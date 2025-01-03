@@ -1,4 +1,4 @@
-namespace Learn.InternalMigration;
+namespace AMS.InternalMigration;
 
 using System.Data;
 using System.Text.RegularExpressions;

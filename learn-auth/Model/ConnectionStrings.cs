@@ -1,4 +1,4 @@
-namespace Learn.Model;
+namespace AMS.Model;
 
 public class ConnectionStrings
 {

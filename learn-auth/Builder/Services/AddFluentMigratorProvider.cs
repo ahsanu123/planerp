@@ -1,8 +1,8 @@
 using System.Reflection;
+using AMS.Extension;
 using FluentMigrator.Runner;
-using Learn.Extension;
 
-namespace Learn.Services;
+namespace AMS.Services;
 
 public static class BuilderAddFluentMigratorProvider
 {

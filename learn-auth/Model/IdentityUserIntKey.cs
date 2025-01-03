@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace Learn.Model;
+namespace AMS.Model;
 
 public class IdentityUserIntKey : IdentityUser<int> { }

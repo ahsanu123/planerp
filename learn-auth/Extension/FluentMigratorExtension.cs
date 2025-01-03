@@ -8,7 +8,7 @@ using FluentMigrator.Runner.Processors;
 using FluentMigrator.Runner.Processors.SQLite;
 using Microsoft.Extensions.Options;
 
-namespace Learn.Extension;
+namespace AMS.Extension;
 
 public static class FluentMigratorExtension
 {

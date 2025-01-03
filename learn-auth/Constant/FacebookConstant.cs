@@ -1,4 +1,4 @@
-namespace Learn.Constant;
+namespace AMS.Constant;
 
 public static class FacebookConstant
 {

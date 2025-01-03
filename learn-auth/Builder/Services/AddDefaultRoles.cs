@@ -1,7 +1,8 @@
-using Learn.Model;
+using AMS.Constant;
+using AMS.Model;
 using Microsoft.AspNetCore.Identity;
 
-namespace Learn.Services;
+namespace AMS.Services;
 
 public static class DefaultRolesBuilder
 {
@@ -13,11 +14,9 @@ public static class DefaultRolesBuilder
 
         var DefaultRoles = new List<string>()
         {
-            "SuperAdmin",
-            "GeneralAdmin",
-            "EuropeAdmin",
-            "AsiaAdmin",
-            "AmericanAdmin",
+            nameof(RoleConstant.LocalSuperAdmin),
+            nameof(RoleConstant.Buyer),
+            nameof(RoleConstant.Manager),
         };
 
         foreach (var role in DefaultRoles)

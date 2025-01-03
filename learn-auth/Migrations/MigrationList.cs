@@ -1,9 +1,9 @@
+using AMS.AppIdentity;
+using AMS.Model;
 using FluentMigrator;
-using Learn.AppIdentity;
-using Learn.Model;
 using Microsoft.AspNetCore.Identity;
 
-namespace Learn.InternalMigration;
+namespace AMS.InternalMigration;
 
 public class ModelMigrationList : MigrationBase
 {

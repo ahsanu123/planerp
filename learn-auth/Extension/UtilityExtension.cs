@@ -1,4 +1,4 @@
-namespace Learn.Extension;
+namespace AMS.Extension;
 
 using System.ComponentModel;
 using System.Runtime.CompilerServices;

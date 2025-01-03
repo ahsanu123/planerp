@@ -1,10 +1,10 @@
 using System.Security.Claims;
-using Learn.Constant;
-using Learn.Model;
+using AMS.Constant;
+using AMS.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-namespace Learn.StandardIdentity;
+namespace AMS.StandardIdentity;
 
 public class CustomUserClaimsPrincipalFactory
     : UserClaimsPrincipalFactory<IdentityUserIntKey, IdentityRoleIntKey>

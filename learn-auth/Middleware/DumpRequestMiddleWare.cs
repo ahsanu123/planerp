@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Learn.Middleware;
+namespace AMS.Middleware;
 
 public class DumpRequestMiddleWare
 {

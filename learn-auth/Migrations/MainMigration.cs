@@ -1,7 +1,7 @@
 using System.Reflection;
 using FluentMigrator;
 
-namespace Learn.InternalMigration;
+namespace AMS.InternalMigration;
 
 [Migration(
     MigrationApplicationBuilder.MIGRATION_VERSION,

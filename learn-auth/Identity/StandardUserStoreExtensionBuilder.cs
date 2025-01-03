@@ -1,7 +1,7 @@
-using Learn.Model;
+using AMS.Model;
 using Microsoft.AspNetCore.Identity;
 
-namespace Learn.StandardIdentity;
+namespace AMS.StandardIdentity;
 
 public static class StandardUserStoreExtensionBuilder
 {

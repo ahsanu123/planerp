@@ -1,10 +1,10 @@
-namespace Learn.Extension;
+namespace AMS.Extension;
 
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using AMS.InternalMigration;
 using Dapper;
-using Learn.InternalMigration;
 using Newtonsoft.Json;
 using SqlKata;
 using SqlKata.Compilers;

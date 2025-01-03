@@ -81,6 +81,7 @@ class IAuthorizationHandler{
 ```
 - you can access swagger at `http://localhost:5136/swagger/index.html` (port might be different)
 - you can access frontend app at `http://localhost:5173/` (port might be different)
+- extended to create AMS 
 
 ## ⚓ Reference 
 

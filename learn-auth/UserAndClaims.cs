@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace Learn.UserClaim;
+namespace AMS.UserClaim;
 
 public static class UsersAndClaims
 {

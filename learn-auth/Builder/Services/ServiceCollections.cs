@@ -1,9 +1,9 @@
-using Learn.AppAuthorization;
-using Learn.AppIdentity;
-using Learn.Repository;
+using AMS.AppAuthorization;
+using AMS.AppIdentity;
+using AMS.Repository;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Learn.Services;
+namespace AMS.Services;
 
 public static class ServiceCollections
 {

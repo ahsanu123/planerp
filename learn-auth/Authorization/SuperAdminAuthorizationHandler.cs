@@ -1,8 +1,8 @@
 using System.Security.Claims;
-using Learn.Constant;
+using AMS.Constant;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Learn.AppAuthorization;
+namespace AMS.AppAuthorization;
 
 public class SuperAdminAuthorizationHandler
     : AuthorizationHandler<SuperAdminAuthorizationRequirement>

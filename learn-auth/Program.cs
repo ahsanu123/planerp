@@ -1,9 +1,9 @@
-using Learn.AppAuthorization;
-using Learn.Constant;
-using Learn.InternalMigration;
-using Learn.Model;
-using Learn.Services;
-using Learn.StandardIdentity;
+using AMS.AppAuthorization;
+using AMS.Constant;
+using AMS.InternalMigration;
+using AMS.Model;
+using AMS.Services;
+using AMS.StandardIdentity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 

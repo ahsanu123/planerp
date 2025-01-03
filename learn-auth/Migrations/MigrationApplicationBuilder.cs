@@ -1,7 +1,7 @@
 using FluentMigrator;
 using FluentMigrator.Runner;
 
-namespace Learn.InternalMigration;
+namespace AMS.InternalMigration;
 
 public static class MigrationApplicationBuilder
 {

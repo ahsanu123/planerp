@@ -1,8 +1,8 @@
-using Learn.Model;
+using AMS.Model;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 
-namespace Learn.AppIdentity;
+namespace AMS.AppIdentity;
 
 public interface ISqliteConnectionProvider
 {

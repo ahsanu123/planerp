@@ -1,14 +1,14 @@
 using System.Linq;
 using System.Security.Claims;
-using Learn.AppIdentity;
-using Learn.Constant;
-using Learn.Extension;
-using Learn.Model;
+using AMS.AppIdentity;
+using AMS.Constant;
+using AMS.Extension;
+using AMS.Model;
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
 using SqlKata;
 
-namespace Learn.Repository;
+namespace AMS.Repository;
 
 public interface ICampaignRepository
 {
@@ -67,7 +67,7 @@ public class CampaignRepository : ICampaignRepository
 
         var getAllCampaign_Query = new Query(nameof(CampaignModel));
 
-        if (claims.Any(claim => claim.Value == RoleConstant.GeneralAdmin))
+        if (claims.Any(claim => claim.Value == RoleConstant.Manager))
         {
             await CreateConnection(async conn =>
             {

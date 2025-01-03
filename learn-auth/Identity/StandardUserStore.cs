@@ -1,15 +1,15 @@
 using System.Globalization;
 using System.Security.Claims;
-using Learn.AppIdentity;
-using Learn.Extension;
-using Learn.Model;
+using AMS.AppIdentity;
+using AMS.Extension;
+using AMS.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
 using SqlKata;
-using static Learn.Extension.UtilityExtension;
+using static AMS.Extension.UtilityExtension;
 
-namespace Learn.StandardIdentity;
+namespace AMS.StandardIdentity;
 
 /// <summary>
 /// Class that implement UserStoreBase, and IUserStore with TKey = int

@@ -1,12 +1,12 @@
 using System.Security.Claims;
-using Learn.Constant;
-using Learn.Model;
+using AMS.Constant;
+using AMS.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace Learn.LearnController;
+namespace AMS.LearnController;
 
 [ApiController]
 [Route("[controller]")]

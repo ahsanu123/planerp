@@ -1,18 +1,18 @@
 using System.Security.Claims;
-using Learn.Constant;
-using Learn.Model;
-using Learn.Repository;
+using AMS.Constant;
+using AMS.Model;
+using AMS.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Learn.LearnController;
+namespace AMS.LearnController;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(
-    Roles = $"{RoleConstant.GeneralAdmin},{RoleConstant.AsiaAdmin},{RoleConstant.AmericanAdmin},{RoleConstant.EuropeAdmin}"
-)]
+// [Authorize(
+// Roles = $"{RoleConstant.GeneralAdmin},{RoleConstant.AsiaAdmin},{RoleConstant.AmericanAdmin},{RoleConstant.EuropeAdmin}"
+// )]
 public class CampaignController : Controller
 {
     private ICampaignRepository _campaignRepo;

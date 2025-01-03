@@ -1,13 +1,13 @@
 using System.Globalization;
 using System.Security.Claims;
-using Learn.AppIdentity;
-using Learn.Extension;
-using Learn.Model;
+using AMS.AppIdentity;
+using AMS.Extension;
+using AMS.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using SqlKata;
 
-namespace Learn.StandardIdentity;
+namespace AMS.StandardIdentity;
 
 /// <summary>
 /// Class that Implement RoleStoreBase with TKey = int

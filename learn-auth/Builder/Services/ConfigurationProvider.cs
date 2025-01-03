@@ -1,6 +1,6 @@
-using Learn.Model;
+using AMS.Model;
 
-namespace Learn.Services;
+namespace AMS.Services;
 
 public static class AppSettingConfigurationProvider
 {

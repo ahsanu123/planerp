@@ -1,7 +1,7 @@
-using Learn.Constant;
+using AMS.Constant;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Learn.AppAuthorization;
+namespace AMS.AppAuthorization;
 
 public class SuperAdminAuthorizationRequirement : IAuthorizationRequirement
 {

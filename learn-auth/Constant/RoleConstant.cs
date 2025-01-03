@@ -1,9 +1,8 @@
-namespace Learn.Constant;
+namespace AMS.Constant;
 
 public static class RoleConstant
 {
-    public const string GeneralAdmin = "GENERALADMIN";
-    public const string EuropeAdmin = "EUROPEADMIN";
-    public const string AsiaAdmin = "ASIAADMIN";
-    public const string AmericanAdmin = "AMERICANADMIN";
+    public const string Buyer = "BUYER";
+    public const string LocalSuperAdmin = "LOCALSUPERADMIN";
+    public const string Manager = "MANAGER";
 }
