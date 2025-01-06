@@ -1,3 +1,4 @@
+using AMS.Constant;
 using AMS.Model;
 using AMS.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -41,13 +42,34 @@ public class AmpasDailyController : Controller
     }
 
     [HttpPost]
-    [Route("daily-summary")]
-    [ProducesResponseType(typeof(AmpasDailySummary), 200)]
-    public async Task<IActionResult> GetDailySummary([FromBody] DateTime? date = null)
+    [Route("summary-info")]
+    [ProducesResponseType(typeof(AmpasSummary), 200)]
+    public async Task<IActionResult> GetDailySummary(
+        [FromQuery] AmpasSummaryDuration duration,
+        [FromBody] DateTime? date = null
+    )
     {
         var datetime = date ?? DateTime.Now;
+        var summary = await _ampasRepo.GetSummary(datetime, duration);
 
-        var summary = await _ampasRepo.GetDailySummary(datetime);
+        return Ok(summary);
+    }
+
+    [HttpPost]
+    [Route("user-summary-info")]
+    [ProducesResponseType(typeof(AmpasSummary), 200)]
+    public async Task<IActionResult> GetUserSummary(
+        [FromQuery] AmpasSummaryDuration duration,
+        [FromQuery] string username,
+        [FromBody] DateTime? date = null
+    )
+    {
+        var user = await _userManager.FindByNameAsync(username);
+        if (user == null)
+            return NotFound();
+
+        var datetime = date ?? DateTime.Now;
+        var summary = await _ampasRepo.GetSummaryForUser(datetime, user, duration);
 
         return Ok(summary);
     }

@@ -73,10 +73,10 @@ export default function UserBillInformation(props: UserBillInformationProps) {
 
       <RenderTable
         headData={[
-          ["username", "total taken", "total bill"]
+          ["username", "total taken", "total bill", "total production", "total worth"]
         ]}
         bodyData={[
-          ["user 1", 100, "Rp.1.000.000"]
+          ["user 1", 100, "Rp.1.000.000", 150, "Rp.1.500.000"]
         ]}
       />
     </>

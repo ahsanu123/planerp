@@ -1,4 +1,5 @@
 using AMS.AppIdentity;
+using AMS.Constant;
 using AMS.Extension;
 using AMS.Model;
 using Microsoft.Data.Sqlite;
@@ -19,7 +20,12 @@ public interface IAmpasRepository
 {
     public Task<AMSResult> AddAmpasForUser(User user, int amount);
     public Task<List<AmpasModel>?> GetListAmpasForUser(User user, DateTime date);
-    public Task<AmpasDailySummary> GetDailySummary(DateTime date);
+    public Task<AmpasSummary> GetSummary(DateTime date, AmpasSummaryDuration duration);
+    public Task<AmpasSummary> GetSummaryForUser(
+        DateTime date,
+        User user,
+        AmpasSummaryDuration duration
+    );
     public Task<double> GetBillForUser(User user, DateTime date);
     public Task<bool> ChangeAmpasPrice(double price);
     public Task<double> GetCurrentPrice();
@@ -126,19 +132,27 @@ public class AmpasRepository : IAmpasRepository
         return records.ToList();
     }
 
-    public async Task<AmpasDailySummary> GetDailySummary(DateTime date)
+    public async Task<AmpasSummary> GetSummary(DateTime date, AmpasSummaryDuration duration)
     {
-        var summary = new AmpasDailySummary();
+        var summary = new AmpasSummary();
 
-        var GetRecord_Query = new Query(nameof(AmpasModel)).WhereDate(
+        var GetDailyRecord_Query = new Query(nameof(AmpasModel)).WhereDate(
             nameof(AmpasModel.TakenTime),
             date.ToString("yyyy-MM-dd")
         );
 
+        var GetMonthlyRecord_Query = new Query(nameof(AmpasModel))
+            .WhereDatePart("year", nameof(AmpasModel.TakenTime), date.ToString("yyyy"))
+            .WhereDatePart("month", nameof(AmpasModel.TakenTime), date.ToString("MM"));
+
         await _createConnection(async conn =>
         {
             var userTakeCount = new List<KeyValuePair<string, int>>();
-            var records = await conn.QuerySqlKataAsync<AmpasModel>(GetRecord_Query);
+            var records = await conn.QuerySqlKataAsync<AmpasModel>(
+                duration == AmpasSummaryDuration.Daily
+                    ? GetDailyRecord_Query
+                    : GetMonthlyRecord_Query
+            );
 
             foreach (var record in records)
             {
@@ -169,5 +183,52 @@ public class AmpasRepository : IAmpasRepository
     public async Task<double> GetCurrentPrice()
     {
         return await _getCurrentAmpasPrice();
+    }
+
+    // TODO:
+    // make it simpler
+    public async Task<AmpasSummary> GetSummaryForUser(
+        DateTime date,
+        User user,
+        AmpasSummaryDuration duration
+    )
+    {
+        var summary = new AmpasSummary();
+
+        var GetDailyRecord_Query = new Query(nameof(AmpasModel))
+            .WhereDate(nameof(AmpasModel.TakenTime), date.ToString("yyyy-MM-dd"))
+            .Where(nameof(AmpasModel.UserId), user.Id);
+
+        var GetMonthlyRecord_Query = new Query(nameof(AmpasModel))
+            .WhereDatePart("year", nameof(AmpasModel.TakenTime), date.ToString("yyyy"))
+            .WhereDatePart("month", nameof(AmpasModel.TakenTime), date.ToString("MM"))
+            .Where(nameof(AmpasModel.UserId), user.Id);
+
+        await _createConnection(async conn =>
+        {
+            var userTakeCount = new List<KeyValuePair<string, int>>();
+            var records = await conn.QuerySqlKataAsync<AmpasModel>(
+                duration == AmpasSummaryDuration.Daily
+                    ? GetDailyRecord_Query
+                    : GetMonthlyRecord_Query
+            );
+
+            foreach (var record in records)
+            {
+                var GetUserForId_Query = new Query(nameof(User)).Where(
+                    nameof(User.Id),
+                    record.UserId
+                );
+                userTakeCount.Add(new KeyValuePair<string, int>(user.UserName, record.Amount));
+            }
+
+            summary.TotalTaken = records.Select(record => record.Amount).ToList().Sum();
+            summary.TotalTakenPrice = records
+                .Select(record => record.Price * record.Amount)
+                .ToList()
+                .Sum();
+            summary.UserTakenCount = userTakeCount;
+        });
+        return summary;
     }
 }

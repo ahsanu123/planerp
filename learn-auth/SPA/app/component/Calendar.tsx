@@ -65,8 +65,8 @@ interface CalendarProps {
   showNavigator?: boolean
   title?: string,
   gridComponent?: (date: string) => JSX.Element
-  onPrevMonthClicked?: (date: Date) => Date
-  onNextMonthClicked?: (date: Date) => Date
+  onPrevMonthClicked?: (date: Date) => void
+  onNextMonthClicked?: (date: Date) => void
 }
 
 export default function Calendar(props: CalendarProps) {
@@ -83,29 +83,17 @@ export default function Calendar(props: CalendarProps) {
   const [days, setDays] = useState<string[]>(generateCalendarObject(date))
 
   const handleOnPrevMonthClicked = () => {
-    if (onPrevMonthClicked) {
-      const newDate = onPrevMonthClicked(date)
-      setDate(newDate)
-      setDays(generateCalendarObject(newDate))
-    }
-    else {
-      const newDate = addMonths(date, -1)
-      setDate(newDate)
-      setDays(generateCalendarObject(newDate))
-    }
+    onPrevMonthClicked?.(date)
+    const newDate = addMonths(date, -1)
+    setDate(newDate)
+    setDays(generateCalendarObject(newDate))
   }
 
   const handleOnNextMonthClicked = () => {
-    if (onNextMonthClicked) {
-      const newDate = onNextMonthClicked(date)
-      setDate(newDate)
-      setDays(generateCalendarObject(newDate))
-    }
-    else {
-      const newDate = addMonths(date, 1)
-      setDate(newDate)
-      setDays(generateCalendarObject(newDate))
-    }
+    onNextMonthClicked?.(date)
+    const newDate = addMonths(date, 1)
+    setDate(newDate)
+    setDays(generateCalendarObject(newDate))
   }
 
   const defaultGridComponent = (date: string, amount?: number | string) => {
@@ -130,7 +118,10 @@ export default function Calendar(props: CalendarProps) {
   return (
     <>
       <h5>
-        🌕 {date.toLocaleDateString("id-id", { month: 'long' })}
+        🌕
+        {date.toLocaleDateString("id-id", { month: 'long' })}
+        {" "}
+        {date.toLocaleDateString("id-id", { year: 'numeric' })}
         {title ? ` - ${title}` : ""}
       </h5>
       {showNavigator && (
@@ -148,7 +139,6 @@ export default function Calendar(props: CalendarProps) {
           </button>
         </div>
       )}
-      {date.toLocaleDateString()}
       <div
         className="ams-calendar"
       >

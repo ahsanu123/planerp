@@ -1,6 +1,6 @@
 namespace AMS.Model;
 
-public class AmpasDailySummary
+public class AmpasSummary
 {
     public int TotalTaken { get; set; }
     public double TotalTakenPrice { get; set; }

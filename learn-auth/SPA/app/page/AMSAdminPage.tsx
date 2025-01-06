@@ -3,9 +3,10 @@ import Calendar from "../component/Calendar"
 import ListUser from "../component/ListUser"
 import { useState } from "react"
 import UserBillInformation from "../component/UserBillInformation"
-import { AmpasPricingService, LocalAccountService, type AmpasDailySummary, type AmpasModel } from "../api/generated"
+import { AmpasPricingService, LocalAccountService, type AmpasModel } from "../api/generated"
 import { defaultClient } from "../api/constant"
 import type { Route } from "./+types/AMSAdminPage"
+import { utilToDate } from "../utility/convert-heyapi-date"
 
 /*
  * Basic AMS admin flow 
@@ -53,6 +54,17 @@ export default function AMSAdminPage({
     setMontlyInformation(monthlyInformation.data as AmpasModel[]);
   }
 
+  const renderTakenByUserForThisDay = (date: string) => (
+    // make it simpler
+    monthlyInformation?.filter((item) => {
+      const takenTime = utilToDate(item.takenTime!)
+      // console.log(takenTime.getDate())
+      return takenTime.getDate() === parseInt(date)
+    })
+      .map((item) => item.amount)
+      .reduce((a, b) => ((a ?? 0) + (b ?? 0)), 0)
+  )
+
   const adminGridElement = (date: string) => {
     const includeDash = date.includes("-")
     return (
@@ -63,8 +75,13 @@ export default function AMSAdminPage({
           ? (
             <>
               <p>
-                {selectedUser}
+                {!selectedUser ?
+                  ("Pilih User")
+                  :
+                  (`Ambil ${renderTakenByUserForThisDay(date)}`)
+                }
               </p>
+
             </>
           )
           : (
@@ -87,12 +104,16 @@ export default function AMSAdminPage({
 
       <hr />
       <UserBillInformation />
-      <hr />
 
       <Calendar
         title={selectedUser}
         gridComponent={adminGridElement}
+        onNextMonthClicked={(date) => getMontlyUserInformation(selectedUser ?? "")}
+        onPrevMonthClicked={(date) => getMontlyUserInformation(selectedUser ?? "")}
       />
+
+      <hr />
+      <b>Daftar Pengguna</b>
       <ListUser
         users={users}
         handleOnUserSelected={(username) => getMontlyUserInformation(username)}

@@ -17,9 +17,12 @@ import type {
   GetAmpasDailyAddAmpasData,
   GetAmpasDailyAddAmpasError,
   GetAmpasDailyAddAmpasResponse,
-  PostAmpasDailyDailySummaryData,
-  PostAmpasDailyDailySummaryError,
-  PostAmpasDailyDailySummaryResponse,
+  PostAmpasDailySummaryInfoData,
+  PostAmpasDailySummaryInfoError,
+  PostAmpasDailySummaryInfoResponse,
+  PostAmpasDailyUserSummaryInfoData,
+  PostAmpasDailyUserSummaryInfoError,
+  PostAmpasDailyUserSummaryInfoResponse,
   GetAmpasPricingCurrentPriceError,
   GetAmpasPricingCurrentPriceResponse,
   GetAmpasPricingChangePriceData,
@@ -163,18 +166,34 @@ export class AmpasDailyService {
     });
   }
 
-  public static postAmpasDailyDailySummary<
-    ThrowOnError extends boolean = false
-  >(
-    options?: OptionsLegacyParser<PostAmpasDailyDailySummaryData, ThrowOnError>
+  public static postAmpasDailySummaryInfo<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<PostAmpasDailySummaryInfoData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostAmpasDailyDailySummaryResponse,
-      PostAmpasDailyDailySummaryError,
+      PostAmpasDailySummaryInfoResponse,
+      PostAmpasDailySummaryInfoError,
       ThrowOnError
     >({
       ...options,
-      url: "/AmpasDaily/daily-summary",
+      url: "/AmpasDaily/summary-info",
+    });
+  }
+
+  public static postAmpasDailyUserSummaryInfo<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<
+      PostAmpasDailyUserSummaryInfoData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).post<
+      PostAmpasDailyUserSummaryInfoResponse,
+      PostAmpasDailyUserSummaryInfoError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/AmpasDaily/user-summary-info",
     });
   }
 }
