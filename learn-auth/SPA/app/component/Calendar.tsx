@@ -1,5 +1,7 @@
+import { useState, type JSX } from "react"
 import { getRandomArbitrary } from "../utility/random-arbitrary"
 import "./Calendar.css"
+import { addMonths, setDay } from "date-fns"
 
 const TOTAL_DAYS_TO_SHOW = 42
 const DAY_TO_DISPLAY = 7
@@ -19,16 +21,6 @@ const sundayStartdays = [
   "Kamis",
   "Jumat",
   "Sabtu",
-]
-
-const indoDays = [
-  "Senin",
-  "Selasa",
-  "Rabu",
-  "Kamis",
-  "Jumat",
-  "Sabtu",
-  "Minggu",
 ]
 
 function generateCalendarObject(currentDate: Date) {
@@ -52,12 +44,11 @@ function generateCalendarObject(currentDate: Date) {
     year,
     month,
     date,
-    totalDays: new Date(year, month, 0).getDate(),
+    totalDays: new Date(year, month + 1, 0).getDate(),
   }
 
-  const currentDay = indoDays[day - 1]
+  const currentDay = days[day]
   const firstDateIndex = sundayStartdays.findIndex((item) => item === currentDay)
-
   for (let i = 0; i < TOTAL_DAYS_TO_SHOW; i++) {
     if (i < firstDateIndex)
       days.push("-")
@@ -70,12 +61,54 @@ function generateCalendarObject(currentDate: Date) {
   return days
 }
 
-export default function Calendar() {
+interface CalendarProps {
+  showNavigator?: boolean
+  title?: string,
+  gridComponent?: (date: string) => JSX.Element
+  onPrevMonthClicked?: (date: Date) => Date
+  onNextMonthClicked?: (date: Date) => Date
+}
 
-  const date = new Date()
-  const days = generateCalendarObject(date)
+export default function Calendar(props: CalendarProps) {
 
-  const gridComponent = (date: string, amount?: number | string) => {
+  const {
+    showNavigator = true,
+    title,
+    gridComponent,
+    onPrevMonthClicked,
+    onNextMonthClicked
+  } = props
+
+  const [date, setDate] = useState<Date>(new Date())
+  const [days, setDays] = useState<string[]>(generateCalendarObject(date))
+
+  const handleOnPrevMonthClicked = () => {
+    if (onPrevMonthClicked) {
+      const newDate = onPrevMonthClicked(date)
+      setDate(newDate)
+      setDays(generateCalendarObject(newDate))
+    }
+    else {
+      const newDate = addMonths(date, -1)
+      setDate(newDate)
+      setDays(generateCalendarObject(newDate))
+    }
+  }
+
+  const handleOnNextMonthClicked = () => {
+    if (onNextMonthClicked) {
+      const newDate = onNextMonthClicked(date)
+      setDate(newDate)
+      setDays(generateCalendarObject(newDate))
+    }
+    else {
+      const newDate = addMonths(date, 1)
+      setDate(newDate)
+      setDays(generateCalendarObject(newDate))
+    }
+  }
+
+  const defaultGridComponent = (date: string, amount?: number | string) => {
     const includeDash = date.includes("-")
     return (
       <div
@@ -98,7 +131,24 @@ export default function Calendar() {
     <>
       <h5>
         🌕 {date.toLocaleDateString("id-id", { month: 'long' })}
+        {title ? ` - ${title}` : ""}
       </h5>
+      {showNavigator && (
+        <div>
+          <button
+            onClick={() => handleOnPrevMonthClicked()}
+          >
+            Previous Month
+          </button>
+          {" "}
+          <button
+            onClick={() => handleOnNextMonthClicked()}
+          >
+            Next Month
+          </button>
+        </div>
+      )}
+      {date.toLocaleDateString()}
       <div
         className="ams-calendar"
       >
@@ -106,7 +156,7 @@ export default function Calendar() {
           <>
             {index < DAY_TO_DISPLAY
               ? (<b>{item}</b>)
-              : gridComponent(item, getRandomArbitrary(1, 4).toFixed())
+              : (gridComponent ? gridComponent(item) : defaultGridComponent(item, getRandomArbitrary(1, 4).toFixed()))
             }
           </>
         ))}

@@ -9,11 +9,17 @@ export default defineConfig({
   },
   plugins: [
     ...defaultPlugins,
+    '@hey-api/schemas',
+    {
+      name: '@hey-api/transformers',
+      dates: true,
+    },
     {
       name: '@hey-api/typescript'
     },
     {
-      name: '@hey-api/transformers'
+      name: '@hey-api/sdk',
+      transformer: true,
     },
     {
       asClass: true,

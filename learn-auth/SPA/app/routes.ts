@@ -3,6 +3,7 @@ import { index, layout, route, type RouteConfig } from "@react-router/dev/routes
 export enum AppRoutes {
   PagePrefix = "page/",
 
+  AMSAdminPage = "ams-admin-page",
   ClaimPage = "claim-page",
   RolePage = "role-page",
   SigninPage = "signin-page",
@@ -26,6 +27,7 @@ export default [
     route(`${AppRoutes.PagePrefix}${AppRoutes.UserRolePage}/:userName`, "./page/UserRolePage.tsx"),
     route(`${AppRoutes.PagePrefix}${AppRoutes.SuperAdminPage}`, "./page/SuperAdminPage.tsx"),
     route(`${AppRoutes.PagePrefix}${AppRoutes.CampaignManagerPage}`, "./page/CampaignManagerPage.tsx"),
+    route(`${AppRoutes.PagePrefix}${AppRoutes.AMSAdminPage}`, "./page/AMSAdminPage.tsx"),
     route(`${AppRoutes.PagePrefix}${AppRoutes.NotAllowedOrNotFound}`, "./page/NotAllowedOrNotFoundPage.tsx"),
   ])
 ] satisfies RouteConfig;

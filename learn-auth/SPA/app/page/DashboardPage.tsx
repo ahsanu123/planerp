@@ -107,7 +107,7 @@ export default function DashboardPage({
 
       <main>
         <sub> 💸 sejumlah: Rp.1,2500,000</sub>
-        <h2>Tukijo - Total 99 Ampas</h2>
+        <h2>User - Total Product</h2>
         <hr />
 
         {

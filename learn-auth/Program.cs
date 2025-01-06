@@ -5,7 +5,7 @@ using AMS.Model;
 using AMS.Services;
 using AMS.StandardIdentity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -48,20 +48,21 @@ builder.Services.AddServicesCollection();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
+    option.UseAllOfForInheritance();
     // look at this
     // https://github.com/domaindrivendev/Swashbuckle.AspNetCore?tab=readme-ov-file#add-security-definitions-and-requirements
-    option.AddSecurityDefinition(
-        "Bearer",
-        new OpenApiSecurityScheme
-        {
-            In = ParameterLocation.Header,
-            Description = "Please enter token",
-            Name = "Authorization",
-            Type = SecuritySchemeType.Http,
-            BearerFormat = "JWT",
-            Scheme = "bearer",
-        }
-    );
+    // option.AddSecurityDefinition(
+    //     "Bearer",
+    //     new OpenApiSecurityScheme
+    //     {
+    //         In = ParameterLocation.Header,
+    //         Description = "Please enter token",
+    //         Name = "Authorization",
+    //         Type = SecuritySchemeType.Http,
+    //         BearerFormat = "JWT",
+    //         Scheme = "bearer",
+    //     }
+    // );
 });
 
 builder.Services.AddCors(option =>
@@ -81,6 +82,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+
     app.UseSwagger();
     app.UseSwaggerUI(option =>
     {
@@ -103,4 +105,5 @@ app.MapControllers();
 
 app.UseFluentMigrator();
 await app.AddDefaultRoles();
+await app.AddDefaultAmpasPrice();
 app.Run();

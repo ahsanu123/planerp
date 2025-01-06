@@ -3,6 +3,7 @@ namespace AMS.Extension;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using AMS.Constant;
 using AMS.InternalMigration;
 using Dapper;
 using Newtonsoft.Json;
@@ -15,6 +16,14 @@ public class DapperSqlKataExtensionHelper
     {
         UtilityExtension.ShowCurrentPosition(sqlResult.Sql);
         UtilityExtension.ShowCurrentPosition(JsonConvert.SerializeObject(sqlResult.NamedBindings));
+    }
+
+    public static SqlResult CompileSqliteQuery(Query query)
+    {
+        var compiler = new SqliteCompiler();
+        var sqlResult = compiler.Compile(query);
+
+        return sqlResult;
     }
 
     public static SqlResult CompilePostgresqlQuery(Query query)
@@ -143,10 +152,24 @@ public static class DapperSqlKataExtension
     public static async Task<IEnumerable<T>> QuerySqlKataAsync<T>(
         this IDbConnection conn,
         Query query,
-        bool LogRaw = false
+        bool LogRaw = false,
+        SqlCompilerConstant compiler = SqlCompilerConstant.Sqlite
     )
     {
-        var sqlResult = DapperSqlKataExtensionHelper.CompilePostgresqlQuery(query);
+        SqlResult sqlResult = null;
+
+        switch (compiler)
+        {
+            case SqlCompilerConstant.Postgresql:
+                sqlResult = DapperSqlKataExtensionHelper.CompilePostgresqlQuery(query);
+                break;
+            case SqlCompilerConstant.Sqlite:
+                sqlResult = DapperSqlKataExtensionHelper.CompileSqliteQuery(query);
+                break;
+        }
+
+        if (compiler == null)
+            throw new ArgumentNullException("Compiler not found!!");
 
         DapperSqlKataExtensionHelper.LogRaw(sqlResult);
 

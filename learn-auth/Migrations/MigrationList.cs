@@ -12,10 +12,12 @@ public class ModelMigrationList : MigrationBase
         typeof(Role),
         typeof(User),
         typeof(RoleClaim),
-        typeof(Model.UserClaim),
+        typeof(UserClaim),
         typeof(UserLogin),
         typeof(UserRole),
         typeof(UserToken),
+        typeof(AmpasModel),
+        typeof(AmpasPrice),
         typeof(CampaignModel),
     };
 

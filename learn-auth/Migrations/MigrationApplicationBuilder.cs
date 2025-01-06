@@ -5,7 +5,7 @@ namespace AMS.InternalMigration;
 
 public static class MigrationApplicationBuilder
 {
-    public const int MIGRATION_VERSION = 53;
+    public const int MIGRATION_VERSION = 56;
 
     public const string MIGRATION_DESCRIPTION =
         $"Learning Authentication and Authorization From stratch";
@@ -18,6 +18,11 @@ public static class MigrationApplicationBuilder
 
         var runner = scope.ServiceProvider.GetService<IMigrationRunner>();
         var versionLoader = scope.ServiceProvider.GetService<IVersionLoader>();
+
+        if (runner == null)
+            throw new ArgumentNullException("Fluent Migrator runner was Null!!");
+        if (versionLoader == null)
+            throw new ArgumentNullException("Fluent Migrator version loader was Null!!");
 
         runner.ListMigrations();
 

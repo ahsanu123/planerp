@@ -4,7 +4,7 @@ const authorization: AuthorizationModel = {
   claims: [
     {
       type: UserClaimTypes.role,
-      value: "BAKER"
+      value: "ASIAADMIN"
     }
   ]
 }

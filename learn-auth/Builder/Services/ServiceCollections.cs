@@ -13,6 +13,7 @@ public static class ServiceCollections
         services.AddSingleton<IAuthorizationHandler, SuperAdminAuthorizationHandler>();
 
         services.AddTransient<ICampaignRepository, CampaignRepository>();
+        services.AddScoped<IAmpasRepository, AmpasRepository>();
 
         return services;
     }

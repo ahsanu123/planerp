@@ -1,6 +1,4 @@
 using AMS.Model;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +29,17 @@ public class LocalAccountController : Controller
     }
 
     [HttpPost]
+    [Route("login-without-password")]
+    public async Task<ActionResult> LoginWithoutPassword([FromQuery] string username)
+    {
+        var user = await _userManager.FindByNameAsync(username);
+        if (user == null)
+            return NotFound();
+        await _signinManager.SignInAsync(user, false);
+        return Ok();
+    }
+
+    [HttpPost]
     [Route("login")]
     public async Task<ActionResult> Login([FromQuery] string username, [FromBody] string password)
     {
@@ -47,5 +56,13 @@ public class LocalAccountController : Controller
     {
         await _signinManager.SignOutAsync();
         return Ok();
+    }
+
+    [HttpGet]
+    [Route("list-user")]
+    public async Task<ActionResult> ListUser()
+    {
+        var users = _userManager.Users;
+        return Ok(users.Select(user => user.UserName));
     }
 }

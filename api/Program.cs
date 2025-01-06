@@ -64,11 +64,7 @@ if (app.Environment.IsDevelopment())
         config.Path = "/redoc";
         config.DocumentPath = "/swagger/v1/swagger.json";
     });
-    // app.UseSwagger();
-    // app.UseSwaggerUI(option =>
-    // {
-    //     option.EnableTryItOutByDefault();
-    // });
+
     app.UseGraphQlProvider();
 
     app.UseCors(option =>

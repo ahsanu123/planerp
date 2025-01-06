@@ -12,6 +12,28 @@ import type {
   GetAccountExternalLoginCallbackData,
   GetAccountExternalLoginCallbackError,
   GetAccountExternalLoginCallbackResponse,
+  GetAccountExternalAuthenticationProviderInfoError,
+  GetAccountExternalAuthenticationProviderInfoResponse,
+  GetAmpasDailyAddAmpasData,
+  GetAmpasDailyAddAmpasError,
+  GetAmpasDailyAddAmpasResponse,
+  PostAmpasDailyDailySummaryData,
+  PostAmpasDailyDailySummaryError,
+  PostAmpasDailyDailySummaryResponse,
+  GetAmpasPricingCurrentPriceError,
+  GetAmpasPricingCurrentPriceResponse,
+  GetAmpasPricingChangePriceData,
+  GetAmpasPricingChangePriceError,
+  GetAmpasPricingChangePriceResponse,
+  PostAmpasPricingMonthlyBillData,
+  PostAmpasPricingMonthlyBillError,
+  PostAmpasPricingMonthlyBillResponse,
+  PostAmpasPricingMonthlyInformationData,
+  PostAmpasPricingMonthlyInformationError,
+  PostAmpasPricingMonthlyInformationResponse,
+  GetAmpasReporterAmpasReportData,
+  GetAmpasReporterAmpasReportError,
+  GetAmpasReporterAmpasReportResponse,
   PostCampaignCreateCampaignData,
   PostCampaignCreateCampaignError,
   PostCampaignCreateCampaignResponse,
@@ -20,38 +42,25 @@ import type {
   PostCampaignUpdateCampaignResponse,
   GetCampaignCampaignsError,
   GetCampaignCampaignsResponse,
-  PostIdentityAccountRegisterData,
-  PostIdentityAccountRegisterError,
-  PostIdentityAccountRegisterResponse,
-  PostIdentityAccountLoginData,
-  PostIdentityAccountLoginError,
-  PostIdentityAccountLoginResponse,
-  PostIdentityAccountRefreshData,
-  PostIdentityAccountRefreshError,
-  PostIdentityAccountRefreshResponse,
-  MapIdentityApiIdentityAccountConfirmEmailData,
-  MapIdentityApiIdentityAccountConfirmEmailError,
-  MapIdentityApiIdentityAccountConfirmEmailResponse,
-  PostIdentityAccountResendConfirmationEmailData,
-  PostIdentityAccountResendConfirmationEmailError,
-  PostIdentityAccountResendConfirmationEmailResponse,
-  PostIdentityAccountForgotPasswordData,
-  PostIdentityAccountForgotPasswordError,
-  PostIdentityAccountForgotPasswordResponse,
-  PostIdentityAccountResetPasswordData,
-  PostIdentityAccountResetPasswordError,
-  PostIdentityAccountResetPasswordResponse,
-  PostIdentityAccountManage2FaData,
-  PostIdentityAccountManage2FaError,
-  PostIdentityAccountManage2FaResponse,
-  GetIdentityAccountManageInfoError,
-  GetIdentityAccountManageInfoResponse,
-  PostIdentityAccountManageInfoData,
-  PostIdentityAccountManageInfoError,
-  PostIdentityAccountManageInfoResponse,
+  PostLocalAccountRegisterData,
+  PostLocalAccountRegisterError,
+  PostLocalAccountRegisterResponse,
+  PostLocalAccountLoginWithoutPasswordData,
+  PostLocalAccountLoginWithoutPasswordError,
+  PostLocalAccountLoginWithoutPasswordResponse,
+  PostLocalAccountLoginData,
+  PostLocalAccountLoginError,
+  PostLocalAccountLoginResponse,
+  GetLocalAccountLogoutError,
+  GetLocalAccountLogoutResponse,
+  GetLocalAccountListUserError,
+  GetLocalAccountListUserResponse,
   PostRoleManagerAddRoleForEmailByEmailData,
   PostRoleManagerAddRoleForEmailByEmailError,
   PostRoleManagerAddRoleForEmailByEmailResponse,
+  PostRoleManagerRemoveRoleForUserByUserNameData,
+  PostRoleManagerRemoveRoleForUserByUserNameError,
+  PostRoleManagerRemoveRoleForUserByUserNameResponse,
   PostRoleManagerAddRoleForUserByUserNameData,
   PostRoleManagerAddRoleForUserByUserNameError,
   PostRoleManagerAddRoleForUserByUserNameResponse,
@@ -72,9 +81,6 @@ import type {
   GetRoleManagerGetUserForRoleData,
   GetRoleManagerGetUserForRoleError,
   GetRoleManagerGetUserForRoleResponse,
-  PostRoleManagerRemoveRoleForUserByUserNameData,
-  PostRoleManagerRemoveRoleForUserByUserNameError,
-  PostRoleManagerRemoveRoleForUserByUserNameResponse,
   GetUserInfoWhoAmIError,
   GetUserInfoWhoAmIResponse,
   PostUserManagerUserDetailData,
@@ -128,6 +134,129 @@ export class AccountService {
       url: "/Account/ExternalLoginCallback",
     });
   }
+
+  public static getAccountExternalAuthenticationProviderInfo<
+    ThrowOnError extends boolean = false
+  >(options?: OptionsLegacyParser<unknown, ThrowOnError>) {
+    return (options?.client ?? client).get<
+      GetAccountExternalAuthenticationProviderInfoResponse,
+      GetAccountExternalAuthenticationProviderInfoError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/Account/external-authentication-provider-info",
+    });
+  }
+}
+
+export class AmpasDailyService {
+  public static getAmpasDailyAddAmpas<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetAmpasDailyAddAmpasData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).get<
+      GetAmpasDailyAddAmpasResponse,
+      GetAmpasDailyAddAmpasError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/AmpasDaily/add-ampas",
+    });
+  }
+
+  public static postAmpasDailyDailySummary<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<PostAmpasDailyDailySummaryData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).post<
+      PostAmpasDailyDailySummaryResponse,
+      PostAmpasDailyDailySummaryError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/AmpasDaily/daily-summary",
+    });
+  }
+}
+
+export class AmpasPricingService {
+  public static getAmpasPricingCurrentPrice<
+    ThrowOnError extends boolean = false
+  >(options?: OptionsLegacyParser<unknown, ThrowOnError>) {
+    return (options?.client ?? client).get<
+      GetAmpasPricingCurrentPriceResponse,
+      GetAmpasPricingCurrentPriceError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/AmpasPricing/current-price",
+    });
+  }
+
+  public static getAmpasPricingChangePrice<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<GetAmpasPricingChangePriceData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).get<
+      GetAmpasPricingChangePriceResponse,
+      GetAmpasPricingChangePriceError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/AmpasPricing/change-price",
+    });
+  }
+
+  public static postAmpasPricingMonthlyBill<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<PostAmpasPricingMonthlyBillData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).post<
+      PostAmpasPricingMonthlyBillResponse,
+      PostAmpasPricingMonthlyBillError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/AmpasPricing/monthly-bill",
+    });
+  }
+
+  public static postAmpasPricingMonthlyInformation<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<
+      PostAmpasPricingMonthlyInformationData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).post<
+      PostAmpasPricingMonthlyInformationResponse,
+      PostAmpasPricingMonthlyInformationError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/AmpasPricing/monthly-information",
+    });
+  }
+}
+
+export class AmpasReporterService {
+  public static getAmpasReporterAmpasReport<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<GetAmpasReporterAmpasReportData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).get<
+      GetAmpasReporterAmpasReportResponse,
+      GetAmpasReporterAmpasReportError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/AmpasReporter/ampas-report",
+    });
+  }
 }
 
 export class CampaignService {
@@ -175,168 +304,74 @@ export class CampaignService {
   }
 }
 
-export class LearnAuthService {
-  public static postIdentityAccountRegister<
-    ThrowOnError extends boolean = false
-  >(
-    options?: OptionsLegacyParser<PostIdentityAccountRegisterData, ThrowOnError>
+export class LocalAccountService {
+  public static postLocalAccountRegister<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<PostLocalAccountRegisterData, ThrowOnError>
   ) {
     return (options?.client ?? client).post<
-      PostIdentityAccountRegisterResponse,
-      PostIdentityAccountRegisterError,
+      PostLocalAccountRegisterResponse,
+      PostLocalAccountRegisterError,
       ThrowOnError
     >({
       ...options,
-      url: "/IdentityAccount/register",
+      url: "/LocalAccount/register",
     });
   }
 
-  public static postIdentityAccountLogin<ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<PostIdentityAccountLoginData, ThrowOnError>
-  ) {
-    return (options?.client ?? client).post<
-      PostIdentityAccountLoginResponse,
-      PostIdentityAccountLoginError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/IdentityAccount/login",
-    });
-  }
-
-  public static postIdentityAccountRefresh<
-    ThrowOnError extends boolean = false
-  >(
-    options?: OptionsLegacyParser<PostIdentityAccountRefreshData, ThrowOnError>
-  ) {
-    return (options?.client ?? client).post<
-      PostIdentityAccountRefreshResponse,
-      PostIdentityAccountRefreshError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/IdentityAccount/refresh",
-    });
-  }
-
-  public static mapIdentityApiIdentityAccountConfirmEmail<
+  public static postLocalAccountLoginWithoutPassword<
     ThrowOnError extends boolean = false
   >(
     options?: OptionsLegacyParser<
-      MapIdentityApiIdentityAccountConfirmEmailData,
+      PostLocalAccountLoginWithoutPasswordData,
       ThrowOnError
     >
+  ) {
+    return (options?.client ?? client).post<
+      PostLocalAccountLoginWithoutPasswordResponse,
+      PostLocalAccountLoginWithoutPasswordError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/LocalAccount/login-without-password",
+    });
+  }
+
+  public static postLocalAccountLogin<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<PostLocalAccountLoginData, ThrowOnError>
+  ) {
+    return (options?.client ?? client).post<
+      PostLocalAccountLoginResponse,
+      PostLocalAccountLoginError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/LocalAccount/login",
+    });
+  }
+
+  public static getLocalAccountLogout<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>
   ) {
     return (options?.client ?? client).get<
-      MapIdentityApiIdentityAccountConfirmEmailResponse,
-      MapIdentityApiIdentityAccountConfirmEmailError,
+      GetLocalAccountLogoutResponse,
+      GetLocalAccountLogoutError,
       ThrowOnError
     >({
       ...options,
-      url: "/IdentityAccount/confirmEmail",
+      url: "/LocalAccount/logout",
     });
   }
 
-  public static postIdentityAccountResendConfirmationEmail<
-    ThrowOnError extends boolean = false
-  >(
-    options?: OptionsLegacyParser<
-      PostIdentityAccountResendConfirmationEmailData,
-      ThrowOnError
-    >
+  public static getLocalAccountListUser<ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>
   ) {
-    return (options?.client ?? client).post<
-      PostIdentityAccountResendConfirmationEmailResponse,
-      PostIdentityAccountResendConfirmationEmailError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/IdentityAccount/resendConfirmationEmail",
-    });
-  }
-
-  public static postIdentityAccountForgotPassword<
-    ThrowOnError extends boolean = false
-  >(
-    options?: OptionsLegacyParser<
-      PostIdentityAccountForgotPasswordData,
-      ThrowOnError
-    >
-  ) {
-    return (options?.client ?? client).post<
-      PostIdentityAccountForgotPasswordResponse,
-      PostIdentityAccountForgotPasswordError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/IdentityAccount/forgotPassword",
-    });
-  }
-
-  public static postIdentityAccountResetPassword<
-    ThrowOnError extends boolean = false
-  >(
-    options?: OptionsLegacyParser<
-      PostIdentityAccountResetPasswordData,
-      ThrowOnError
-    >
-  ) {
-    return (options?.client ?? client).post<
-      PostIdentityAccountResetPasswordResponse,
-      PostIdentityAccountResetPasswordError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/IdentityAccount/resetPassword",
-    });
-  }
-
-  public static postIdentityAccountManage2Fa<
-    ThrowOnError extends boolean = false
-  >(
-    options?: OptionsLegacyParser<
-      PostIdentityAccountManage2FaData,
-      ThrowOnError
-    >
-  ) {
-    return (options?.client ?? client).post<
-      PostIdentityAccountManage2FaResponse,
-      PostIdentityAccountManage2FaError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/IdentityAccount/manage/2fa",
-    });
-  }
-
-  public static getIdentityAccountManageInfo<
-    ThrowOnError extends boolean = false
-  >(options?: OptionsLegacyParser<unknown, ThrowOnError>) {
     return (options?.client ?? client).get<
-      GetIdentityAccountManageInfoResponse,
-      GetIdentityAccountManageInfoError,
+      GetLocalAccountListUserResponse,
+      GetLocalAccountListUserError,
       ThrowOnError
     >({
       ...options,
-      url: "/IdentityAccount/manage/info",
-    });
-  }
-
-  public static postIdentityAccountManageInfo<
-    ThrowOnError extends boolean = false
-  >(
-    options?: OptionsLegacyParser<
-      PostIdentityAccountManageInfoData,
-      ThrowOnError
-    >
-  ) {
-    return (options?.client ?? client).post<
-      PostIdentityAccountManageInfoResponse,
-      PostIdentityAccountManageInfoError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/IdentityAccount/manage/info",
+      url: "/LocalAccount/list-user",
     });
   }
 }
@@ -357,6 +392,24 @@ export class RoleManagerService {
     >({
       ...options,
       url: "/RoleManager/add-role-for-email/{email}",
+    });
+  }
+
+  public static postRoleManagerRemoveRoleForUserByUserName<
+    ThrowOnError extends boolean = false
+  >(
+    options: OptionsLegacyParser<
+      PostRoleManagerRemoveRoleForUserByUserNameData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).post<
+      PostRoleManagerRemoveRoleForUserByUserNameResponse,
+      PostRoleManagerRemoveRoleForUserByUserNameError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/RoleManager/remove-role-for-user/{userName}",
     });
   }
 
@@ -470,24 +523,6 @@ export class RoleManagerService {
     >({
       ...options,
       url: "/RoleManager/get-user-for-role",
-    });
-  }
-
-  public static postRoleManagerRemoveRoleForUserByUserName<
-    ThrowOnError extends boolean = false
-  >(
-    options: OptionsLegacyParser<
-      PostRoleManagerRemoveRoleForUserByUserNameData,
-      ThrowOnError
-    >
-  ) {
-    return (options?.client ?? client).post<
-      PostRoleManagerRemoveRoleForUserByUserNameResponse,
-      PostRoleManagerRemoveRoleForUserByUserNameError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/RoleManager/remove-role-for-user/{userName}",
     });
   }
 }
