@@ -64,4 +64,17 @@ public class AmpasPricingController : Controller
 
         return Ok(montlyInfo);
     }
+
+    [HttpPost]
+    [Route("set-paid-status")]
+    public async Task<ActionResult> SetPaidStatus([FromBody] PaidStatus status)
+    {
+        var user = await _userManager.FindByNameAsync(status.Username);
+        if (user == null)
+            return NotFound();
+
+        var result = await _ampasRepo.SetPaidStatus(user, status.From, status.To, status.Paid);
+
+        return Ok(result);
+    }
 }

@@ -1,4 +1,4 @@
-import { useState, type JSX } from "react"
+import { useEffect, useState, type JSX } from "react"
 import { getRandomArbitrary } from "../utility/random-arbitrary"
 import "./Calendar.css"
 import { addMonths, setDay } from "date-fns"
@@ -83,17 +83,17 @@ export default function Calendar(props: CalendarProps) {
   const [days, setDays] = useState<string[]>(generateCalendarObject(date))
 
   const handleOnPrevMonthClicked = () => {
-    onPrevMonthClicked?.(date)
     const newDate = addMonths(date, -1)
     setDate(newDate)
     setDays(generateCalendarObject(newDate))
+    onPrevMonthClicked?.(newDate)
   }
 
   const handleOnNextMonthClicked = () => {
-    onNextMonthClicked?.(date)
     const newDate = addMonths(date, 1)
     setDate(newDate)
     setDays(generateCalendarObject(newDate))
+    onNextMonthClicked?.(newDate)
   }
 
   const defaultGridComponent = (date: string, amount?: number | string) => {
@@ -115,6 +115,7 @@ export default function Calendar(props: CalendarProps) {
       </div>
     )
   }
+
   return (
     <>
       <h5>

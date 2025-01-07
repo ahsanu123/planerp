@@ -12,3 +12,8 @@ export enum ExternalLoginProvider {
   Google = "Google",
   Github = "Github"
 }
+
+export enum AmpasSummaryDurationEnum {
+  Daily,
+  Monthly
+}

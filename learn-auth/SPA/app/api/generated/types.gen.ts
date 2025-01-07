@@ -3,6 +3,7 @@
 export type AmpasModel = {
   id?: number;
   userId?: number;
+  paid?: boolean;
   productionDate?: Date;
   takenTime?: Date;
   price?: number;
@@ -14,6 +15,7 @@ export type AmpasSummary = {
   totalTaken?: number;
   totalTakenPrice?: number;
   userTakenCount?: Array<StringInt32KeyValuePair> | null;
+  username?: string | null;
 };
 
 export type AmpasSummaryDuration = 0 | 1;
@@ -23,6 +25,13 @@ export type CampaignModel = {
   type?: string | null;
   title?: string | null;
   description?: string | null;
+};
+
+export type PaidStatus = {
+  username?: string | null;
+  from?: Date;
+  to?: Date;
+  paid?: boolean;
 };
 
 export type Role = {
@@ -142,6 +151,14 @@ export type PostAmpasPricingMonthlyInformationData = {
 export type PostAmpasPricingMonthlyInformationResponse = Array<AmpasModel>;
 
 export type PostAmpasPricingMonthlyInformationError = unknown;
+
+export type PostAmpasPricingSetPaidStatusData = {
+  body?: PaidStatus;
+};
+
+export type PostAmpasPricingSetPaidStatusResponse = unknown;
+
+export type PostAmpasPricingSetPaidStatusError = unknown;
 
 export type GetAmpasReporterAmpasReportData = {
   query?: {

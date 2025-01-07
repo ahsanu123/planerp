@@ -34,6 +34,9 @@ import type {
   PostAmpasPricingMonthlyInformationData,
   PostAmpasPricingMonthlyInformationError,
   PostAmpasPricingMonthlyInformationResponse,
+  PostAmpasPricingSetPaidStatusData,
+  PostAmpasPricingSetPaidStatusError,
+  PostAmpasPricingSetPaidStatusResponse,
   GetAmpasReporterAmpasReportData,
   GetAmpasReporterAmpasReportError,
   GetAmpasReporterAmpasReportResponse,
@@ -257,6 +260,24 @@ export class AmpasPricingService {
     >({
       ...options,
       url: "/AmpasPricing/monthly-information",
+    });
+  }
+
+  public static postAmpasPricingSetPaidStatus<
+    ThrowOnError extends boolean = false
+  >(
+    options?: OptionsLegacyParser<
+      PostAmpasPricingSetPaidStatusData,
+      ThrowOnError
+    >
+  ) {
+    return (options?.client ?? client).post<
+      PostAmpasPricingSetPaidStatusResponse,
+      PostAmpasPricingSetPaidStatusError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/AmpasPricing/set-paid-status",
     });
   }
 }

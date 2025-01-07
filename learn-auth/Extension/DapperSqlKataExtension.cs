@@ -139,10 +139,21 @@ public static class DapperSqlKataExtension
     public static async Task ExecuteSqlKataAsync(
         this IDbConnection conn,
         Query query,
-        bool logRaw = false
+        bool logRaw = false,
+        SqlCompilerConstant compiler = SqlCompilerConstant.Sqlite
     )
     {
-        var sqlResult = DapperSqlKataExtensionHelper.CompilePostgresqlQuery(query);
+        SqlResult sqlResult = null;
+
+        switch (compiler)
+        {
+            case SqlCompilerConstant.Postgresql:
+                sqlResult = DapperSqlKataExtensionHelper.CompilePostgresqlQuery(query);
+                break;
+            case SqlCompilerConstant.Sqlite:
+                sqlResult = DapperSqlKataExtensionHelper.CompileSqliteQuery(query);
+                break;
+        }
 
         DapperSqlKataExtensionHelper.LogRaw(sqlResult);
 

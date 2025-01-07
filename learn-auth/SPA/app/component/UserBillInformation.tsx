@@ -1,7 +1,31 @@
+import { useEffect, useState } from "react"
 import "./UserBillInformation.css"
+import { AmpasDailyService, LocalAccountService, type AmpasSummary } from "../api/generated"
+import { AmpasSummaryDurationEnum, defaultClient } from "../api/constant"
+import { formatAsRupiah } from "../utility/format-as-rupiah"
 
-interface UserBillInformationProps {
-  username?: string
+export async function clientLoader() {
+  const summaries: AmpasSummary[] = []
+
+  const listUsername = await LocalAccountService.getLocalAccountListUser({
+    client: defaultClient
+  })
+
+  const usernames = listUsername.data as string[]
+  usernames.forEach(async (username) => {
+    const summary = await AmpasDailyService.postAmpasDailyUserSummaryInfo({
+      client: defaultClient,
+      query: {
+        duration: AmpasSummaryDurationEnum.Monthly,
+        username,
+      },
+      body: new Date()
+    })
+    const data = summary.data
+    data && summaries.push(data)
+  })
+
+  return summaries
 }
 
 interface RenderTableProps {
@@ -54,31 +78,52 @@ const RenderTable = (props: RenderTableProps) => {
   )
 }
 
-export default function UserBillInformation(props: UserBillInformationProps) {
+export default function UserBillInformation() {
+
+  const [ampasSummary, setAmpasSummary] = useState<AmpasSummary[]>()
+
+  const getAmpasSummary = async () => {
+
+    const summaries: AmpasSummary[] = []
+
+    const listUsername = await LocalAccountService.getLocalAccountListUser({
+      client: defaultClient
+    })
+
+    const usernames = listUsername.data as string[]
+    usernames.forEach(async (username) => {
+      const summary = await AmpasDailyService.postAmpasDailyUserSummaryInfo({
+        client: defaultClient,
+        query: {
+          duration: AmpasSummaryDurationEnum.Monthly,
+          username,
+        },
+        body: new Date()
+      })
+      const data = summary.data
+      data && summaries.push(data)
+    })
+    setAmpasSummary(summaries)
+  }
+
+  const data = ampasSummary?.map((item) => (
+    [item.username ?? "", item.totalTaken ?? "", formatAsRupiah(item.totalTakenPrice ?? 0)]
+  ))
+
+  useEffect(() => {
+    getAmpasSummary()
+  }, [])
 
   return (
     <>
-      <h4>Summary</h4>
-      <details>
-        <summary>
-          Weekly
-        </summary>
-        <blockquote
-          className="stack"
-        >
-          <b>Total Taken:</b>
-          <p>value</p>
-        </blockquote>
-      </details>
-
-      <RenderTable
-        headData={[
-          ["username", "total taken", "total bill", "total production", "total worth"]
-        ]}
-        bodyData={[
-          ["user 1", 100, "Rp.1.000.000", 150, "Rp.1.500.000"]
-        ]}
-      />
+      {data && (
+        <RenderTable
+          headData={[
+            ["username", "total taken", "total bill"]
+          ]}
+          bodyData={data}
+        />
+      )}
     </>
   )
 }

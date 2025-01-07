@@ -7,6 +7,7 @@ import { AmpasPricingService, LocalAccountService, type AmpasModel } from "../ap
 import { defaultClient } from "../api/constant"
 import type { Route } from "./+types/AMSAdminPage"
 import { utilToDate } from "../utility/convert-heyapi-date"
+import PaidForDuration from "../component/PaidForDuration"
 
 /*
  * Basic AMS admin flow 
@@ -35,10 +36,11 @@ export default function AMSAdminPage({
     users
   } = loaderData
 
+  const [calendarDate, setCalendarDate] = useState<Date>(new Date());
   const [selectedUser, setSelectedUser] = useState<string>()
   const [monthlyInformation, setMontlyInformation] = useState<AmpasModel[]>([]);
 
-  const getMontlyUserInformation = async (username: string) => {
+  const getMontlyUserInformation = async (username: string, date?: Date) => {
 
     await LocalAccountService.getLocalAccountLogout({ client: defaultClient })
     await LocalAccountService.postLocalAccountLoginWithoutPassword({
@@ -48,10 +50,10 @@ export default function AMSAdminPage({
     setSelectedUser(username)
     const monthlyInformation = await AmpasPricingService.postAmpasPricingMonthlyInformation({
       client: defaultClient,
-      body: new Date()
+      body: date ?? calendarDate
     })
 
-    setMontlyInformation(monthlyInformation.data as AmpasModel[]);
+    setMontlyInformation(monthlyInformation.data as AmpasModel[])
   }
 
   const renderTakenByUserForThisDay = (date: string) => (
@@ -65,6 +67,13 @@ export default function AMSAdminPage({
       .reduce((a, b) => ((a ?? 0) + (b ?? 0)), 0)
   )
 
+  const isPaidForThisDate = (date: string) => {
+    const ispaid = monthlyInformation.find((item) =>
+      utilToDate(item.takenTime!).getDate() === parseInt(date)
+    )
+    return ispaid?.paid
+  }
+
   const adminGridElement = (date: string) => {
     const includeDash = date.includes("-")
     return (
@@ -75,10 +84,17 @@ export default function AMSAdminPage({
           ? (
             <>
               <p>
-                {!selectedUser ?
-                  ("Pilih User")
-                  :
-                  (`Ambil ${renderTakenByUserForThisDay(date)}`)
+                {selectedUser
+                  ? (
+                    <>
+                      {isPaidForThisDate(date)
+                        ? `✔️ ${renderTakenByUserForThisDay(date)} `
+                        : (`Ambil ${renderTakenByUserForThisDay(date)}`)}
+                    </>
+                  )
+                  : (
+                    "Pilih User"
+                  )
                 }
               </p>
 
@@ -97,19 +113,36 @@ export default function AMSAdminPage({
       </div>
     )
   }
+
+  const AdminInformation = (
+    <details>
+      <summary>Admin Information</summary>
+      <ul>
+        <li>Strikethrough text mean <s>bill</s> was paid</li>
+      </ul>
+    </details>
+  )
+
   return (
     <>
       <h2>AMS Admin Page</h2>
       <Clock />
 
       <hr />
-      <UserBillInformation />
+      <h4>Monthly Worth</h4>
+
 
       <Calendar
         title={selectedUser}
         gridComponent={adminGridElement}
-        onNextMonthClicked={(date) => getMontlyUserInformation(selectedUser ?? "")}
-        onPrevMonthClicked={(date) => getMontlyUserInformation(selectedUser ?? "")}
+        onNextMonthClicked={(date) => {
+          setCalendarDate(date)
+          getMontlyUserInformation(selectedUser ?? "", date)
+        }}
+        onPrevMonthClicked={(date) => {
+          setCalendarDate(date)
+          getMontlyUserInformation(selectedUser ?? "", date)
+        }}
       />
 
       <hr />
@@ -118,6 +151,18 @@ export default function AMSAdminPage({
         users={users}
         handleOnUserSelected={(username) => getMontlyUserInformation(username)}
       />
+
+      {selectedUser && (
+        <>
+          <hr />
+          <PaidForDuration
+            username={selectedUser}
+            onSubmit={() => getMontlyUserInformation(selectedUser)}
+          />
+          <hr />
+          <UserBillInformation />
+        </>
+      )}
     </>
   )
 }

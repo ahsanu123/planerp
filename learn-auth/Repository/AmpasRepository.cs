@@ -21,14 +21,15 @@ public interface IAmpasRepository
     public Task<AMSResult> AddAmpasForUser(User user, int amount);
     public Task<List<AmpasModel>?> GetListAmpasForUser(User user, DateTime date);
     public Task<AmpasSummary> GetSummary(DateTime date, AmpasSummaryDuration duration);
+    public Task<AMSResult> SetPaidStatus(User user, DateTime from, DateTime to, bool status);
+    public Task<double> GetBillForUser(User user, DateTime date);
+    public Task<bool> ChangeAmpasPrice(double price);
+    public Task<double> GetCurrentPrice();
     public Task<AmpasSummary> GetSummaryForUser(
         DateTime date,
         User user,
         AmpasSummaryDuration duration
     );
-    public Task<double> GetBillForUser(User user, DateTime date);
-    public Task<bool> ChangeAmpasPrice(double price);
-    public Task<double> GetCurrentPrice();
 }
 
 public class AmpasRepository : IAmpasRepository
@@ -222,6 +223,7 @@ public class AmpasRepository : IAmpasRepository
                 userTakeCount.Add(new KeyValuePair<string, int>(user.UserName, record.Amount));
             }
 
+            summary.Username = user.UserName;
             summary.TotalTaken = records.Select(record => record.Amount).ToList().Sum();
             summary.TotalTakenPrice = records
                 .Select(record => record.Price * record.Amount)
@@ -230,5 +232,24 @@ public class AmpasRepository : IAmpasRepository
             summary.UserTakenCount = userTakeCount;
         });
         return summary;
+    }
+
+    public async Task<AMSResult> SetPaidStatus(User user, DateTime from, DateTime to, bool status)
+    {
+        var result = new AMSResult { Success = false };
+
+        var UpdatePaidStatusForDuration_Query = new Query(nameof(AmpasModel))
+            .WhereDate(nameof(AmpasModel.TakenTime), ">=", from.ToString("yyyy-MM-dd"))
+            .WhereDate(nameof(AmpasModel.TakenTime), "<=", to.ToString("yyyy-MM-dd"))
+            .Where(nameof(AmpasModel.UserId), user.Id)
+            .AsUpdate(new { Paid = status });
+
+        await _createConnection(async conn =>
+        {
+            await conn.ExecuteSqlKataAsync(UpdatePaidStatusForDuration_Query);
+            result.Success = true;
+        });
+
+        return result;
     }
 }

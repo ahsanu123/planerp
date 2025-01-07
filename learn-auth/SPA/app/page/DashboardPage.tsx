@@ -2,8 +2,8 @@ import { useNavigate } from "react-router"
 import type { Route } from "./+types/DashboardPage";
 import { UserClaimTypes, whoami } from "../model/authorization-model";
 import { roleButtons, type RoleButtonKeys } from "../model/role-button-model";
-import { AmpasDailyService, AmpasPricingService, LocalAccountService, UserManagerService, type AmpasModel } from "../api/generated";
-import { defaultClient } from "../api/constant";
+import { AmpasDailyService, AmpasPricingService, LocalAccountService, UserManagerService, type AmpasModel, type AmpasSummary } from "../api/generated";
+import { AmpasSummaryDurationEnum, defaultClient } from "../api/constant";
 import './DashboardPage.css'
 import GridButton from "../component/GridButton";
 import Calendar from "../component/Calendar";
@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import ListUser from "../component/ListUser";
 import { utilToDate } from "../utility/convert-heyapi-date";
 import { formatAsRupiah } from "../utility/format-as-rupiah";
+import { useFormState } from "react-dom";
 
 export async function clientLoader() {
   // return await whoami()
@@ -33,9 +34,9 @@ export default function DashboardPage({
 
   const { users } = loaderData
   const [display, setDisplay] = useState<DisplayStateType>("Date")
-  const [monthlyBill, setMonthlybill] = useState<number>()
   const [totalTaken, setTotalTaken] = useState<number>()
   const [selectedUser, setSelectedUser] = useState<string>()
+  const [monthlyUserBill, setMonthlyUserBill] = useState<AmpasSummary>()
   const [monthlyInformation, setMontlyInformation] = useState<AmpasModel[]>([]);
 
   const navigate = useNavigate();
@@ -57,21 +58,22 @@ export default function DashboardPage({
   }
 
   const getMonthlyBillForUser = async () => {
-    const monthlyBill = await AmpasPricingService.postAmpasPricingMonthlyBill({
+    const monthlySummaryForUser = await AmpasDailyService.postAmpasDailyUserSummaryInfo({
       client: defaultClient,
+      query: {
+        duration: AmpasSummaryDurationEnum.Monthly,
+        username: selectedUser
+      },
       body: new Date()
     })
+
+    if (monthlySummaryForUser.response.ok) {
+      setMonthlyUserBill(monthlySummaryForUser.data)
+    }
+
     await getMontlyUserInformation(selectedUser ?? "")
 
-    const totalTaken = monthlyInformation?.filter((item) => {
-      const takenTime = utilToDate(item.takenTime!)
-      return takenTime.getDate() === new Date().getDate()
-    })
-      .map((item) => item.amount)
-      .reduce((a, b) => ((a ?? 0) + (b ?? 0)), 0)
-
-    setMonthlybill(monthlyBill.data as number)
-    setTotalTaken(totalTaken)
+    setTotalTaken(monthlySummaryForUser.data?.totalTaken)
   }
 
   const handleSignOut = async () => {
@@ -171,6 +173,7 @@ export default function DashboardPage({
     )
   }
 
+
   useEffect(() => {
     getMonthlyBillForUser()
   }, [selectedUser])
@@ -205,27 +208,30 @@ export default function DashboardPage({
       <hr />
 
       <main>
-        {monthlyBill && (
+        {!!monthlyUserBill && (
           <sub> 💸 Sejumlah:
             {" "}
             <b>
-              {formatAsRupiah(monthlyBill)}
+              {formatAsRupiah(monthlyUserBill.totalTakenPrice!)}
             </b>
           </sub>
         )}
-        <h2>
-          {selectedUser ?? "User"}
-          -
-          {totalTaken}
-        </h2>
-        <hr />
+        {selectedUser && (
+          <>
+            <h2>
+              {selectedUser}
+              {" - total ambil "}
+              {totalTaken}
+            </h2>
+            <hr />
+          </>
+        )}
 
         {
           (display === "Date")
             ? (
               <>
                 <Calendar
-                  title={selectedUser}
                   showNavigator={false}
                   gridComponent={gridElement}
                   onNextMonthClicked={(date) => getMontlyUserInformation(selectedUser ?? "")}

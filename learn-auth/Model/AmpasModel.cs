@@ -4,6 +4,7 @@ public class AmpasModel
 {
     public int Id { get; set; }
     public int UserId { get; set; }
+    public bool Paid { get; set; }
     public DateTime ProductionDate { get; set; }
     public DateTime TakenTime { get; set; }
     public double Price { get; set; }

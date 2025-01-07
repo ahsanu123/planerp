@@ -1,11 +1,9 @@
 using AMS.AppAuthorization;
-using AMS.Constant;
 using AMS.InternalMigration;
 using AMS.Model;
 using AMS.Services;
 using AMS.StandardIdentity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -106,4 +104,5 @@ app.MapControllers();
 app.UseFluentMigrator();
 await app.AddDefaultRoles();
 await app.AddDefaultAmpasPrice();
+await app.AddDefaultUser();
 app.Run();

@@ -11,6 +11,9 @@ export const AmpasModelSchema = {
       type: "integer",
       format: "int32",
     },
+    paid: {
+      type: "boolean",
+    },
     productionDate: {
       type: "string",
       format: "date-time",
@@ -53,6 +56,10 @@ export const AmpasSummarySchema = {
       },
       nullable: true,
     },
+    username: {
+      type: "string",
+      nullable: true,
+    },
   },
   additionalProperties: false,
 } as const;
@@ -81,6 +88,28 @@ export const CampaignModelSchema = {
     description: {
       type: "string",
       nullable: true,
+    },
+  },
+  additionalProperties: false,
+} as const;
+
+export const PaidStatusSchema = {
+  type: "object",
+  properties: {
+    username: {
+      type: "string",
+      nullable: true,
+    },
+    from: {
+      type: "string",
+      format: "date-time",
+    },
+    to: {
+      type: "string",
+      format: "date-time",
+    },
+    paid: {
+      type: "boolean",
     },
   },
   additionalProperties: false,
