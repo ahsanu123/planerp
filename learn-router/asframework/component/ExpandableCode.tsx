@@ -3,7 +3,7 @@ interface ExpandaleCodeProps {
   title?: string
   code: string
 }
-export default function ExpandaleCode(props: ExpandaleCodeProps) {
+export default function ExpandableCode(props: ExpandaleCodeProps) {
   const {
     code,
     title,

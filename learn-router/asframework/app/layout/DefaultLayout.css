@@ -1,0 +1,32 @@
+.default-layout {
+  display: flex;
+  flex-direction: row;
+
+
+  .sidebar {
+    width: 300px;
+
+    .navlink {
+      background-color: #44624a;
+      color: white;
+      padding: 3px 20px;
+      border-radius: 3px;
+      text-align: left;
+    }
+
+    .navlink-active {
+      background-color: transparent;
+      color: black;
+      padding: 3px 20px;
+    }
+  }
+
+  main {
+    width: 100%;
+    max-height: 97vh;
+    scrollbar-width: thin;
+    scrollbar-base-color: purple;
+    overflow-y: scroll;
+  }
+
+}
