@@ -1527,6 +1527,11 @@ hasown@^2.0.2:
   dependencies:
     function-bind "^1.1.2"
 
+highlight.js@^11.11.1:
+  version "11.11.1"
+  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-11.11.1.tgz#fca06fa0e5aeecf6c4d437239135fabc15213585"
+  integrity sha512-Xwwo44whKBVCYoliBQwaPvtd/2tYFkRQtXDWj1nackaV2JPXx3L0+Jvd8/qCJ2p+ML0/XVkJ2q+Mr+UVdpJK5w==
+
 hosted-git-info@^6.0.0, hosted-git-info@^6.1.1:
   version "6.1.3"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-6.1.3.tgz#2ee1a14a097a1236bddf8672c35b613c46c55946"
@@ -2269,6 +2274,11 @@ safe-buffer@5.2.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
+
+sakura.css@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/sakura.css/-/sakura.css-1.5.0.tgz#f73cd825fd86dcdc93d6208bc8f55d10104cfab4"
+  integrity sha512-AcAZa9F4SCs2xaKLWcXQxJxKfeod2PN3sR31+R22MKuyoJxNChH1wBG4mQaY9gVpJ3VpNA1XHPOrOM9hFo9cSw==
 
 scheduler@^0.25.0:
   version "0.25.0"
