@@ -1,0 +1,3 @@
+[submodule "third-parties/tui.editor"]
+	path = third-parties/tui.editor
+	url = https://github.com/nhn/tui.editor.git

@@ -1,0 +1,73 @@
+name: "planerp"
+
+services:
+    util: 
+        tty: true       
+        stdin_open: true
+        working_dir: /planerp
+        build:
+            context: ./dockerfile
+            dockerfile: ./util.Dockerfile
+        entrypoint: ash
+        
+    spa: 
+        tty: true       
+        stdin_open: true
+        build:
+            context: ./spa_react/
+            dockerfile: ../dockerfile/spa.Dockerfile
+        working_dir: /planerp/spa
+        # entrypoint: ash
+        entrypoint: sh -c "yarn dev"
+        ports: 
+            - "7070:7070"
+        volumes:
+            - /home/ah/personalProject/planerp/spa_react/:/planerp/spa
+        depends_on: 
+            - api
+    api:    
+        tty: true       
+        stdin_open: true
+        # entrypoint: ash
+        entrypoint: sh -c "dotnet watch run"
+        working_dir: /planerp/api
+        build: 
+            context:  ./api/
+            dockerfile: ../dockerfile/backend.Dockerfile
+        volumes:
+            - /home/ah/personalProject/planerp/api/:/planerp/api
+        ports: 
+            - "5000:5000"
+        depends_on: 
+            - db
+    db: 
+        # image: postgres:alpine3.20
+        build: 
+            context: ./dockerfile/
+            dockerfile: ./postgresql.Dockerfile
+        restart: always
+
+        # set shared memory limit when using docker-compose
+        shm_size: 128mb
+        # or set shared memory limit when deploy via swarm stack
+        #volumes:
+        #  - type: tmpfs
+        #    target: /dev/shm
+        #    tmpfs:
+        #      size: 134217728 # 128*2^20 bytes = 128Mb
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_DB=planerp
+            - POSTGRES_PASSWORD=123
+
+    rabbit_mq: 
+        image: rabbitmq:4-management-alpine
+        # build: 
+        #     context: ./dockerfile/ 
+        #     dockerfile: ./rabbitmq.Dockerfile
+        environment:
+            - RABBITMQ_DEFAULT_PASS=123
+        ports: 
+            - "5672:5672"
+            - "15672:15672"
+

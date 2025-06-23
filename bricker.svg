@@ -1,0 +1,37 @@
+<svg data-v-0dd9719b="" version="1.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewBox="0 0 340.000000 150.000000" preserveAspectRatio="xMidYMid meet" color-interpolation-filters="sRGB" style="margin: auto;">
+  <rect data-v-0dd9719b="" x="0" y="0" width="100%" height="100%" fill="#ffffff" fill-opacity="0" class="background"></rect>
+  <rect data-v-0dd9719b="" x="0" y="0" width="100%" height="100%" fill="url(#watermark)" fill-opacity="" class="watermarklayer"></rect>
+  <g data-v-0dd9719b="" class="iconmbgsvg" transform="translate(92.25499725341797,18.74943923950195)">
+    <g fill="#000000" hollow-target="textNormalTran">
+      <g opacity="0.55" transform="translate(21.49500274658203,0)">
+        <g>
+          <rect fill="#000000" fill-opacity="0" stroke-width="2" x="0" y="0" width="112.5" height="112.50112501125011" class="image-rect"></rect>
+          <svg x="0" y="0" width="112.5" height="112.50112501125011" filtersec="colorsb3651602608" class="image-svg-svg primary" style="overflow: visible;">
+            <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="4.510000228881836 6 902.9900512695312 903">
+              <linearGradient id="a55e56f21-4840-4372-bcd6-fb8f50e4d398" gradientUnits="userSpaceOnUse" x1="1078.654" y1="-16317.571" x2="-12.697" y2="-15636.776" gradientTransform="matrix(1 0 0 -1 0 -15520)">
+                <stop offset="0" stop-color="#ffff"></stop>
+                <stop offset=".495" stop-color="#ed6723"></stop>
+                <stop offset="1" stop-color="#ee3e30"></stop>
+              </linearGradient>
+              <path fill="url(#a55e56f21-4840-4372-bcd6-fb8f50e4d398)" d="M456.01 6C206.65 6 4.51 208.14 4.51 457.5c0 .52.02 1.03.02 1.54.83-218.17 177.69-394.78 395.74-394.78 19.17 0 38.01 1.39 56.45 4.04 170.9 24.44 306.57 158.2 334.15 328.29 3.15 17.43 4.96 35.32 5.35 53.57a297.963 297.963 0 0 1 0 14.67c-.11 5.07-.34 10.12-.67 15.15.07-1.43.11-2.85.16-4.28C786.36 624 663.5 741.37 513.29 741.37c-19.63 0-38.78-2.01-57.28-5.82C327.16 708.99 230.26 594.6 230.26 457.5c0-124.68 101.07-225.74 225.75-225.74S681.76 332.83 681.76 457.5c0-137.09-96.9-251.48-225.75-278.05a283.76 283.76 0 0 0-57.28-5.82c-145.73 0-265.72 110.47-281.3 252.48-.99 11.43-1.53 23-1.53 34.69 0 3.88.07 7.74.18 11.59.04 1.43.11 2.87.16 4.3 7.58 192.51 152.25 349.7 338.97 376.41 18.44 2.64 37.28 4.03 56.45 4.03 204.86 0 373.36-155.87 393.7-355.65a458.49 458.49 0 0 0 1.94-30.99c.12-4.32.2-8.64.2-12.99C907.51 208.14 705.37 6 456.01 6z"></path>
+              <defs>
+                <path id="b4a07bd2d-d72e-4ede-a2ff-8f1539a32883" d="M511.67 857.12c-19.17 0-38.01-1.39-56.45-4.03-186.72-26.71-331.39-183.9-338.97-376.41-.22-3.93-.37-7.88-.45-11.85-.06-2.44-.1-4.88-.1-7.34 0-2.45.03-4.9.1-7.33.35-16.6 1.9-32.91 4.55-48.84-1.23 8.18-2.19 16.45-2.91 24.78 15.58-142 135.57-252.48 281.3-252.48 19.62 0 38.78 2.01 57.28 5.82C584.86 206.01 681.76 320.4 681.76 457.5c0 124.68-101.07 225.75-225.75 225.75S230.26 582.17 230.26 457.5c0 137.1 96.9 251.49 225.75 278.06 18.5 3.81 37.65 5.82 57.28 5.82 150.21 0 273.07-117.38 282.43-265.67.19-5.02.31-10.05.31-15.11 0-12.4-.6-24.65-1.71-36.75-.84-9.18-2-18.26-3.46-27.25C763.3 226.49 627.62 92.74 456.72 68.3a398.06 398.06 0 0 0-56.45-4.04C182.22 64.26 5.36 240.87 4.53 459.04c.05 15.01.82 29.85 2.3 44.48C29.88 731.26 222.19 909 456.01 909c234.51 0 427.25-178.81 449.36-407.52-20.34 199.77-188.84 355.64-393.7 355.64z" fill="#000000"></path>
+              </defs>
+              <linearGradient id="c440d24d0-bdef-4335-a4c6-d4fc66ff4fb4" gradientUnits="userSpaceOnUse" x1="842.939" y1="-16638.955" x2="290.059" y2="-15825.282" gradientTransform="matrix(1 0 0 -1 0 -15520)">
+                <stop offset="0" stop-color="#c41e51"></stop>
+                <stop offset=".167" stop-color="#b41d4a"></stop>
+                <stop offset=".427" stop-color="#a21b43"></stop>
+                <stop offset=".699" stop-color="#971a3e"></stop>
+                <stop offset="1" stop-color="#931a3d"></stop>
+              </linearGradient>
+              <use href="#b4a07bd2d-d72e-4ede-a2ff-8f1539a32883" overflow="visible" fill="url(#c440d24d0-bdef-4335-a4c6-d4fc66ff4fb4)"></use>
+            </svg>
+          </svg>
+          <!---->
+        </g>
+      </g>
+  
+    </g>
+  </g>
+  <defs v-gra="od"></defs>
+</svg>
