@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="https://github.com/avaloniaui">
+  <xs:element name="UserControl">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="StackPanel">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TextBlock" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:attribute name="Text" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="HorizontalAlignment" use="required" />
+            <xs:attribute name="VerticalAlignment" use="required" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
